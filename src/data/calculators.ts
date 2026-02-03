@@ -259,7 +259,7 @@ export function executeCalculator(
             }
             break;
 
-        case 'CALC-003': // Debt Payoff
+        case 'CALC-003': { // Debt Payoff
             const monthlyRate = inputs.avgInterestRate / 100 / 12;
             const months = Math.log(inputs.monthlyPayment / (inputs.monthlyPayment - inputs.totalDebt * monthlyRate)) / Math.log(1 + monthlyRate);
             result = Math.ceil(months);
@@ -275,6 +275,7 @@ export function executeCalculator(
                 'Focus on highest interest debts first (avalanche method) to save money.'
             ];
             break;
+        }
     }
 
     return { result, interpretation, recommendations };

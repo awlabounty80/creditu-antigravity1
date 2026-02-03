@@ -9,7 +9,6 @@ import { useProfile } from '@/hooks/useProfile'
 import { useGamification } from '@/hooks/useGamification'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
-// @ts-ignore
 import html2pdf from 'html2pdf.js'
 
 interface DisputeWizardProps {
@@ -21,7 +20,6 @@ type WizardStep = 'select' | 'reason' | 'review'
 
 export function DisputeWizard({ reportData, onCancel }: DisputeWizardProps) {
     const { profile } = useProfile()
-    // @ts-ignore
     const { awardPoints } = useGamification()
     const [step, setStep] = useState<WizardStep>('select')
     const [selectedAccount, setSelectedAccount] = useState<ParsedAccount | null>(null)
@@ -206,7 +204,6 @@ Sincerely,
 
         html2pdf().set(opt).from(element).save().then(() => {
             setDownloading(false)
-            // @ts-ignore
             awardPoints(100, 'Dispute Generated')
             toast.success("Dispute Generated", {
                 description: "PDF downloaded successfully. +100 Moo Points.",
@@ -252,7 +249,6 @@ Sincerely,
             if (!insertError) {
                 setSaveSuccess(true)
                 setTimeout(() => setSaveSuccess(false), 2000)
-                // @ts-ignore
                 awardPoints(25, 'Dispute Saved')
             }
         } catch (e) {

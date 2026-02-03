@@ -16,7 +16,7 @@ export function StudentIdCard() {
     if (loading || !profile) return <div className="h-full w-full bg-slate-900 rounded-xl animate-pulse"></div>
 
     const clearance = getClearanceLevel(profile.moo_points || 0)
-    // @ts-ignore
+    // @ts-expect-error: Type inference
     const enrollmentDate = new Date(profile.created_at || new Date()).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     const studentId = profile.id.slice(0, 8).toUpperCase()
 

@@ -3,7 +3,6 @@ import { Card, CardDescription, CardHeader, CardTitle, CardFooter } from '@/comp
 import { Button } from '@/components/ui/button'
 import { FileText, Download, BookOpen, ExternalLink, ShieldCheck, HelpingHand, HeartHandshake } from 'lucide-react'
 import { generateAuditFooter } from '@/lib/governance'
-// @ts-ignore
 import html2pdf from 'html2pdf.js'
 
 export function ResourcesTab() {

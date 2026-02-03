@@ -209,7 +209,7 @@ export function useCourse(courseId?: string) {
             })) || []
 
             // 3. Fetch User Progress (if logged in)
-            let completedLessonIds = new Set<string>()
+            const completedLessonIds = new Set<string>()
             let progressPercent = 0
 
             if (user) {

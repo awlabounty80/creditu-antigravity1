@@ -44,7 +44,6 @@ export function FoundationCoreClass() {
                         <span>Modules Completed</span>
                         <span>{completedCount} / {FOUNDATION_SYLLABI.length}</span>
                     </div>
-                    {/* @ts-ignore */}
                     <Progress value={progressPercent} className="h-2 bg-slate-800" />
                 </div>
             </CardHeader>

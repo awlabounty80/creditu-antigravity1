@@ -40,7 +40,7 @@ export default function StudentDashboard() {
                 .eq('user_id', profile?.id)
 
             if (data) {
-                // @ts-ignore
+                // @ts-expect-error: Type mismatch in Supabase response
                 setEnrollments(data)
                 const earned = data.reduce((acc: number, curr: any) => curr.progress_percent >= 100 ? acc + curr.courses.credits_value : acc, 0)
                 setCreditsEarned(earned)

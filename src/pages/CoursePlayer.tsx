@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, CheckCircle, Lock, Menu, Check, Circle, Loader2, AlertTriangle, AlertCircle, BookOpen } from 'lucide-react'
+import { ChevronLeft, CheckCircle, Lock, Menu, Check, Circle, Loader2, AlertTriangle, AlertCircle, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCourse, Lesson } from '@/hooks/useCourse'
 import ReactMarkdown from 'react-markdown'

@@ -13,7 +13,8 @@ const MOCK_REPORT_DATA: CreditReportData = {
             accountNumber: "4400 0012 3456 ****",
             status: "Late 30 Days",
             balance: "$4,520",
-            openedDate: "2021-05-15"
+            openedDate: "2021-05-15",
+            bureau: 'Experian'
         },
         {
             id: "2",
@@ -21,7 +22,8 @@ const MOCK_REPORT_DATA: CreditReportData = {
             accountNumber: "991823****",
             status: "Collection",
             balance: "$1,200",
-            openedDate: "2019-11-02"
+            openedDate: "2019-11-02",
+            bureau: 'TransUnion'
         },
         {
             id: "3",
@@ -29,7 +31,8 @@ const MOCK_REPORT_DATA: CreditReportData = {
             accountNumber: "5100 1199 2288 ****",
             status: "Current",
             balance: "$0",
-            openedDate: "2020-02-20"
+            openedDate: "2020-02-20",
+            bureau: 'Equifax'
         }
     ]
 }

@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Download, FileText, AlertCircle, CheckCircle } from 'lucide-react';
+import { Download, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface DisputeData {
     yourName: string;

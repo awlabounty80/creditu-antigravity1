@@ -22,11 +22,11 @@ export interface CreditReportData {
 
 // Regex Patterns for Common Credit Report Formats (IdentityIQ, SmartCredit, etc.)
 const PATTERNS = {
-    accountNumber: /(?:Account\s*#|Acct\s*#|Account\s*Number)[:\s]*([X0-9\-]+)/i,
+    accountNumber: /(?:Account\s*#|Acct\s*#|Account\s*Number)[:\s]*([X0-9-]+)/i,
     balance: /(?:Balance|Current\s*Balance)[:\s]*\$?([\d,]+\.?\d*)/i,
-    status: /(?:Account\s*Status|Status)[:\s]*([A-Za-z\s\/]+)/i,
+    status: /(?:Account\s*Status|Status)[:\s]*([A-Za-z\s/]+)/i,
     openedDate: /(?:Date\s*Opened|Opened)[:\s]*(\d{1,2}\/\d{1,2}\/\d{2,4})/i,
-    bureauScores: /(?:Experian|Equifax|TransUnion)\s*[:\-]?\s*(\d{3})/i
+    bureauScores: /(?:Experian|Equifax|TransUnion)\s*[:-]?\s*(\d{3})/i
 };
 
 export async function parseCreditReport(file: File): Promise<CreditReportData> {
@@ -50,7 +50,6 @@ export async function parseCreditReport(file: File): Promise<CreditReportData> {
 
         // 2. Parser State Machine
         let currentAccount: Partial<ParsedAccount> | null = null;
-        let bufferCount = 0; // To detect end of account block
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];

@@ -5,8 +5,8 @@ import { FOUNDATION_SYLLABI } from '@/components/dashboard/FoundationSyllabi'
 import { useFoundationProgress } from '@/hooks/useFoundationProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { CheckCircle2, Lock, ArrowRight, Play, Pause, Volume2, User } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle2, ArrowRight, Play, User } from 'lucide-react'
+import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 
 export default function FreshmanClassroom() {

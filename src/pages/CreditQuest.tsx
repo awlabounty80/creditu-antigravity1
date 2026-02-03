@@ -32,7 +32,7 @@ export default function CreditQuest() {
         setLoading(true)
         try {
             // 1. Fetch History
-            const { data: history, error } = await supabase.rpc('get_quest_stats', { user_uuid: user?.id })
+            const { data: history } = await supabase.rpc('get_quest_stats', { user_uuid: user?.id })
 
             const stats = history || {} // { 'template_id': { attempts: 1, correct: 0 } }
 

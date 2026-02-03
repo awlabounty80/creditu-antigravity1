@@ -14,7 +14,6 @@ import StatusPortal from './pages/public/StatusPortal'
 import Tuition from './pages/public/Tuition'
 import WelcomeFreshman from './pages/public/WelcomeFreshman'
 
-import Dashboard from './pages/Dashboard'
 import StudentDashboard from './pages/StudentDashboard'
 import Curriculum from './pages/Curriculum'
 // import CreditLab from './pages/CreditLab' // Deprecated in favor of CreditTools
@@ -49,7 +48,6 @@ import { AdmissionsProvider } from './context/AdmissionsContext'
 import { RequireAuth } from './components/auth/RequireAuth'
 
 import FreshmanClassroom from './pages/classroom/FreshmanClassroom'
-import DebugDashboard from './pages/DebugDashboard'
 import SystemStatus from './components/debug/SystemStatus'
 
 
