@@ -18,7 +18,7 @@ export function applyChoicePolicy(input: {
         : choices;
 
     // Prioritize step-by-step if overwhelmed/curious and available
-    let ordered = [...filtered];
+    const ordered = [...filtered];
     if (policy.preferStepByStep) {
         ordered.sort((a, b) => {
             const aScore = /step|walk|guide/i.test(a.label) ? -1 : 0;

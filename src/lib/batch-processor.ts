@@ -1,4 +1,4 @@
-import { IMediaFactory, MediaInput, MediaAsset, GOVERNANCE_PROTOCOLS, MEDIA_STANDARDS } from './media-factory';
+import { IMediaFactory, MediaInput, MediaAsset, GOVERNANCE_PROTOCOLS } from './media-factory';
 
 /**
  * CREDIT U™ BATCH GENERATION PROCESSOR

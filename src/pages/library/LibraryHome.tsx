@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Search, BookOpen, Sparkles, Filter, FileText, Download, X } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { ArticleCard } from '@/components/library/ArticleCard'
 import { supabase } from '@/lib/supabase'
 import { CreditCowChat } from '@/components/credit-lab/CreditCowChat'
@@ -122,7 +121,7 @@ export default function LibraryHome({ initialTab = 'All' }: { initialTab?: strin
                     author: "CU Staff", // Placeholder until join
                     isNew: false
                 }))
-                setArticles(prev => {
+                setArticles(() => {
                     // Dedup logic could go here, but simple merge for now
                     return [...MOCK_ARTICLES, ...mapped]
                 })

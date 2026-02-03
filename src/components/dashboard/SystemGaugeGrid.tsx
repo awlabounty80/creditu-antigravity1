@@ -25,7 +25,7 @@ export function SystemGaugeGrid() {
                             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">{gauge.label}</span>
                             <span className="text-xs font-mono font-bold text-slate-500">{gauge.value}%</span>
                         </div>
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error: Progress props mismatch */}
                         <Progress value={gauge.value} className="h-1.5 bg-black" indicatorClassName={gauge.color} />
                     </div>
                 ))}

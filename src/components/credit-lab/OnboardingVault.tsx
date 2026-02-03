@@ -60,7 +60,8 @@ export function OnboardingVault({ onUploadComplete }: OnboardingVaultProps) {
                         accountNumber: 'XXXX-4492',
                         status: 'Late (30)',
                         balance: '$1,294.00',
-                        openedDate: '2022-01-15'
+                        openedDate: '2022-01-15',
+                        bureau: 'Experian'
                     },
                     {
                         id: '2',
@@ -68,7 +69,8 @@ export function OnboardingVault({ onUploadComplete }: OnboardingVaultProps) {
                         accountNumber: 'XXXX-9921',
                         status: 'Collection',
                         balance: '$550.00',
-                        openedDate: '2021-06-10'
+                        openedDate: '2021-06-10',
+                        bureau: 'TransUnion'
                     },
                     {
                         id: '3',
@@ -76,7 +78,8 @@ export function OnboardingVault({ onUploadComplete }: OnboardingVaultProps) {
                         accountNumber: 'XXXX-1234',
                         status: 'Open/Good',
                         balance: '$0.00',
-                        openedDate: '2019-11-05'
+                        openedDate: '2019-11-05',
+                        bureau: 'Equifax'
                     }
                 ]
             }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LEARNING_LEVELS, LearningLevel, getCurriculumSummary } from '@/lib/learning-levels';
-import { CheckCircle, Lock, ArrowRight, BookOpen, Target, Award } from 'lucide-react';
+import { CheckCircle, Lock, ArrowRight, Target, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function LearningPath() {
@@ -76,7 +76,7 @@ export default function LearningPath() {
 
                 {/* Learning Path Visualization */}
                 <div className="space-y-6 mb-8">
-                    {levels.map((level, idx) => {
+                    {levels.map((level) => {
                         const status = getLevelStatus(level.id);
                         const isSelected = selectedLevel === level.id;
 

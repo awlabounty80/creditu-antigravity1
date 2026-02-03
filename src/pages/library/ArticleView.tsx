@@ -131,11 +131,10 @@ export default function ArticleView() {
                 // Local fallback for guest
                 localStorage.setItem(`article_completed_${article.id}`, 'true')
                 setIsCompleted(true)
-                // @ts-ignore
                 awardPoints(50, `Read Article: ${article.title}`)
             } else {
                 // Call RPC
-                const { data, error } = await supabase.rpc('complete_article', { article_uuid: article.id })
+                const { error } = await supabase.rpc('complete_article', { article_uuid: article.id })
 
                 if (error) throw error
 

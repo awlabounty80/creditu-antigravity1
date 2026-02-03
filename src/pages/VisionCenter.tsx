@@ -40,7 +40,6 @@ const CATEGORIES = [
 
 export default function VisionCenter() {
     const { profile } = useProfile()
-    // @ts-ignore
     const { awardPoints } = useGamification()
     const [affirmation, setAffirmation] = useState("")
     const [items, setItems] = useState<VisionItem[]>([])
@@ -122,7 +121,6 @@ export default function VisionCenter() {
                     caption: data.caption,
                     targetScore: data.target_score
                 }, ...prev])
-                // @ts-ignore
                 awardPoints(50, 'Vision Manifested')
             }
         }

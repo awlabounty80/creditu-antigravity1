@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calculator, TrendingUp, AlertCircle } from 'lucide-react';
@@ -16,7 +15,7 @@ export default function CreditScoreSimulator() {
 
     const calculateImpact = () => {
         let newScore = currentScore;
-        let changes: { action: string; impact: number; reason: string }[] = [];
+        const changes: { action: string; impact: number; reason: string }[] = [];
 
         if (scenarios.payOffCard) {
             const impact = 35;

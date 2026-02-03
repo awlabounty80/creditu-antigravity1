@@ -212,15 +212,15 @@ export function generateScenario(index: number, targetTemplateId?: string): Scen
         params = [Math.floor(Math.random() * 5) + 3]; // 3-8 years
     }
 
-    // @ts-ignore
+    // @ts-expect-error: Dynamic generation
     const choices = template.generate(...params);
 
     return {
         id: index + 1,
         title: template.title,
-        // @ts-ignore
+        // @ts-expect-error: Dynamic description
         description: template.desc(...params),
-        // @ts-ignore
+        // @ts-expect-error: Icon mapping
         icon: ICONS[template.icon] || Wallet,
         themeColor: template.theme,
         templateId: template.id,

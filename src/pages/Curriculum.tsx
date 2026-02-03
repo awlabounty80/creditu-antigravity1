@@ -46,7 +46,7 @@ export default function Curriculum() {
                 if (coursesError) throw coursesError
 
                 // 2. Fetch Enrollments (if user logged in)
-                let enrollmentsByKey: Record<string, number> = {}
+                const enrollmentsByKey: Record<string, number> = {}
                 if (user) {
                     const { data: enrollments } = await supabase
                         .from('enrollments')

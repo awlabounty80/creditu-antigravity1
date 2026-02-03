@@ -13,21 +13,10 @@ import { FoundationCoreClass } from '@/components/dashboard/FoundationCoreClass'
 import { SystemGaugeGrid } from '@/components/dashboard/SystemGaugeGrid'
 import { ActiveMissionCard } from '@/components/dashboard/ActiveMissionCard'
 
-interface EnrolledCourse {
-    course_id: string
-    progress_percent: number
-    courses: {
-        title: string
-        slug: string
-        credits_value: number
-    }
-}
-
 export default function Dashboard() {
     const { profile, loading } = useProfile()
     const { points } = useGamification()
     const navigate = useNavigate()
-    const [enrollments, setEnrollments] = useState<EnrolledCourse[]>([])
     const [creditsEarned, setCreditsEarned] = useState(0)
 
     useEffect(() => {
@@ -39,8 +28,6 @@ export default function Dashboard() {
                 .eq('user_id', profile?.id)
 
             if (data) {
-                // @ts-ignore
-                setEnrollments(data)
                 const earned = data.reduce((acc: number, curr: any) => curr.progress_percent >= 100 ? acc + curr.courses.credits_value : acc, 0)
                 setCreditsEarned(earned)
             }

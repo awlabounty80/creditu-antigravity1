@@ -85,7 +85,7 @@ const TOOLS = [
     }
 ]
 
-export function CreditTools({ defaultTab }: { defaultTab?: string }) {
+export function CreditTools({ defaultTab: _defaultTab }: { defaultTab?: string }) {
     const navigate = useNavigate()
     const [activeModal, setActiveModal] = useState<string | null>(null)
 
