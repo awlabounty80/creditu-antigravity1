@@ -38,7 +38,7 @@ export default function ToolsHub() {
             title: 'Credit Utilization Calculator',
             description: 'Calculate your utilization ratio and get recommendations',
             icon: Calculator,
-            path: '/dashboard/knowledge',
+            path: '/dashboard/tools/utilization',
             color: 'from-amber-500 to-orange-500',
             features: ['Instant calculations', 'Optimization tips', 'Per-card analysis']
         },
@@ -47,7 +47,7 @@ export default function ToolsHub() {
             title: 'Debt-to-Income Calculator',
             description: 'Understand your DTI ratio for loan qualification',
             icon: Calculator,
-            path: '/dashboard/knowledge',
+            path: '/dashboard/tools/dti',
             color: 'from-blue-500 to-cyan-500',
             features: ['Loan thresholds', 'Qualification guidance', 'Improvement strategies']
         },

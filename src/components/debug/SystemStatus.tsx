@@ -9,6 +9,7 @@ export default function SystemStatus() {
     const [authStatus, setAuthStatus] = useState<'checking' | 'connected' | 'error'>('checking')
     const [storageStatus, setStorageStatus] = useState<'checking' | 'connected' | 'error'>('checking')
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isVisible, setIsVisible] = useState(true)
 
     useEffect(() => {
         // 1. Check Environment Variables
@@ -76,15 +77,26 @@ export default function SystemStatus() {
         checkServices()
     }, [])
 
+
+
     if (envStatus === 'connected' && dbStatus === 'connected' && authStatus === 'connected' && storageStatus === 'connected') return null
+    if (!isVisible) return null
 
     return (
         <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-10 fade-in duration-1000">
             <Card className="bg-black/90 border-white/10 backdrop-blur-md shadow-2xl w-80">
                 <CardContent className="p-4 space-y-3">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 border-b border-white/10 pb-2 mb-2">
-                        System Diagnostic
-                    </h4>
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                            System Diagnostic
+                        </h4>
+                        <button
+                            onClick={() => setIsVisible(false)}
+                            className="text-slate-500 hover:text-white transition-colors"
+                        >
+                            <XCircle className="w-4 h-4" />
+                        </button>
+                    </div>
 
                     {/* Env Check */}
                     <div className="flex items-center justify-between">
@@ -143,6 +155,6 @@ export default function SystemStatus() {
                     )}
                 </CardContent>
             </Card>
-        </div>
+        </div >
     )
 }

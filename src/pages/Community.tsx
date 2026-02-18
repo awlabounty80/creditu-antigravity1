@@ -272,7 +272,7 @@ export default function Community() {
                                             onChange={e => setNewThreadCategory(e.target.value)}
                                             data-tour-id="comm-category-select"
                                         >
-                                            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                                            {CATEGORIES.map(c => <option key={c} value={c} className="bg-slate-900 text-white">{c}</option>)}
                                         </select>
                                     </div>
                                     <div className="flex justify-end gap-3 pt-4">

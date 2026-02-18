@@ -5,7 +5,8 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { Loader2, Crown, AlertCircle, ArrowLeft, ShieldCheck, Mail, Key } from 'lucide-react'
+import { Loader2, AlertCircle, ArrowLeft, ShieldCheck, Mail, Key } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -22,14 +23,23 @@ export default function Login() {
     const location = useLocation()
     const reEntry = useAmaraReEntry()
 
-    // Get the return url from location state
-    const from = location.state?.from?.pathname || "/dashboard"
+    // Get the return url from location state - prioritizing Orientation for Dorm Week
+    const from = location.state?.from?.pathname || "/dashboard/orientation"
 
     useEffect(() => {
         // Check if already logged in
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) navigate(from, { replace: true })
         })
+
+        // Listen for auth state changes (e.g. Magic Link completion)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session) {
+                navigate(from, { replace: true })
+            }
+        })
+
+        return () => subscription.unsubscribe()
     }, [navigate, from])
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -53,7 +63,7 @@ export default function Login() {
                     email,
                     options: {
                         shouldCreateUser: true,
-                        emailRedirectTo: `${window.location.origin}/dashboard`,
+                        emailRedirectTo: `${window.location.origin}/dashboard/orientation`,
                     }
                 })
 
@@ -98,14 +108,12 @@ export default function Login() {
 
                             {/* Header */}
                             <div className="text-center mb-8">
-                                <div className="mx-auto bg-gradient-to-br from-indigo-600 to-purple-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-4 p-[1px]">
-                                    <div className="bg-[#0A0F1E] w-full h-full rounded-2xl flex items-center justify-center">
-                                        <Crown className="w-8 h-8 text-white" />
-                                    </div>
+                                <div className="mx-auto w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-4 overflow-hidden border border-white/10">
+                                    <CreditULogo className="w-full h-full" variant="white" showShield={false} iconClassName="w-22 h-22" />
                                 </div>
-                                <h1 className="font-heading text-2xl font-bold text-white tracking-tight mb-2">Student Verification</h1>
+                                <h1 className="font-heading text-2xl font-bold text-white tracking-tight mb-2">Dorm Week Check-In</h1>
                                 <p className="text-slate-400 text-sm">
-                                    {usePassword ? "Enter credentials for clearance." : "Biometric access initialized."}
+                                    {usePassword ? "Enter credentials for clearance." : "Secure sequence initialized."}
                                 </p>
                             </div>
 
@@ -115,19 +123,28 @@ export default function Login() {
                                         <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
                                             <Mail className="w-6 h-6" />
                                         </div>
-                                        <h3 className="font-bold text-lg mb-1">Check your Uplink</h3>
+                                        <h3 className="font-bold text-lg mb-1">Access Key Dispatched</h3>
                                         <p className="text-sm opacity-80 leading-relaxed">
-                                            A secure access key has been sent to <span className="text-white font-mono">{email}</span>.
-                                            <br /><span className="text-xs text-amber-500 mt-2 block font-medium">⚠️ Note: If this email is not real (e.g. test@test.com), the uplink will fail. Check Spam folder.</span>
+                                            Your Dorm Week entry link has been sent to <span className="text-white font-mono">{email}</span>.
+                                            <br /><span className="text-xs text-amber-500 mt-2 block font-medium">⚠️ Check your spam/promotions folder if it doesn't appear instantly.</span>
                                         </p>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        className="text-slate-500 hover:text-white hover:bg-white/5"
-                                        onClick={() => setSent(false)}
-                                    >
-                                        Use a different identity
-                                    </Button>
+                                    <div className="flex flex-col gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            className="text-slate-500 hover:text-white hover:bg-white/5"
+                                            onClick={() => setSent(false)}
+                                        >
+                                            Use a different email
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            className="text-amber-500/50 hover:text-amber-400 text-[10px] font-bold uppercase tracking-widest"
+                                            onClick={() => navigate('/dashboard')}
+                                        >
+                                            [DEV] Bypass Wait: Go to Dashboard
+                                        </Button>
+                                    </div>
                                 </div>
                             ) : (
                                 <form onSubmit={handleLogin} className="space-y-6">

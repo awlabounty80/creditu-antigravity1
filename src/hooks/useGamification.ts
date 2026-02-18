@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useProfile } from './useProfile'
 import { supabase } from '@/lib/supabase'
 import { useDeveloperMode } from './useDeveloperMode'
@@ -52,14 +52,36 @@ export function useGamification() {
         }
     }
 
+    const [showLevelUp, setShowLevelUp] = useState(false)
+    const [currentLevelName, setCurrentLevelName] = useState("")
+
     // MOCK DATA FOR DEV MODE
     const effectivePoints = isDevMode ? 650 : (profile?.moo_points || 0)
+    const currentLevel = getLevel(effectivePoints)
+
+    // Check for level up
+    // In a real app, we'd store the "last seen level" in the DB or local storage to detect changes
+    // For this demo, let's just use local state and a simple effect
+    useEffect(() => {
+        if (loading) return
+
+        const lastKnown = localStorage.getItem('credit_u_last_level')
+        if (lastKnown && lastKnown !== currentLevel) {
+            setShowLevelUp(true)
+            setCurrentLevelName(currentLevel)
+        }
+
+        localStorage.setItem('credit_u_last_level', currentLevel)
+    }, [currentLevel, loading])
 
     return {
         points: effectivePoints,
-        level: getLevel(effectivePoints),
+        level: currentLevel,
         awardPoints,
         awarding,
-        loading: isDevMode ? false : loading
+        loading: isDevMode ? false : loading,
+        showLevelUp,
+        newLevel: currentLevelName,
+        dismissLevelUp: () => setShowLevelUp(false)
     }
 }

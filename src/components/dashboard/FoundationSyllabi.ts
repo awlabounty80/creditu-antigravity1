@@ -1,34 +1,58 @@
 export const FOUNDATION_SYLLABI = [
     {
-        id: 'lesson-1',
-        title: 'The Mirror of Credit',
-        description: 'Understand that your credit report is a reflection of your character in the financial matrix.',
-        duration_minutes: 2,
-        xp_reward: 150,
-        content_url: '/library/the-mirror-of-credit'
-    },
-    {
-        id: 'lesson-2',
-        title: 'The 5 Pillars of FICO',
-        description: 'Deconstruct the algorithm. Learn the exact weights of Payment History, Utilization, and more.',
+        id: 'welcome-wealth-game',
+        title: 'Welcome to the Wealth Game',
+        description: 'Shift from Consumer to Architect. Why credit is leverage, not debt.',
         duration_minutes: 5,
-        xp_reward: 250,
-        content_url: '/library/5-fico-factors'
+        xp_reward: 100,
+        content_url: '/dashboard/course/freshman-foundations'
     },
     {
-        id: 'lesson-3',
-        title: 'Dispute & Demand',
-        description: 'The art of the challenge. Learn how to demand verification for any debt.',
-        duration_minutes: 8,
-        xp_reward: 350,
-        content_url: '/library/dispute-process'
+        id: 'the-matrix',
+        title: 'The Matrix (How It Works)',
+        description: 'The Data Triangle: You vs. Lenders vs. Bureaus. Who to fight and how.',
+        duration_minutes: 7,
+        xp_reward: 150,
+        content_url: '/dashboard/course/freshman-foundations'
     },
     {
-        id: 'lesson-4',
-        title: 'Funding the Dream',
-        description: 'From credit to capital. How to leverage a clean profile for business funding.',
+        id: 'the-5-pillars',
+        title: 'The 5 Pillars of Power',
+        description: 'The FICO Hand Method: Mastering the 5 variables that control your score.',
         duration_minutes: 10,
-        xp_reward: 500,
-        content_url: '/library/funding-intro'
+        xp_reward: 200,
+        content_url: '/dashboard/course/freshman-foundations'
+    },
+    {
+        id: 'debt-vs-leverage',
+        title: 'Debt vs. Leverage',
+        description: 'The secret of the wealthy: Using OPM (Other People\'s Money) to buy assets.',
+        duration_minutes: 8,
+        xp_reward: 200,
+        content_url: '/dashboard/course/freshman-foundations'
+    },
+    {
+        id: 'fcra-rights',
+        title: 'The Rules of Engagement (FCRA)',
+        description: 'Your legal Bill of Rights. Learn the law that forces bureaus to delete errors.',
+        duration_minutes: 8,
+        xp_reward: 250,
+        content_url: '/dashboard/course/freshman-foundations'
+    },
+    {
+        id: 'financial-avatar',
+        title: 'Your Financial Avatar',
+        description: 'Lenders don\'t see you, they see your data. Learn to groom your digital self.',
+        duration_minutes: 10,
+        xp_reward: 200,
+        content_url: '/dashboard/course/freshman-foundations'
+    },
+    {
+        id: 'mission-800',
+        title: 'Mission 800 (Setting the Target)',
+        description: 'Defining the objective. Why life is cheaper and faster at the top.',
+        duration_minutes: 5,
+        xp_reward: 300,
+        content_url: '/dashboard/course/freshman-foundations'
     }
 ]

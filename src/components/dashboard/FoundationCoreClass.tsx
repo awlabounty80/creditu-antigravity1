@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { FOUNDATION_SYLLABI } from './FoundationSyllabi'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useFoundationProgress } from '@/hooks/useFoundationProgress'
+// import { ProfessorGenerative } from './ProfessorGenerative'
 
 export function FoundationCoreClass() {
     const navigate = useNavigate()
+    const location = useLocation()
     const { completedLessons, completeLesson, loading } = useFoundationProgress()
 
     const handleStartLesson = (lesson: any) => {
@@ -49,17 +51,22 @@ export function FoundationCoreClass() {
                 </div>
             </CardHeader>
             <CardContent className="space-y-3">
-                {/* Dean's Welcome Message */}
-                <div className="mb-4 rounded-xl overflow-hidden border border-white/10 bg-black shadow-lg relative group">
-                    <video
-                        src="/assets/dean-welcome.mp4"
-                        controls
-                        className="w-full aspect-video object-cover opacity-90 hover:opacity-100 transition-opacity"
-                    />
-                    <div className="absolute bottom-3 left-3 z-10">
-                        <p className="text-xs font-bold text-white shadow-black drop-shadow-md">Dean's Transmission</p>
+                {/* DEAN'S TRANSMISSION - Only show on main dashboard, hide in student classroom/course player */}
+                {!location.pathname.includes('/course/') && !location.pathname.includes('/classroom/') && !location.pathname.includes('/class/') && (
+                    <div className="mb-4">
+                        {/* 3D Professor Removed for Stability */}
+                        <div className="p-4 bg-indigo-900/20 border border-indigo-500/20 rounded-xl relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-1 bg-indigo-500 h-full"></div>
+                            <h4 className="text-sm font-bold text-indigo-100 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                                Dr. Leverage Transmission
+                            </h4>
+                            <p className="text-xs text-slate-400 mt-2 italic">
+                                "Welcome to the Wealth Game. This orientation is mandatory before accessing the Global Campus. We are here to shift your mindset from Consumer to Architect."
+                            </p>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {FOUNDATION_SYLLABI.map((lesson, index) => {
                     const isCompleted = completedLessons.has(lesson.id)

@@ -4,16 +4,21 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useGamification } from '@/hooks/useGamification'
-import { Trophy, CheckCircle, XCircle, ArrowRight, Brain } from 'lucide-react'
+import { CheckCircle, XCircle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import confetti from 'canvas-confetti'
 import { supabase } from '@/lib/supabase'
 import { useProfile } from '@/hooks/useProfile'
 import { generateScenario, TEMPLATES, type Scenario, type Choice } from '@/lib/quest-engine'
+import { LevelUpOverlay } from '@/components/gamification/LevelUpOverlay'
+import { useSound } from '@/hooks/useSound'
+import { ScoreBoard } from '@/components/gamification/ScoreBoard'
 
 export default function CreditQuest() {
-    const { user } = useProfile()
+    const { user, profile } = useProfile()
     const { awardPoints } = useGamification()
+    const { playHover, playClick, playSuccess, playError } = useSound()
+
     const [scenarios, setScenarios] = useState<Scenario[]>([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null)
@@ -21,34 +26,43 @@ export default function CreditQuest() {
     const [totalPoints, setTotalPoints] = useState(0)
     const [simulatedScore, setSimulatedScore] = useState(650)
     const [loading, setLoading] = useState(true)
+    const [showTestCelebration, setShowTestCelebration] = useState(false)
+    const [initialMooPoints, setInitialMooPoints] = useState(0)
+
+    // Combo & Streak State
+    const [combo, setCombo] = useState(0)
+    const [shakeScreen, setShakeScreen] = useState(false)
+
+    useEffect(() => {
+        if (user && !initialMooPoints && profile?.moo_points) {
+            setInitialMooPoints(profile.moo_points)
+        }
+    }, [user, profile])
 
     useEffect(() => {
         if (user) {
             initSession()
+        } else {
+            const newGame = Array.from({ length: 5 }).map((_, i) => generateScenario(i))
+            setScenarios(newGame)
+            setLoading(false)
         }
     }, [user])
 
     async function initSession() {
         setLoading(true)
         try {
-            // 1. Fetch History
-            const { data: history, error } = await supabase.rpc('get_quest_stats', { user_uuid: user?.id })
+            const { data: history } = await supabase.rpc('get_quest_stats', { user_uuid: user?.id })
+            const stats = history || {}
 
-            const stats = history || {} // { 'template_id': { attempts: 1, correct: 0 } }
-
-            // 2. Sort Templates by "Need"
-            // Priority: Failed > New > Mastered
             const playlist = TEMPLATES.sort((a, b) => {
                 const statA = stats[a.id] || { attempts: 0, correct: 0 }
                 const statB = stats[b.id] || { attempts: 0, correct: 0 }
-
                 const scoreA = getPriorityScore(statA)
                 const scoreB = getPriorityScore(statB)
+                return scoreB - scoreA
+            }).slice(0, 5)
 
-                return scoreB - scoreA // Descending priority
-            }).slice(0, 5) // Take top 5
-
-            // 3. Generate Scenarios
             const sessionScenarios = playlist.map((t, i) => generateScenario(i, t.id))
             setScenarios(sessionScenarios)
 
@@ -61,9 +75,9 @@ export default function CreditQuest() {
     }
 
     function getPriorityScore(stat: any) {
-        if (stat.attempts === 0) return 10; // New Content (High Priority)
-        if (stat.correct === 0) return 20; // Failed Content (Highest Priority - Review)
-        return 1; // Mastered (Low priority)
+        if (stat.attempts === 0) return 10;
+        if (stat.correct === 0) return 20;
+        return 1;
     }
 
     const currentScenario = scenarios[currentIndex]
@@ -71,27 +85,38 @@ export default function CreditQuest() {
     const handleChoice = async (choice: Choice) => {
         if (selectedChoice) return
         setSelectedChoice(choice)
+        playClick()
 
-        // Award points
-        if (choice.points > 0) {
-            setTotalPoints(prev => prev + choice.points)
-            awardPoints(choice.points, `Quest: ${currentScenario.title}`)
-        }
-
-        // Update Sim Score
-        setSimulatedScore(prev => Math.min(850, Math.max(300, prev + choice.statImpact.score)))
-
-        // Confetti
         if (choice.isCorrect) {
+            playSuccess()
+            setCombo(prev => prev + 1)
+
+            // Award points + Combo Bonus
+            const comboBonus = combo > 1 ? combo * 10 : 0
+            const total = choice.points + comboBonus
+
+            setTotalPoints(prev => prev + total)
+            awardPoints(total, `Quest: ${currentScenario.title}`)
+
+            setSimulatedScore(prev => Math.min(850, Math.max(300, prev + choice.statImpact.score)))
+
             confetti({
-                particleCount: 100,
+                particleCount: 100 + (combo * 20),
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#4ade80', '#22c55e', '#ffffff']
+                colors: ['#2563eb', '#f59e0b', '#ffd700', '#ffffff'], // Royal Blue, Amber, Gold, White
+                shapes: ['square', 'circle'], // Square = Card/Bill, Circle = Coin
+                scalar: 1.2,
+                gravity: 0.8
             })
+        } else {
+            playError()
+            setCombo(0)
+            setShakeScreen(true)
+            setTimeout(() => setShakeScreen(false), 400)
+            setSimulatedScore(prev => Math.min(850, Math.max(300, prev + choice.statImpact.score)))
         }
 
-        // SAVE HISTORY to DB (The "Memory")
         if (user && currentScenario.templateId) {
             await supabase.from('quest_history').insert({
                 user_id: user.id,
@@ -102,29 +127,41 @@ export default function CreditQuest() {
     }
 
     const nextScenario = () => {
+        playClick()
         setSelectedChoice(null)
         if (currentIndex < scenarios.length - 1) {
             setCurrentIndex(prev => prev + 1)
         } else {
             setGameCompleted(true)
+            playSuccess() // Big success
             awardPoints(500, "Quest Completion Bonus")
+
+            // Trigger Epic Celebration - Wait 3s so user can see Grand Scoreboard
+            setTimeout(() => setShowTestCelebration(true), 3000)
         }
     }
 
-    const resetGame = () => {
-        // Refresh session with new priorities
+
+
+    const continueGame = () => {
+        playClick()
         initSession()
         setCurrentIndex(0)
         setSelectedChoice(null)
         setGameCompleted(false)
-        setTotalPoints(0)
-        setSimulatedScore(650)
     }
 
-    if (loading || !currentScenario) return <div className="min-h-screen bg-[#020412] flex items-center justify-center text-white">Loading Simulation...</div>
+    if (loading) return <div className="min-h-screen bg-[#020412] flex items-center justify-center text-white">Loading Simulation...</div>
+    if (!currentScenario && !loading) return <div className="min-h-screen bg-[#020412] flex items-center justify-center text-white">Simulation Error. Please Refresh.</div>
+
+    // Calculate Dynamic XP for Scoreboard
+    const currentDisplayXP = initialMooPoints + totalPoints;
+    const finalDisplayXP = gameCompleted ? currentDisplayXP + 500 : currentDisplayXP;
 
     return (
-        <div className="min-h-screen bg-[#020412] text-white p-6 md:p-12 font-sans relative overflow-hidden">
+        <div className={cn("min-h-screen bg-[#020412] text-white p-6 md:p-12 font-sans relative overflow-hidden transition-transform duration-100", shakeScreen ? "translate-x-1" : "")}>
+            {shakeScreen && <div className="absolute inset-0 bg-red-500/10 z-50 pointer-events-none animate-pulse" />}
+
             {/* Background Ambience */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
                 <div className="absolute top-10 right-10 w-96 h-96 bg-indigo-600/30 rounded-full blur-[100px]" />
@@ -133,33 +170,24 @@ export default function CreditQuest() {
 
             <div className="max-w-4xl mx-auto relative z-10">
 
-                {/* Header Stats */}
-                <div className="flex flex-col md:flex-row justify-between items-center bg-white/5 border border-white/10 rounded-2xl p-6 mb-12 backdrop-blur-md">
-                    <div className="flex items-center gap-4 mb-4 md:mb-0">
-                        <div className="bg-indigo-600 p-3 rounded-lg shadow-lg shadow-indigo-500/20">
-                            <Brain className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-black italic tracking-tighter">CREDIT QUEST</h1>
-                            <p className="text-xs text-slate-400 font-mono tracking-widest">TACTICAL SIMULATION v2.0</p>
-                        </div>
+                {/* Header Stats - REPLACED WITH COMMAND BOARD */}
+                {!gameCompleted && (
+                    <div className="mb-12 animate-in slide-in-from-top-4 duration-700">
+                        <ScoreBoard
+                            creditScore={simulatedScore}
+                            xp={currentDisplayXP}
+                            streak={combo}
+                            rank={currentDisplayXP > 5000 ? "Master Architect" : currentDisplayXP > 2000 ? "Senior Agent" : "Cadet"}
+                        />
                     </div>
+                )}
 
-                    <div className="flex gap-8">
-                        <div className="text-center">
-                            <p className="text-[10px] uppercase text-slate-500 font-bold tracking-widest">Sim Score</p>
-                            <div className={cn("text-2xl font-bold font-mono transition-colors duration-500",
-                                simulatedScore >= 700 ? "text-emerald-400" : simulatedScore >= 650 ? "text-amber-400" : "text-red-400"
-                            )}>
-                                {simulatedScore}
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-[10px] uppercase text-slate-500 font-bold tracking-widest">Session XP</p>
-                            <div className="text-2xl font-bold text-indigo-400 font-mono">+{totalPoints}</div>
-                        </div>
-                    </div>
-                </div>
+                {showTestCelebration && (
+                    <LevelUpOverlay
+                        newLevel="MASTER ARCHITECT"
+                        onDismiss={() => setShowTestCelebration(false)}
+                    />
+                )}
 
                 {/* GAME STAGE */}
                 <AnimatePresence mode="wait">
@@ -171,31 +199,45 @@ export default function CreditQuest() {
                             exit={{ opacity: 0, x: -50 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <Card className="bg-[#0A0F1E] border-white/10 shadow-2xl overflow-hidden">
+                            <Card className="bg-[#0A0F1E] border-white/10 shadow-2xl overflow-hidden relative">
                                 {/* Scenario Header */}
-                                <div className="p-8 border-b border-white/5 bg-gradient-to-r from-white/5 to-transparent">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <Badge variant="outline" className="bg-white/5 border-white/20 text-slate-300">
-                                            Scenario {currentIndex + 1} of {scenarios.length}
-                                        </Badge>
-                                        <div className="h-px flex-1 bg-white/10" />
+                                <div className="p-8 border-b border-white/5 bg-gradient-to-br from-white/5 via-indigo-900/10 to-transparent relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
+
+                                    <div className="flex items-center justify-between mb-6 relative z-10">
+                                        <div className="flex items-center gap-4">
+                                            <Badge variant="outline" className="bg-black/40 border-white/10 text-slate-400 font-mono tracking-wider">
+                                                SCENARIO {currentIndex + 1} / {scenarios.length}
+                                            </Badge>
+                                            {['nuclear_cfpb', 'pay_for_delete', 'piggyback', 'statement_hack'].includes(currentScenario?.templateId) ? (
+                                                <Badge className="bg-red-500/20 text-red-300 border-red-500/50 animate-pulse">
+                                                    ⚠️ ADVANCED TACTIC
+                                                </Badge>
+                                            ) : (
+                                                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/50">
+                                                    CORE FUNDAMENTAL
+                                                </Badge>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex gap-6">
-                                        <div className={cn("p-4 rounded-2xl h-fit shadow-xl", "bg-black/40 border border-white/10")}>
-                                            <currentScenario.icon className={cn("w-10 h-10", currentScenario.themeColor)} />
+
+                                    <div className="flex gap-6 relative z-10">
+                                        <div className={cn("p-4 rounded-2xl h-fit shadow-xl backdrop-blur-sm", "bg-black/40 border border-white/10")}>
+                                            <currentScenario.icon className={cn("w-10 h-10", currentScenario?.themeColor)} />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{currentScenario.title}</h2>
-                                            <p className="text-lg text-slate-300 leading-relaxed font-light">{currentScenario.description}</p>
+                                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">{currentScenario?.title}</h2>
+                                            <p className="text-lg text-slate-300 leading-relaxed font-light">{currentScenario?.description}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Choices */}
                                 <div className="p-8 space-y-4">
-                                    {currentScenario.choices.map((choice) => (
+                                    {currentScenario?.choices.map((choice) => (
                                         <button
                                             key={choice.id}
+                                            onMouseEnter={playHover}
                                             onClick={() => handleChoice(choice)}
                                             disabled={!!selectedChoice}
                                             className={cn(
@@ -234,8 +276,21 @@ export default function CreditQuest() {
                                                             ) : (
                                                                 <span className="text-red-400 flex items-center gap-2"><XCircle className="w-4 h-4" /> {choice.feedback}</span>
                                                             )}
-                                                            <div className="mt-2 text-xs opacity-70">
-                                                                Impact: Score {choice.statImpact.score > 0 ? '+' : ''}{choice.statImpact.score}
+                                                            <div className="mt-4 flex items-center justify-between">
+                                                                <div className="text-xs opacity-70">
+                                                                    Impact: Score {choice.statImpact.score > 0 ? '+' : ''}{choice.statImpact.score}
+                                                                </div>
+
+                                                                {['pay_for_delete', 'ghost_debt', 'nuclear_cfpb', 'dispute_law'].includes(currentScenario?.templateId) && (
+                                                                    <Button size="sm" variant="outline" className="h-7 text-xs border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300" onClick={(e) => { e.stopPropagation(); window.open('/dashboard/tools/dispute-generator', '_blank') }}>
+                                                                        Open Dispute Tool <ArrowRight className="w-3 h-3 ml-1" />
+                                                                    </Button>
+                                                                )}
+                                                                {['utilize_windfall', 'statement_hack', 'limit_increase'].includes(currentScenario?.templateId) && (
+                                                                    <Button size="sm" variant="outline" className="h-7 text-xs border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300" onClick={(e) => { e.stopPropagation(); window.open('/dashboard/tools/utilization', '_blank') }}>
+                                                                        Check Calculator <ArrowRight className="w-3 h-3 ml-1" />
+                                                                    </Button>
+                                                                )}
                                                             </div>
                                                         </motion.div>
                                                     )}
@@ -256,31 +311,41 @@ export default function CreditQuest() {
                             </Card>
                         </motion.div>
                     ) : (
-                        /* COMPLETION SCREEN */
+                        /* COMPLETION SCREEN - GRAND SCOREBOARD */
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="text-center py-12"
+                            className="flex flex-col items-center justify-center py-12"
                         >
-                            <Trophy className="w-32 h-32 text-amber-400 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-bounce" />
-                            <h2 className="text-5xl font-black text-white mb-4">SIMULATION COMPLETE</h2>
-                            <p className="text-xl text-slate-300 max-w-lg mx-auto mb-12">
-                                You demonstrated excellent strategic instincts. Your simulated credit score is now <span className="text-emerald-400 font-bold">{simulatedScore}</span>.
-                            </p>
-
-                            <div className="inline-flex flex-col items-center gap-4 bg-white/5 p-8 rounded-3xl border border-white/10 mb-12">
-                                <span className="text-sm font-mono uppercase tracking-widest text-slate-500">Total Rewards Earned</span>
-                                <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                                    {totalPoints + 500} MP
-                                </span>
+                            <div className="w-full transform scale-110 mb-12">
+                                <ScoreBoard
+                                    creditScore={simulatedScore}
+                                    xp={finalDisplayXP}
+                                    streak={3} // Force high streak visualization
+                                    rank={finalDisplayXP > 5000 ? "Master Architect" : "Senior Agent"}
+                                />
                             </div>
 
-                            <div className="flex justify-center gap-4">
-                                <Button onClick={resetGame} variant="outline" className="border-white/10 hover:bg-white/5 text-slate-300">
-                                    Replay Simulation
+                            <div className="text-center space-y-4 animate-in slide-in-from-bottom-5 fade-in duration-700 delay-300">
+                                <h1 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">
+                                    MISSION ACCOMPLISHED
+                                </h1>
+                                <p className="text-lg text-slate-300">
+                                    Simulation data has been uploaded. Your profile has been updated.
+                                </p>
+
+                                <div className="inline-flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/20 px-6 py-3 rounded-full mt-4">
+                                    <span className="text-emerald-400 font-bold tracking-widest uppercase text-sm">Session Rewards</span>
+                                    <span className="text-2xl font-black text-white">+{totalPoints + 500} XP</span>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center gap-4 mt-12 animate-in slide-in-from-bottom-5 fade-in duration-700 delay-500">
+                                <Button onClick={continueGame} className="bg-indigo-600 hover:bg-indigo-500 text-white h-12 px-8 rounded-full shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+                                    Continue Training (Endless)
                                 </Button>
-                                <Button className="bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => window.location.href = '/dashboard/curriculum'}>
-                                    Return to Base
+                                <Button variant="outline" className="border-white/10 hover:bg-white/5 text-slate-300 h-12 px-8 rounded-full" onClick={() => window.location.href = '/dashboard'}>
+                                    Return to HQ
                                 </Button>
                             </div>
                         </motion.div>

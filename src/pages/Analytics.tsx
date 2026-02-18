@@ -1,8 +1,67 @@
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { TrendingUp, Users, BookOpen, Trophy, Target, Clock, Award, Zap } from 'lucide-react';
+import { TrendingUp, Users, BookOpen, Trophy, Target, Clock, Award, Zap, ShieldAlert } from 'lucide-react';
 
 export default function Analytics() {
-    // Mock data - in production, this would come from Supabase
+    // ------------------------------------------------------------------
+    // DYNAMIC DATA LOADER (UPDATED FROM DISPUTE WIZARD)
+    // ------------------------------------------------------------------
+    const [reportData, setReportData] = useState<any>(null);
+
+    useEffect(() => {
+        const stored = localStorage.getItem('credit_report_data');
+        if (stored) {
+            try {
+                setReportData(JSON.parse(stored));
+            } catch (e) {
+                console.error("Failed to load report data", e);
+            }
+        }
+    }, []);
+
+    // Calculate dynamic stats or fallback to mocks
+    const dynamicStats = reportData ? {
+        metric1: {
+            value: reportData.accounts.filter((a: any) =>
+                ['late', 'collection', 'charge', 'past due', 'repossession', 'foreclosure', 'bankruptcy'].some((k: string) => a.status.toLowerCase().includes(k))
+            ).length,
+            label: 'Negative Items Detected',
+            change: '+2 Identified',
+            icon: ShieldAlert,
+            color: 'text-red-400',
+            bg: 'bg-red-500/10',
+            border: 'border-red-500/20'
+        },
+        metric2: {
+            value: reportData.score || "N/A",
+            label: 'Current Credit Score',
+            change: 'Synced just now',
+            icon: Trophy,
+            color: 'text-emerald-400',
+            bg: 'bg-emerald-500/10',
+            border: 'border-emerald-500/20'
+        },
+        metric3: {
+            value: reportData.accounts.length,
+            label: 'Total Accounts Monitored',
+            change: 'Active Tracking',
+            icon: BookOpen,
+            color: 'text-blue-400',
+            bg: 'bg-blue-500/10',
+            border: 'border-blue-500/20'
+        },
+        metric4: {
+            value: (125340 + (reportData.accounts.length * 100)).toLocaleString(), // Bonus points for data
+            label: 'Moo Points',
+            change: '+Sync Bonus',
+            icon: Award,
+            color: 'text-purple-400',
+            bg: 'bg-purple-500/10',
+            border: 'border-purple-500/20'
+        }
+    } : null;
+
+    // Fallback Mock Data (Platform Stats)
     const stats = {
         totalStudents: 1247,
         activeToday: 342,
@@ -46,60 +105,60 @@ export default function Analytics() {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-heading font-bold mb-2 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                        Platform Analytics
+                        {reportData ? "My Credit Diagnostics" : "Platform Analytics"}
                     </h1>
                     <p className="text-slate-400">
-                        Real-time insights into student engagement and platform performance
+                        {reportData ? "Real-time analysis of your uploaded credit profile metrics." : "Real-time insights into student engagement and platform performance."}
                     </p>
                 </div>
 
                 {/* Key Metrics Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <Card className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/20">
+                    {/* CARD 1 */}
+                    <Card className={`${dynamicStats ? dynamicStats.metric1.bg + ' ' + dynamicStats.metric1.border : 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/20'}`}>
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <Users className="w-8 h-8 text-indigo-400" />
-                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">+12%</span>
+                                {dynamicStats ? <dynamicStats.metric1.icon className={`w-8 h-8 ${dynamicStats.metric1.color}`} /> : <Users className="w-8 h-8 text-indigo-400" />}
+                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">{dynamicStats ? dynamicStats.metric1.change : '+12%'}</span>
                             </div>
-                            <div className="text-3xl font-bold mb-1">{stats.totalStudents.toLocaleString()}</div>
-                            <div className="text-sm text-slate-400">Total Students</div>
-                            <div className="text-xs text-indigo-400 mt-2">{stats.activeToday} active today</div>
+                            <div className="text-3xl font-bold mb-1">{dynamicStats ? dynamicStats.metric1.value : stats.totalStudents.toLocaleString()}</div>
+                            <div className="text-sm text-slate-400">{dynamicStats ? dynamicStats.metric1.label : 'Total Students'}</div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
+                    {/* CARD 2 */}
+                    <Card className={`${dynamicStats ? dynamicStats.metric2.bg + ' ' + dynamicStats.metric2.border : 'bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20'}`}>
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <Trophy className="w-8 h-8 text-emerald-400" />
-                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">+8%</span>
+                                {dynamicStats ? <dynamicStats.metric2.icon className={`w-8 h-8 ${dynamicStats.metric2.color}`} /> : <Trophy className="w-8 h-8 text-emerald-400" />}
+                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">{dynamicStats ? dynamicStats.metric2.change : '+8%'}</span>
                             </div>
-                            <div className="text-3xl font-bold mb-1">{stats.coursesCompleted}</div>
-                            <div className="text-sm text-slate-400">Courses Completed</div>
-                            <div className="text-xs text-emerald-400 mt-2">{stats.avgCompletionRate}% avg completion</div>
+                            <div className="text-3xl font-bold mb-1">{dynamicStats ? dynamicStats.metric2.value : stats.coursesCompleted}</div>
+                            <div className="text-sm text-slate-400">{dynamicStats ? dynamicStats.metric2.label : 'Courses Completed'}</div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
+                    {/* CARD 3 */}
+                    <Card className={`${dynamicStats ? dynamicStats.metric3.bg + ' ' + dynamicStats.metric3.border : 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20'}`}>
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <BookOpen className="w-8 h-8 text-amber-400" />
-                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">+15%</span>
+                                {dynamicStats ? <dynamicStats.metric3.icon className={`w-8 h-8 ${dynamicStats.metric3.color}`} /> : <BookOpen className="w-8 h-8 text-amber-400" />}
+                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">{dynamicStats ? dynamicStats.metric3.change : '+15%'}</span>
                             </div>
-                            <div className="text-3xl font-bold mb-1">{stats.totalLessonsWatched.toLocaleString()}</div>
-                            <div className="text-sm text-slate-400">Lessons Watched</div>
-                            <div className="text-xs text-amber-400 mt-2">{stats.avgWatchTime} min avg</div>
+                            <div className="text-3xl font-bold mb-1">{dynamicStats ? dynamicStats.metric3.value : stats.totalLessonsWatched.toLocaleString()}</div>
+                            <div className="text-sm text-slate-400">{dynamicStats ? dynamicStats.metric3.label : 'Lessons Watched'}</div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+                    {/* CARD 4 */}
+                    <Card className={`${dynamicStats ? dynamicStats.metric4.bg + ' ' + dynamicStats.metric4.border : 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20'}`}>
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <Award className="w-8 h-8 text-purple-400" />
-                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">+20%</span>
+                                {dynamicStats ? <dynamicStats.metric4.icon className={`w-8 h-8 ${dynamicStats.metric4.color}`} /> : <Award className="w-8 h-8 text-purple-400" />}
+                                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded">{dynamicStats ? dynamicStats.metric4.change : '+20%'}</span>
                             </div>
-                            <div className="text-3xl font-bold mb-1">{stats.mooPointsAwarded.toLocaleString()}</div>
-                            <div className="text-sm text-slate-400">Moo Points Awarded</div>
-                            <div className="text-xs text-purple-400 mt-2">{stats.quizzesTaken} quizzes taken</div>
+                            <div className="text-3xl font-bold mb-1">{dynamicStats ? dynamicStats.metric4.value : stats.mooPointsAwarded.toLocaleString()}</div>
+                            <div className="text-sm text-slate-400">{dynamicStats ? dynamicStats.metric4.label : 'Moo Points Awarded'}</div>
                         </CardContent>
                     </Card>
                 </div>

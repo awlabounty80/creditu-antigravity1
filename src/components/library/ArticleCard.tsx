@@ -33,7 +33,7 @@ export function ArticleCard({ title, summary, slug, pillar, author, readTime, is
             whileHover={{ y: -5 }}
             className="group"
         >
-            <Link to={`/dashboard/library/${slug}`}>
+            <Link to={`/dashboard/library/article/${slug}`}>
                 <Card className="h-full bg-slate-900/40 border-white/5 hover:border-indigo-500/30 overflow-hidden backdrop-blur-sm transition-all duration-300">
                     <div className="p-6 flex flex-col h-full">
                         {/* Meta Header */}

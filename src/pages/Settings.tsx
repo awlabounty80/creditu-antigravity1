@@ -136,7 +136,9 @@ export default function Settings() {
                                     </div>
                                     <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5 text-slate-300" onClick={() => {
                                         onboarding.reset()
-                                        toast.success("Onboarding Reset. Go to Dashboard to start.")
+                                        toast.success("Restarting Tour...")
+                                        // Navigate to dashboard to trigger the start (GuideAgent watches for this)
+                                        setTimeout(() => window.location.href = '/dashboard', 500)
                                     }}>
                                         <RefreshCw size={14} className="mr-2" /> Reset Tour
                                     </Button>

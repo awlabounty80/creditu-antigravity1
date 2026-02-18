@@ -9,12 +9,24 @@ export interface Lesson {
     title: string
     content_markdown?: string
     video_url?: string
+    transcript?: string
     duration_minutes: number
     type: 'video' | 'text' | 'quiz'
     is_free_preview: boolean
     order_index: number
     isCompleted?: boolean // merged from user progress
     isLocked?: boolean // calculated based on logic (previous lesson complete?)
+    video_object?: {
+        type: 'ai_professor' | 'voiceover_slides' | 'placeholder' | 'external_reference';
+        title: string;
+        duration_estimate: number;
+        thumbnail_image: string;
+        playback_status: 'ready' | 'pending' | 'rendering';
+        external_resource_url?: string;
+        external_resource_title?: string;
+    }
+    video_mode?: 'VIDEO' | 'AVATAR';
+    chat_log?: string;
 }
 
 export interface Module {
@@ -47,17 +59,17 @@ export function useCourse(courseId?: string) {
         setError(null)
 
         try {
-            // 1. STATIC COURSE (HIGHEST PRIORITY) - Use this for freshman-foundations
-            if (courseId === 'freshman-foundations') {
-                console.log('🎯 Using STATIC course data for:', courseId);
-                console.log('📚 Course has', FRESHMAN_FOUNDATIONS_COURSE.modules.length, 'modules');
-                console.log('📝 First lesson:', FRESHMAN_FOUNDATIONS_COURSE.modules[0]?.lessons[0]?.title);
-                console.log('📖 First lesson content length:', FRESHMAN_FOUNDATIONS_COURSE.modules[0]?.lessons[0]?.content_markdown?.length);
+            // MAP URL ID TO DB ID
+            // The frontend uses 'freshman-foundations' but the DB (seed) uses 'course_foundation'
+            const targetDbId = courseId === 'freshman-foundations' ? 'course_foundation' : courseId;
 
-                setCourse(FRESHMAN_FOUNDATIONS_COURSE as any);
-                setLoading(false);
-                return;
-            }
+            // 1. STATIC COURSE (HIGHEST PRIORITY) - DISABLED TO ALLOW DB OVERRIDE
+            // if (courseId === 'freshman-foundations') {
+            //    console.log('🎯 Using STATIC course data for:', courseId);
+            //    setCourse(FRESHMAN_FOUNDATIONS_COURSE as any);
+            //    setLoading(false);
+            //    return;
+            // }
 
             // 2. PURE CLIENT SIDE MOCK (for "DO MORE" Preview)
             if (courseId === 'travel-hacking-preview') {
@@ -132,7 +144,7 @@ export function useCourse(courseId?: string) {
             const { data: courseData, error: courseError } = await supabase
                 .from('courses')
                 .select('*')
-                .eq('id', courseId)
+                .eq('id', targetDbId) // Use mapped ID
                 .single()
 
             if (courseError) {
@@ -165,7 +177,7 @@ export function useCourse(courseId?: string) {
                                     order_index: 0,
                                     isCompleted: false,
                                     isLocked: false,
-                                    video_url: '/assets/hero-background.mp4'
+                                    video_url: '/assets/dean-welcome-v2.mp4?v=3'
                                 },
                                 {
                                     id: `l-${courseId}-2`,
@@ -176,7 +188,7 @@ export function useCourse(courseId?: string) {
                                     order_index: 1,
                                     isCompleted: false,
                                     isLocked: false,
-                                    video_url: '/assets/dean-welcome.mp4'
+                                    video_url: '/assets/dean-part-2.mp4?v=3'
                                 }
                             ]
                         }
@@ -192,11 +204,9 @@ export function useCourse(courseId?: string) {
                 .from('modules')
                 .select(`
                     id, title, description, order_index,
-                    lessons (
-                        id, title, duration_minutes, is_free_preview, order_index, content, type
-                    )
+                    lessons (*)
                 `)
-                .eq('course_id', courseId)
+                .eq('course_id', targetDbId) // Use mapped ID
                 .order('order_index', { ascending: true })
 
             if (modulesError) throw modulesError
@@ -205,7 +215,7 @@ export function useCourse(courseId?: string) {
             // (Supabase nested order is tricky, easier to sort in JS unless using foreign table sort syntax)
             const modulesWithSortedLessons = modulesData?.map((m: any) => ({
                 ...m,
-                lessons: m.lessons?.sort((a: any, b: any) => a.order_index - b.order_index) || []
+                lessons: m.lessons?.sort((a: any, b: any) => (a.order_index || 0) - (b.order_index || 0)) || []
             })) || []
 
             // 3. Fetch User Progress (if logged in)
@@ -254,11 +264,40 @@ export function useCourse(courseId?: string) {
                 ...m,
                 lessons: m.lessons.map((l: any) => {
                     const isCompleted = completedLessonIds.has(l.id)
-                    const isLocked = !previousLessonCompleted && !l.is_free_preview
+                    const isFree = l.order_index === 0 || l.is_free_preview;
+                    const isLocked = !previousLessonCompleted && !isFree
 
                     // Map generic 'content' to specific fields based on type
-                    const videoUrl = l.type === 'video' ? (l.content || FALLBACK_VIDEOS[l.id]) : undefined
-                    const contentMarkdown = l.type === 'text' ? l.content : undefined
+                    // LEGACY/SOFT-SCHEMA SUPPORT: Check content for "VIDEO_URL: <url>" pattern
+                    const contentVideoMatch = l.content ? l.content.match(/VIDEO_URL:\s*([^\s\n]+)/) : null;
+                    const embeddedVideoUrl = contentVideoMatch ? contentVideoMatch[1] : undefined;
+
+                    const contentModeMatch = l.content ? l.content.match(/VIDEO_MODE:\s*([^\s\n]+)/) : null;
+                    const videoMode = contentModeMatch ? (contentModeMatch[1] as 'VIDEO' | 'AVATAR') : undefined;
+
+                    // Extract Chat Log
+                    // Pattern: CHAT_LOG_START ... CHAT_LOG_END
+                    const chatLogMatch = l.content ? l.content.match(/CHAT_LOG_START([\s\S]*?)CHAT_LOG_END/) : null;
+                    const chatLog = chatLogMatch ? chatLogMatch[1].trim() : undefined;
+
+                    // Clean content from tags for display
+                    // Clean content from tags for display
+                    let cleanedContent = l.type === 'text' ? l.content : undefined;
+                    if (cleanedContent) {
+                        cleanedContent = cleanedContent
+                            .replace(/VIDEO_URL:.*(\n|$)/g, '')
+                            .replace(/VIDEO_MODE:.*(\n|$)/g, '')
+                            .replace(/CHAT_LOG_START[\s\S]*?CHAT_LOG_END/g, '');
+                    }
+
+                    // FORCE OVERRIDE: Ensure the uploaded video plays (Bypassing DB issues)
+
+                    // FORCE OVERRIDE: Ensure the uploaded video plays (Bypassing DB issues)
+                    const isWelcomeLesson = l.title.includes('Welcome to the Wealth Game');
+                    const forcedUrl = isWelcomeLesson ? 'https://sdrkjbbiznbyiozeltgw.supabase.co/storage/v1/object/public/campus-assets/uploads/23p2cn109t4_1770152872193.mp4' : undefined;
+
+                    const videoUrl = forcedUrl || embeddedVideoUrl || (l.type === 'video' ? (l.content || FALLBACK_VIDEOS[l.id]) : undefined)
+                    const contentMarkdown = cleanedContent;
 
                     // Update tracker for next lesson
                     previousLessonCompleted = isCompleted
@@ -269,7 +308,9 @@ export function useCourse(courseId?: string) {
                         isLocked,
                         video_url: videoUrl,
                         content_markdown: contentMarkdown,
-                        type: l.type || (videoUrl ? 'video' : 'text')
+                        type: l.type || (videoUrl ? 'video' : 'text'),
+                        video_mode: videoMode,
+                        chat_log: chatLog
                     }
                 })
             }))
@@ -282,40 +323,51 @@ export function useCourse(courseId?: string) {
 
         } catch (e) {
             console.error("Error fetching course, using fallback:", e)
-            // Instead of showing error, provide a working fallback course
+            // Instead of showing error, provide a working fallback course that MATCHES the intended content
             setCourse({
-                id: courseId || 'fallback',
-                title: 'Credit Foundations',
-                description: 'Welcome to Credit U™. Start your journey to financial mastery.',
-                level: 'Freshman',
+                id: courseId || 'course_foundation',
+                title: 'Level 1: Foundation (Orientation)',
+                description: 'Shift from Survivor to Architect. The Wealth Game begins here.',
+                level: 'Foundation',
                 progress: 0,
-                track: 'Foundations',
+                track: 'Mindset',
                 modules: [
                     {
-                        id: 'mod-fallback-1',
-                        title: 'Getting Started',
+                        id: 'mod_found_1',
+                        title: 'The Mindset Shift',
                         order_index: 0,
                         lessons: [
                             {
-                                id: 'l-fallback-1',
-                                title: 'Welcome to Credit U™',
-                                duration_minutes: 3,
+                                id: 'less_1_1',
+                                title: 'Welcome to the Wealth Game',
+                                duration_minutes: 5,
                                 type: 'video',
                                 is_free_preview: true,
                                 order_index: 0,
                                 isCompleted: false,
                                 isLocked: false,
-                                video_url: '/assets/dean-welcome.mp4'
+                                video_url: 'https://sdrkjbbiznbyiozeltgw.supabase.co/storage/v1/object/public/campus-assets/uploads/23p2cn109t4_1770152872193.mp4'
                             },
                             {
-                                id: 'l-fallback-2',
-                                title: 'Your Learning Path',
-                                duration_minutes: 5,
+                                id: 'less_1_2',
+                                title: 'The Matrix (How It Works)',
+                                duration_minutes: 7,
                                 type: 'video',
                                 is_free_preview: true,
                                 order_index: 1,
                                 isCompleted: false,
                                 isLocked: false,
+                                video_url: '/assets/dean-part-2.mp4'
+                            },
+                            {
+                                id: 'less_1_3',
+                                title: 'The 5 Pillars (Grip Strength)',
+                                duration_minutes: 10,
+                                type: 'video',
+                                is_free_preview: false,
+                                order_index: 2,
+                                isCompleted: false,
+                                isLocked: true,
                                 video_url: '/assets/hero-background.mp4'
                             }
                         ]

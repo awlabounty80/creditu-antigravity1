@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Shield, Cpu, Activity, FileText, Ban, Scale, MessageSquare, X } from 'lucide-react'
+import { Shield, Cpu, Activity, FileText, Ban, Scale, MessageSquare, X, ShieldAlert } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CreditCowChat } from '@/components/credit-lab/CreditCowChat'
@@ -82,6 +82,17 @@ const TOOLS = [
         border: 'border-blue-400/20',
         locked: false,
         path: '/dashboard/library/law'
+    },
+    {
+        id: 'id-theft',
+        title: 'Identity Theft',
+        description: 'Execute FCRA 605B blocks and fraud recovery protocols.',
+        icon: ShieldAlert,
+        color: 'text-red-500',
+        bg: 'bg-red-500/10',
+        border: 'border-red-500/20',
+        locked: false,
+        path: '/dashboard/credit-lab/identity-theft'
     }
 ]
 

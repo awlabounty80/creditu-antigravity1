@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { SummonIntensity } from "@/lib/amara-summon";
-import { Sparkles, Crown } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { CreditULogo } from "@/components/common/CreditULogo";
 
 export function CinematicSummonOverlay(props: {
     open: boolean;
@@ -110,9 +111,9 @@ export function CinematicSummonOverlay(props: {
                             </div>
                         )}
 
-                        {/* Bee + Crown Motif (Watermark) */}
+                        {/* Bee + Bull Motif (Watermark) */}
                         <div style={sx.motif}>
-                            <Crown size={12} fill="#f59e0b" color="#f59e0b" />
+                            <CreditULogo className="w-5 h-5" variant="gold" showShield={false} iconClassName="w-3 h-3" />
                         </div>
                     </div>
 

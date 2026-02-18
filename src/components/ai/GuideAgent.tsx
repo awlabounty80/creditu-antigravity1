@@ -171,7 +171,7 @@ export function GuideAgent({ pageId: overridePageId, userName, pageLabel }: Guid
 
     // Dynamic Avatar Logic (Step 8 + 10)
     const avatarUrl = useMemo(() => {
-        if (activeAgent === 'LEVERAGE') return '/assets/dr-leverage.jpg'
+        if (activeAgent === 'LEVERAGE') return '/assets/dr-leverage-transmission.png'
 
         const mode = uiPolicy.uiMode
         // Mapped to real user-uploaded assets
@@ -185,10 +185,14 @@ export function GuideAgent({ pageId: overridePageId, userName, pageLabel }: Guid
 
     // --- ONBOARDING LOGIC (Step 9) ---
 
-    // 1. Auto-Start on Dashboard
+    // 1. Auto-Start on Dashboard (Force Open)
     useEffect(() => {
-        if (resolvedPageId === 'home_dashboard' && onboarding.state.status === 'IDLE' && dockState === 'OPEN') {
-            onboarding.start()
+        if (resolvedPageId === 'home_dashboard' && onboarding.state.status === 'IDLE') {
+            if (dockState !== 'OPEN') {
+                setDockState('OPEN')
+            } else {
+                onboarding.start()
+            }
         }
     }, [resolvedPageId, onboarding.state.status, dockState])
 
@@ -813,7 +817,7 @@ export function GuideAgent({ pageId: overridePageId, userName, pageLabel }: Guid
                         }}
                     >
                         <div className="w-full h-full relative overflow-hidden">
-                            <img src={avatarUrl} className="w-full h-full object-cover scale-[3] object-center opacity-90 group-hover:opacity-100 transition-opacity" alt="Amara U." />
+                            <img src={avatarUrl} className="w-full h-full object-cover scale-[1.1] object-top opacity-90 group-hover:opacity-100 transition-opacity" alt="Amara U." />
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                         <Sparkles className={`absolute bottom-2 w-4 h-4 text-amber-400 ${uiPolicy.intensity === 'MEDIUM' ? 'animate-pulse' : ''}`} />
@@ -832,7 +836,7 @@ export function GuideAgent({ pageId: overridePageId, userName, pageLabel }: Guid
                     >
                         <div className="relative h-56 bg-black group shrink-0 overflow-hidden">
                             <div className="w-full h-full relative overflow-hidden">
-                                <img src={avatarUrl} className="w-full h-full object-cover scale-[3] object-center opacity-90 group-hover:opacity-100 transition-all duration-700" alt="Amara U." />
+                                <img src={avatarUrl} className="w-full h-full object-cover scale-[1.1] object-top opacity-90 group-hover:opacity-100 transition-all duration-700" alt="Amara U." />
                             </div>
                             <div className={`absolute inset-0 bg-gradient-to-t ${contextConfig.color} mix-blend-overlay transition-colors duration-1000`}></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-transparent to-transparent"></div>

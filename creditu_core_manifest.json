@@ -1,0 +1,67 @@
+{
+    "project_name": "Credit U Platform",
+    "version_baseline": "1.0.5",
+    "timestamp": "2026-02-18T02:37:00Z",
+    "core_protection_level": "HARDENED",
+    "routing": {
+        "public": [
+            "/",
+            "/dorm-week",
+            "/gate",
+            "/tour",
+            "/apply",
+            "/tuition",
+            "/welcome",
+            "/login",
+            "/onboarding"
+        ],
+        "protected_dashboard": [
+            "/dashboard",
+            "/dashboard/financial-nervous-system",
+            "/dashboard/curriculum",
+            "/dashboard/honor-roll",
+            "/dashboard/lab",
+            "/dashboard/voice-training",
+            "/dashboard/course/:courseId",
+            "/dashboard/learning-path",
+            "/dashboard/credit-lab",
+            "/dashboard/library",
+            "/dashboard/settings"
+        ],
+        "admin": [
+            "/admin",
+            "/admin/users",
+            "/admin/cockpit",
+            "/admin/referrals"
+        ]
+    },
+    "database": {
+        "schemas": [
+            "public"
+        ],
+        "critical_tables": [
+            "profiles",
+            "referrals",
+            "daily_tasks",
+            "honor_roll",
+            "courses",
+            "enrollments"
+        ],
+        "rls_status": "ENFORCED"
+    },
+    "security": {
+        "auth_provider": "Supabase Auth",
+        "rbac_roles": [
+            "student",
+            "founder",
+            "dean",
+            "admin"
+        ],
+        "development_bypass": "Localhost Only (sessionStorage)"
+    },
+    "integrations": [
+        "Resend (Emails)",
+        "Deepgram (Voice SDK)",
+        "Gaussian Splats (3D Visuals)"
+    ]
+}

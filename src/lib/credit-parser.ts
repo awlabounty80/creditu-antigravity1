@@ -1,6 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 // Explicitly import the worker to ensure it's bundled
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.js?url';
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export interface ParsedAccount {

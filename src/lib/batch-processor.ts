@@ -9,7 +9,7 @@ import { IMediaFactory, MediaInput, MediaAsset, GOVERNANCE_PROTOCOLS, MEDIA_STAN
 
 export interface BatchLessonDefinition {
     lessonId: string; // {{LEVEL}}-{{MODULE}}-{{LESSON_NUMBER}}
-    courseLevel: 'FRESHMAN' | 'SOPHOMORE' | 'JUNIOR' | 'SENIOR' | 'GRADUATE';
+    courseLevel: 'FOUNDATION' | 'FRESHMAN' | 'SOPHOMORE' | 'JUNIOR' | 'SENIOR' | 'GRADUATE';
     moduleName: string;
     lessonTitle: string;
     teachingObjective: string;

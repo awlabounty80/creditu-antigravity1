@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Crown, Users, GraduationCap, PlayCircle, Star, Quote, ArrowRight } from 'lucide-react'
+import { Users, GraduationCap, PlayCircle, Star, Quote, ArrowRight } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { motion } from 'framer-motion'
 
 // Custom Background Component
@@ -27,21 +28,9 @@ const TrustBadge = ({ delay, label, icon: Icon }: any) => (
     </motion.div>
 )
 
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-
 export default function CreditUniversityLanding() {
-    const navigate = useNavigate()
-
-    // Auto-Redirect if Session Exists (Fail-safe for magic links dropping on root)
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                navigate('/dashboard/v2')
-            }
-        })
-    }, [navigate])
+    // Auto-Redirect removed to prevent entry page flashing.
+    // Users can access dashboard via "Student Portal" link.
 
     return (
         <div className="min-h-screen bg-[#020412] text-white font-sans selection:bg-amber-500/30 overflow-x-hidden">
@@ -52,8 +41,8 @@ export default function CreditUniversityLanding() {
                     <div className="flex items-center gap-3">
                         <div className="relative group">
                             <div className="absolute inset-0 bg-amber-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                            <div className="relative bg-gradient-to-br from-indigo-950 to-black p-2.5 rounded-xl border border-white/10 shadow-xl">
-                                <Crown className="w-6 h-6 text-amber-400" strokeWidth={2} />
+                            <div className="relative bg-gradient-to-br from-indigo-950 to-black p-1 rounded-xl border border-white/10 shadow-xl overflow-hidden">
+                                <CreditULogo className="w-12 h-12" variant="gold" showShield={false} iconClassName="w-10 h-10" />
                             </div>
                         </div>
                         <div className="flex flex-col">
@@ -175,7 +164,7 @@ export default function CreditUniversityLanding() {
             <section className="py-24 bg-[#0a0f29]">
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-2xl mx-auto mb-16">
-                        <Crown className="w-12 h-12 text-amber-500 mx-auto mb-6" />
+                        <CreditULogo className="w-16 h-16 mx-auto mb-6" variant="gold" showShield={false} iconClassName="w-12 h-12" />
                         <h2 className="text-4xl font-bold text-white font-heading mb-4">Real Results. Real Legacy.</h2>
                         <p className="text-slate-400">Join a network of alumni who are rewriting their family history.</p>
                     </div>

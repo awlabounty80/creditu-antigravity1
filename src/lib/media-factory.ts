@@ -46,7 +46,7 @@ export type ProfessorPersona = 'AMARA_DEAN' | 'DR_LEVERAGE' | 'GUEST_EXPERT' | '
 
 export interface MediaInput {
     lessonId: string;
-    level: 'FRESHMAN' | 'SOPHOMORE' | 'JUNIOR' | 'SENIOR' | 'GRADUATE';
+    level: 'FOUNDATION' | 'FRESHMAN' | 'SOPHOMORE' | 'JUNIOR' | 'SENIOR' | 'GRADUATE';
     teachingObjective: string;
     scriptContent: string; // The "Truth" - do not modify
     professor: ProfessorPersona;

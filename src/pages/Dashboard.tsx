@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, BookOpen, Trophy, TrendingUp, Crown, Brain } from 'lucide-react'
+import { ArrowRight, BookOpen, Trophy, TrendingUp, Crown, Brain, Eye, Mic } from 'lucide-react'
 import { useProfile } from '@/hooks/useProfile'
 import { useGamification } from '@/hooks/useGamification'
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import { FundingUnlock } from '@/components/dashboard/FundingUnlock'
 import { DeansWelcome } from '@/components/dashboard/DeansWelcome'
-import { StudentIdCard } from '@/components/dashboard/StudentIdCard'
+import { AgentIDCard } from '@/components/dashboard/AgentIDCard'
 import { FoundationCoreClass } from '@/components/dashboard/FoundationCoreClass'
 import { SystemGaugeGrid } from '@/components/dashboard/SystemGaugeGrid'
 import { ActiveMissionCard } from '@/components/dashboard/ActiveMissionCard'
@@ -159,7 +159,7 @@ export default function Dashboard() {
                 <div className="space-y-8">
                     <DeansWelcome />
 
-                    <StudentIdCard />
+                    <AgentIDCard />
                     <ActiveMissionCard />
                     <FundingUnlock />
 
@@ -180,16 +180,53 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20">
+                    <div
+                        className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20 cursor-pointer hover:border-amber-500/40 transition-all group"
+                        onClick={() => navigate('/dashboard/campus/honor-roll')}
+                    >
                         <div className="flex items-center gap-3 mb-4">
-                            <Crown className="text-amber-400" size={20} />
-                            <h4 className="font-bold text-amber-100">Legacy Status</h4>
+                            <Crown className="text-amber-400 group-hover:text-amber-300 transition-colors" size={20} />
+                            <h4 className="font-bold text-amber-100">Dean's Honor Roll</h4>
                         </div>
                         <p className="text-sm text-amber-200/70 mb-4">
-                            You are 1,200 points away from unlocking "Dean's List" status.
+                            You are 1,200 points away from unlocking "Dean's List" status. See current standings.
                         </p>
                         <div className="w-full bg-black/40 h-1.5 rounded-full overflow-hidden mb-2">
                             <div className="bg-amber-400 h-full w-[65%]"></div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 cursor-pointer hover:border-emerald-500/40 transition-all group"
+                        onClick={() => navigate('/dashboard/campus/lab')}
+                    >
+                        <div className="flex items-center gap-3 mb-4">
+                            <Eye className="text-emerald-400 group-hover:text-emerald-300 transition-colors" size={20} />
+                            <h4 className="font-bold text-emerald-100">Visibility Lab</h4>
+                        </div>
+                        <p className="text-sm text-emerald-200/70 mb-4">
+                            Learn to read your money clearly with guided interpretation.
+                        </p>
+                        <div className="flex items-center gap-2 text-xs font-medium text-emerald-300">
+                            <span>Enter Lab</span>
+                            <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+
+                    <div
+                        className="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 cursor-pointer hover:border-indigo-500/40 transition-all group"
+                        onClick={() => navigate('/dashboard/campus/voice-training')}
+                    >
+                        <div className="flex items-center gap-3 mb-4">
+                            <Mic className="text-indigo-400 group-hover:text-indigo-300 transition-colors" size={20} />
+                            <h4 className="font-bold text-indigo-100">Voice Command Lab</h4>
+                        </div>
+                        <p className="text-sm text-indigo-200/70 mb-4">
+                            Train your articulation and intent with AI-powered speech analysis.
+                        </p>
+                        <div className="flex items-center gap-2 text-xs font-medium text-indigo-300">
+                            <span>Start Training</span>
+                            <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                     </div>
                 </div>

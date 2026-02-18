@@ -5,13 +5,23 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Search, BookOpen, Sparkles, Filter, FileText, Download, X } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { ArticleCard } from '@/components/library/ArticleCard'
 import { supabase } from '@/lib/supabase'
 import { CreditCowChat } from '@/components/credit-lab/CreditCowChat'
 
 // Fallback Data
 const MOCK_ARTICLES = [
+    {
+        id: "fcra-protocol",
+        title: "Understanding the FCRA (Protocol)",
+        slug: "understanding-fcra-protocol",
+        summary: "An interactive knowledge protocol detailing your rights under the Fair Credit Reporting Act.",
+        pillar: "Foundations",
+        readTime: 10,
+        difficulty: "Freshman",
+        author: "Credit U Faculty",
+        isNew: true
+    },
     {
         id: "1",
         title: "The 5 FICO Factors: Decoding the Algorithm",

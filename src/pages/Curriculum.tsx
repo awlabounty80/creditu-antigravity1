@@ -84,7 +84,7 @@ export default function Curriculum() {
                 // INJECT UPCOMING / EXPANDED CURRICULUM (User Request: "DO MORE" content)
                 const EXPANDED_CONTENT = [
                     {
-                        id: "freshman-orientation",
+                        id: "freshman-foundations",
                         title: "Freshman Orientation: Personal Credit Foundations",
                         slug: "freshman-orientation",
                         description: "Dr. Leverage's mandatory 5-class certification. Remove fear, restore trust, and master the system.",
@@ -312,7 +312,7 @@ export default function Curriculum() {
                                                             <Lock className="w-4 h-4 mr-2" /> Access Denied
                                                         </Button>
                                                     ) : (
-                                                        <Link to={course.id === 'freshman-orientation' ? '/dashboard/class/freshman/1' : `/dashboard/course/${course.id}`} className="w-full">
+                                                        <Link to={course.id === 'freshman-foundations' ? '/dashboard/course/freshman-foundations' : `/dashboard/course/${course.id}`} className="w-full">
                                                             <Button className={cn(
                                                                 "w-full h-12 rounded-xl font-bold tracking-wide transition-all",
                                                                 course.progress >= 100

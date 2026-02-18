@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, CreditCard, Activity, DollarSign } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { MediaUploader } from '@/components/admin/MediaUploader'
+import { LessonVideoBinder } from '@/components/admin/LessonVideoBinder'
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState({
@@ -81,8 +83,19 @@ export default function AdminDashboard() {
                 </Card>
             </div>
 
-            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-12 text-center">
-                <h3 className="text-slate-500 font-mono text-sm">REAL-TIME DB CONNECTION ACTIVE</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="md:col-span-1 space-y-6">
+                    <MediaUploader />
+                </div>
+                <div className="md:col-span-1">
+                    <LessonVideoBinder />
+                </div>
+                <div className="md:col-span-1 bg-slate-900/50 border border-slate-800 rounded-xl p-12 text-center flex items-center justify-center">
+                    <div className="text-center">
+                        <h3 className="text-slate-500 font-mono text-sm mb-2">REAL-TIME DB CONNECTION ACTIVE</h3>
+                        <p className="text-slate-600 text-xs">System monitoring specific nodes enabled.</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

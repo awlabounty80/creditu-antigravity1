@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import {
     Gift, Cpu, ShieldAlert, Activity, Users, Ticket,
-    Crown, Shield, Book, Calculator, Headphones, Sun, MapPin, CheckCircle, Sparkles, Search, HeartHandshake, Image as ImageIcon
+    Shield, Book, Calculator, Headphones, Sun, MapPin, CheckCircle, Sparkles, Search, HeartHandshake, Image as ImageIcon
 } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -64,7 +65,7 @@ const ICON_MAP: Record<string, any> = {
     activity: Activity,
     users: Users,
     ticket: Ticket,
-    crown: Crown,
+    crown: () => <CreditULogo className="h-4 w-4" variant="gold" showShield={false} iconClassName="h-4 w-4" />,
     shield: Shield,
     book: Book,
     calculator: Calculator,
@@ -284,7 +285,7 @@ export default function MooStore() {
                 <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 gap-6">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
-                            <Crown size={12} /> Sovereign Emporium
+                            <CreditULogo className="h-4 w-4" variant="gold" showShield={false} iconClassName="h-4 w-4" /> Sovereign Emporium
                         </div>
                         <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-2 flex items-center gap-3">
                             Moo Store™

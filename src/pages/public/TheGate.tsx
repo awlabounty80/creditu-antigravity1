@@ -3,6 +3,8 @@ import { Lock, UserCheck, CreditCard, ChevronRight, ShieldCheck, ScanLine, Spark
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
+import { CreditULogo } from '@/components/common/CreditULogo'
+
 // Access Card Component
 const AccessCard = ({ to, icon: Icon, title, subtitle, colorClass, delay }: any) => {
     return (
@@ -86,17 +88,9 @@ export default function TheGate() {
                         transition={{ duration: 1, ease: "easeOut" }}
                         className="relative mb-8"
                     >
-                        {/* Video Logo */}
-                        <div className="relative h-32 w-32 rounded-full overflow-hidden shadow-2xl shadow-indigo-500/20 border border-white/10">
-                            <video
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                className="w-full h-full object-cover transform scale-125"
-                            >
-                                <source src="/assets/logo-animated.mp4" type="video/mp4" />
-                            </video>
+                        {/* Official Image Logo */}
+                        <div className="relative h-48 w-48 rounded-full overflow-hidden shadow-2xl shadow-indigo-500/20 border border-white/10">
+                            <CreditULogo className="w-full h-full" showShield={false} iconClassName="w-44 h-44" />
                         </div>
                     </motion.div>
 
@@ -120,7 +114,47 @@ export default function TheGate() {
                 </div>
 
                 {/* ACCESS GRID */}
-                <div className="grid w-full max-w-2xl grid-cols-1 gap-4 md:grid-cols-2">
+                {/* HERO ACTION - STEP 1 */}
+                <div className="w-full max-w-2xl mb-8">
+                    <Link to="/onboarding" className="group relative w-full block">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 0.8 }}
+                            className="relative overflow-hidden rounded-2xl border border-indigo-500/50 bg-[#0A0F1E]/80 p-8 backdrop-blur-xl transition-all duration-500 hover:bg-[#0A0F1E] hover:border-indigo-400 hover:shadow-[0_0_50px_-10px_rgba(99,102,241,0.3)] group-hover:-translate-y-1"
+                        >
+                            <div className="absolute top-0 right-0 p-4 opacity-50">
+                                <span className="flex h-3 w-3 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                                <div className="h-20 w-20 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                                    <Sparkles className="h-10 w-10 text-indigo-400 group-hover:text-white transition-colors" />
+                                </div>
+                                <div className="space-y-2 flex-1">
+                                    <div className="flex items-center justify-center md:justify-start gap-3">
+                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-indigo-500 text-white uppercase">Step 01</span>
+                                    </div>
+                                    <h2 className="text-3xl font-heading font-bold text-white tracking-tight group-hover:text-amber-200 transition-colors">
+                                        Dorm Week™ Orientation
+                                    </h2>
+                                    <p className="text-slate-400 font-light text-sm tracking-wide group-hover:text-white/80">
+                                        Begin the 5-Day Cultural & Financial Homecoming.
+                                    </p>
+                                </div>
+                                <div className="hidden md:flex h-12 w-12 rounded-full border border-white/10 items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                    <ChevronRight className="w-6 h-6" />
+                                </div>
+                            </div>
+                        </motion.div>
+                    </Link>
+                </div>
+
+                {/* ACCESS GRID (Secondary) */}
+                <div className="grid w-full max-w-2xl grid-cols-1 gap-4 md:grid-cols-2 opacity-80 hover:opacity-100 transition-opacity">
 
                     <AccessCard
                         to="/login"
@@ -128,7 +162,7 @@ export default function TheGate() {
                         title="Enter as Student"
                         subtitle="Enrolled Users Only"
                         colorClass="from-emerald-600 to-emerald-900"
-                        delay={0.5}
+                        delay={0.6}
                     />
 
                     <AccessCard
@@ -137,7 +171,7 @@ export default function TheGate() {
                         title="Apply for Admission"
                         subtitle="Start Your Legacy"
                         colorClass="from-amber-600 to-amber-900"
-                        delay={0.6}
+                        delay={0.7}
                     />
 
                     <AccessCard
@@ -146,18 +180,9 @@ export default function TheGate() {
                         title="Check Status"
                         subtitle="Applications & Payments"
                         colorClass="from-blue-600 to-blue-900"
-                        delay={0.7}
-                    />
-
-                    <AccessCard
-                        to="/tour"
-                        icon={Sparkles}
-                        title="Enter as Guest"
-                        subtitle="Campus Tour & Samples"
-                        colorClass="from-indigo-600 to-slate-900"
                         delay={0.8}
                     />
-
+                    {/* Removed old 'Begin Reset' card as it's now the Hero */}
                 </div>
 
                 {/* TRUST FOOTER */}

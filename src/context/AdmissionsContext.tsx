@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-
+import { supabase } from '@/lib/supabase';
 import { generateStudentId } from '@/lib/studentId';
 
 // Types
@@ -38,10 +38,32 @@ export function AdmissionsProvider({ children }: { children: ReactNode }) {
 
     const processEnrollment = async (planId: string): Promise<{ success: boolean; error?: string }> => {
         setIsProcessing(true);
-        console.log(`Processing enrollment for ${applicant.email} on plan ${planId}`);
+        // REAL AUTH: Trigger Magic Link for the student
+        try {
+            const { error: authError } = await supabase.auth.signInWithOtp({
+                email: applicant.email,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/onboarding`,
+                    data: {
+                        first_name: applicant.firstName,
+                        last_name: applicant.lastName,
+                    }
+                }
+            });
 
-        // SIMULATION: Fake Payment Delay
-        await new Promise(resolve => setTimeout(resolve, 3000));
+            if (authError) throw authError;
+            console.log("Magic Link dispatched successfully.");
+        } catch (authErr) {
+            console.error("Critical: Enrollment email failed:", authErr);
+            setIsProcessing(false);
+            return {
+                success: false,
+                error: "Communication failure. Please verify email and try again."
+            };
+        }
+
+        // SIMULATION: Fake Payment Delay (reduced since we now have real networking)
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         // Generate ID
         const newStudentId = generateStudentId();

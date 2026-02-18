@@ -1,6 +1,6 @@
 import { Outlet, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Crown } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 
 export default function PublicLayout() {
     return (
@@ -10,11 +10,7 @@ export default function PublicLayout() {
                 <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <div className="w-10 h-10 rounded-lg overflow-hidden shadow-lg group-hover:shadow-credit-royal-500/20 transition-all duration-300">
-                            <video autoPlay loop muted playsInline className="w-full h-full object-cover">
-                                <source src="/assets/logo-animated.mp4" type="video/mp4" />
-                            </video>
-                        </div>
+                        <CreditULogo className="w-12 h-12" showShield={false} iconClassName="w-10 h-10" />
                         <div className="flex flex-col">
                             <span className="font-bold text-xl tracking-tight text-white leading-none">CREDIT U</span>
                             <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 group-hover:text-credit-royal-400 transition-colors">University AI</span>
@@ -56,7 +52,7 @@ export default function PublicLayout() {
                     <div className="grid md:grid-cols-4 gap-12 mb-16">
                         <div className="space-y-4">
                             <div className="flex items-center gap-2">
-                                <Crown size={20} className="text-credit-royal-400" />
+                                <CreditULogo className="w-5 h-5" variant="gold" showShield={false} iconClassName="w-5 h-5" />
                                 <span className="font-bold text-lg">CREDIT U</span>
                             </div>
                             <p className="text-slate-400 text-sm leading-relaxed">

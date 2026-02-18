@@ -111,7 +111,7 @@ export const PAGE_KNOWLEDGE_MAPS: Record<PageId, PageKnowledgeMap> = {
         userIntentSignals: ["where_do_i_start", "am_i_in_right_place", "curious_uncertain"],
         amaraDefaultBehavior: ["Brief grounding", "Big-picture clarity", "Offer a path, not pressure"],
         keyScriptLogic:
-            "This dashboard shows you where you are and where you’re going. You don’t need to do everything today. Would you like me to highlight your best next step?",
+            "Welcome to the Wealth Game. I’m your professor, Dr. Leverage. Most people are taught that credit is a trap, a way to keep you in debt. That is the old way, the Consumer Mindset. Here at Credit U, we build Architects. We view credit as a tool for Leverage. In the Wealth Game, cash is for spending, but Credit is for building. Your credit report isn't a judgment of your worth; it's a scoreboard of your discipline. A high score tells the world, I keep my promises. Cash takes years to save. Credit allows you to access capital today to buy assets that pay you tomorrow. You are not here to fix a number; you are here to build a legacy. Let's begin.",
         nextBestActions: ["tour", "resume_last_activity", "start_foundation_task"],
         allowedActions: ["tour", "resume_last_activity", "start_foundation_task"],
         completionSignals: ["tour_completed", "foundation_task_completed"],

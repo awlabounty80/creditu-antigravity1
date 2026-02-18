@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Crown, CheckCircle2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAdmissions } from '@/context/AdmissionsContext'
@@ -10,6 +12,22 @@ import { useAdmissions } from '@/context/AdmissionsContext'
 export default function Admissions() {
     const navigate = useNavigate()
     const { applicant, updateApplicant } = useAdmissions()
+
+    // --- SYNC ORIENTATION STATE ---
+    useEffect(() => {
+        const saved = localStorage.getItem('credit_u_reset_state');
+        if (saved && !applicant.firstName) {
+            try {
+                const data = JSON.parse(saved);
+                if (data.firstName || data.lastName) {
+                    updateApplicant({
+                        firstName: data.firstName || '',
+                        lastName: data.lastName || '',
+                    });
+                }
+            } catch (e) { console.error(e); }
+        }
+    }, [updateApplicant, applicant.firstName]);
 
     const handleProceed = () => {
         // In real app, validate fields here
@@ -32,7 +50,7 @@ export default function Admissions() {
             <nav className="relative z-50 p-6 flex justify-between items-center max-w-7xl mx-auto">
                 <Link to="/" className="flex items-center gap-2 group">
                     <div className="bg-white/5 border border-white/10 p-2 rounded-lg backdrop-blur-md group-hover:bg-white/10 transition-all">
-                        <Crown className="w-5 h-5 text-amber-400" />
+                        <CreditULogo className="w-8 h-8" variant="gold" showShield={false} iconClassName="w-5 h-5" />
                     </div>
                     <span className="font-heading font-bold tracking-tight">CREDIT U</span>
                 </Link>
@@ -137,11 +155,11 @@ export default function Admissions() {
                                     value={applicant.goal}
                                     onChange={(e) => updateApplicant({ goal: e.target.value })}
                                 >
-                                    <option value="">Select a goal...</option>
-                                    <option value="Fix Personal Credit">Fix Personal Credit</option>
-                                    <option value="Build Business Credit">Build Business Credit</option>
-                                    <option value="Buy a Home">Buy a Home</option>
-                                    <option value="General Wealth Building">General Wealth Building</option>
+                                    <option value="" className="bg-slate-900 text-white">Select a goal...</option>
+                                    <option value="Fix Personal Credit" className="bg-slate-900 text-white">Fix Personal Credit</option>
+                                    <option value="Build Business Credit" className="bg-slate-900 text-white">Build Business Credit</option>
+                                    <option value="Buy a Home" className="bg-slate-900 text-white">Buy a Home</option>
+                                    <option value="General Wealth Building" className="bg-slate-900 text-white">General Wealth Building</option>
                                 </select>
                             </div>
 

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { LogOut, User, Shield, Trophy, Home } from 'lucide-react'
+import { LogOut, User, Shield, Trophy, Home, Activity } from 'lucide-react'
 import { HeaderSyncStatus } from './HeaderSyncStatus'
 
 interface StudentHeaderProps {
@@ -40,7 +40,13 @@ export function StudentHeader({ userEmail, isAdmin }: StudentHeaderProps) {
                         <span className="hidden md:inline">Home</span>
                     </Button>
 
-                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard/profile')} className="text-slate-400 hover:text-white hover:bg-white/5">
+
+                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard/orientation')} className="text-slate-400 hover:text-white hover:bg-white/5">
+                        <Activity className="h-4 w-4 md:mr-2" />
+                        <span className="hidden md:inline">System</span>
+                    </Button>
+
+                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard/settings')} className="text-slate-400 hover:text-white hover:bg-white/5">
                         <User className="h-4 w-4 md:mr-2" />
                         <span className="hidden md:inline">Profile</span>
                     </Button>

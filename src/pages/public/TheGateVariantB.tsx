@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Crown, Lock, UserCheck, CreditCard, ChevronRight, Zap, Music } from 'lucide-react'
+import { Lock, UserCheck, CreditCard, ChevronRight, Zap, Music } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -136,7 +137,7 @@ export default function TheGateVariantB() {
                     />
                     <AccessCardB
                         to="/tour"
-                        icon={Crown}
+                        icon={() => <CreditULogo className="h-6 w-6" variant="gold" showShield={false} iconClassName="h-6 w-6" />}
                         title="Guest Pass"
                         subtitle="Take the Tour"
                         accentColor="group-hover:bg-indigo-600"

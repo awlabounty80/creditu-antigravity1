@@ -185,6 +185,86 @@ export const QUIZZES: Record<string, Quiz> = {
                 difficulty: 'MEDIUM'
             }
         ]
+    },
+    'QUIZ-003': {
+        id: 'QUIZ-003',
+        title: 'Debt Management & DTI',
+        category: 'Debt Strategy',
+        level: 'SOPHOMORE',
+        passingScore: 80,
+        relatedArticle: 'KB-003',
+        questions: [
+            {
+                id: 'Q003-1',
+                question: 'Which debt repayment strategy mathematically saves the most money on interest?',
+                options: [
+                    'Debt Snowball (Smallest Balance First)',
+                    'Debt Avalanche (Highest Interest First)',
+                    'Random Repayment',
+                    'Equal Payments to All'
+                ],
+                correctAnswer: 1,
+                explanation: 'The Debt Avalanche method focuses on paying off debts with the highest interest rates first, which minimizes total interest paid over time.',
+                source: 'Financial Planning Association',
+                difficulty: 'MEDIUM'
+            },
+            {
+                id: 'Q003-2',
+                question: 'What is the maximum Front-End DTI ratio typically allowed for a Conventional Loan?',
+                options: [
+                    '28%',
+                    '36%',
+                    '43%',
+                    '50%'
+                ],
+                correctAnswer: 0,
+                explanation: 'Conventional loans typically look for a Front-End (Housing) ratio of no more than 28% of your gross monthly income.',
+                source: 'Fannie Mae Guidelines',
+                difficulty: 'HARD'
+            },
+            {
+                id: 'Q003-3',
+                question: 'Does paying off a collection account automatically update your credit score?',
+                options: [
+                    'Yes, it deletes the collection immediately',
+                    'Yes, it raises score by 50 points',
+                    'No, the paid collection remains for 7 years (usually)',
+                    'No, it lowers your score'
+                ],
+                correctAnswer: 2,
+                explanation: 'A paid collection remains on your report for 7 years from the original delinquency date, unless you negotiate a "Pay for Delete" (which is rare). Newer scoring models (FICO 9) ignore paid collections, but older ones (FICO 8) do not.',
+                source: 'Experian - Paid Collections',
+                difficulty: 'MEDIUM'
+            },
+            {
+                id: 'Q003-4',
+                question: 'What is a "Charge-Off"?',
+                options: [
+                    'A fee for using credit',
+                    'When a creditor writes off debt as a loss (unlikely to be collected)',
+                    'When you pay off a charge card',
+                    'A type of bankruptcy'
+                ],
+                correctAnswer: 1,
+                explanation: 'A charge-off occurs when a creditor declares a debt unlikely to be collected (usually after 180 days delinquent). It is a severe negative mark on your credit.',
+                source: 'Investopedia - Charge-Off',
+                difficulty: 'EASY'
+            },
+            {
+                id: 'Q003-5',
+                question: 'Using a balance transfer card can help debt payoff IF:',
+                options: [
+                    'You continue spending on the old card',
+                    'The transfer fee is higher than the interest saved',
+                    'You pay off the balance during the 0% APR promo period',
+                    'You transfer balances every month forever'
+                ],
+                correctAnswer: 2,
+                explanation: 'Balance transfers are effective only if you pay off the debt within the promotional 0% interest window and avoid accumulating new debt.',
+                source: 'CFPB - Balance Transfers',
+                difficulty: 'MEDIUM'
+            }
+        ]
     }
 };
 

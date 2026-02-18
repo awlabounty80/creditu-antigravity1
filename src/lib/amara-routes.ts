@@ -4,7 +4,8 @@ export function detectPageId(pathname: string): PageId {
     const p = (pathname || "/").toLowerCase();
 
     // Home / Dashboard (specific check for dashboard root)
-    if (p === "/" || (p.startsWith("/dashboard") && !p.includes('/', 11))) return "home_dashboard"; // Approx check for root dashboard
+    // Home / Dashboard (strict check for root)
+    if (p === "/" || p === "/dashboard" || p === "/dashboard/") return "home_dashboard";
 
     // Credit Lab
     if (p.includes("/credit-lab") || p.includes("/lab")) return "credit_lab";

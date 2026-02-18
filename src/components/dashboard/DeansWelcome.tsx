@@ -1,12 +1,12 @@
-
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Play, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+// import { ProfessorGenerative } from './ProfessorGenerative'
 
 export function DeansWelcome() {
     const [isOpen, setIsOpen] = useState(false)
-    const videoRef = useRef<HTMLVideoElement>(null)
+    const transcript = "Greetings, Architect. You are now entering the inner sanctum of financial intelligence. Most are taught to fear debt; you will learn to master it. Your transmission has been authorized. Let's begin.";
 
     const togglePlay = () => {
         setIsOpen(!isOpen)
@@ -63,20 +63,20 @@ export function DeansWelcome() {
                             className="relative w-full max-w-4xl bg-black rounded-3xl overflow-hidden border border-white/10 shadow-2xl"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <video
-                                ref={videoRef}
-                                autoPlay
-                                playsInline
-                                controls
-                                className="w-full h-full aspect-video object-cover"
-                            >
-                                <source src="/assets/dean-welcome.mp4" type="video/mp4" />
-                            </video>
+                            <div className="aspect-video bg-black">
+                                {/* <ProfessorGenerative
+                                    transcript={transcript}
+                                    onComplete={() => setIsOpen(false)}
+                                /> */}
+                                <div className="w-full h-full flex items-center justify-center text-white">
+                                    <p>Transmission Incoming...</p>
+                                </div>
+                            </div>
 
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="absolute top-4 right-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full"
+                                className="absolute top-4 right-4 z-30 text-white/50 hover:text-white hover:bg-white/10 rounded-full"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <X className="w-6 h-6" />

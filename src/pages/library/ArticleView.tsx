@@ -9,6 +9,8 @@ import { motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import { useGamification } from '@/hooks/useGamification'
 import { KNOWLEDGE_BASE_ARTICLES } from '@/data/knowledge-base'
+import { InteractiveEBook } from '@/components/library/InteractiveEBook'
+import { FCRA_EBOOK_METADATA, FCRA_EBOOK_BLOCKS } from '@/data/ebooks/fcra-ebook'
 
 // Types
 interface Article {
@@ -135,7 +137,7 @@ export default function ArticleView() {
                 awardPoints(50, `Read Article: ${article.title}`)
             } else {
                 // Call RPC
-                const { data, error } = await supabase.rpc('complete_article', { article_uuid: article.id })
+                const { error } = await supabase.rpc('complete_article', { article_uuid: article.id })
 
                 if (error) throw error
 
@@ -229,6 +231,29 @@ export default function ArticleView() {
     }
 
     if (!article) return <div>Not Found</div>
+
+    // SPECIAL CASE: Interactive eBook Protocol
+    if (slug === 'understanding-fcra-protocol' || slug === 'fcra-overview') {
+        return (
+            <div className="min-h-screen bg-[#020412] text-slate-200 font-sans selection:bg-indigo-500/30">
+                <div className="bg-indigo-600/20 border-b border-indigo-500/30 p-2 text-center text-[10px] font-mono text-indigo-400 uppercase tracking-[0.5em] animate-pulse">
+                    Interactive Protocol Deck V2.0 Active • Neural Link Sync: OK
+                </div>
+                <div className="max-w-4xl mx-auto p-6 md:p-12">
+                    <Link to="/dashboard/library">
+                        <Button variant="ghost" className="pl-0 text-slate-500 hover:text-white mb-6">
+                            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Library
+                        </Button>
+                    </Link>
+                    <InteractiveEBook
+                        metadata={FCRA_EBOOK_METADATA}
+                        blocks={FCRA_EBOOK_BLOCKS}
+                        onComplete={() => setIsCompleted(true)}
+                    />
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="min-h-screen bg-[#020412] text-slate-200 font-sans selection:bg-indigo-500/30">

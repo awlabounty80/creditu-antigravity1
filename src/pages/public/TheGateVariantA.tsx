@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Crown, Lock, UserCheck, CreditCard, ChevronRight, ShieldCheck, ScanLine, Sparkles } from 'lucide-react'
+import { Lock, UserCheck, CreditCard, ChevronRight, ShieldCheck, ScanLine, Sparkles } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -90,7 +91,7 @@ export default function TheGateVariantA() {
                         <div className="absolute inset-0 -z-10 animate-pulse-slow blur-2xl bg-amber-500/20 rounded-full"></div>
 
                         <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#0a1129] to-[#020412] shadow-2xl shadow-amber-900/20">
-                            <Crown className="h-10 w-10 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" strokeWidth={1.5} />
+                            <CreditULogo className="h-16 w-16" variant="gold" showShield={false} iconClassName="h-10 w-10" />
 
                             {/* Rotating Gold Ring */}
                             <div className="absolute inset-0 rounded-2xl border border-amber-500/10 animate-[spin_10s_linear_infinite] opacity-50"></div>

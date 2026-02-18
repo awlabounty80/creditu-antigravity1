@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useProfile } from '@/hooks/useProfile'
-import { LayoutDashboard, GraduationCap, CreditCard, Users, Settings, LogOut, Crown, Sparkles, Menu, X, BookOpen, ShoppingBag, Brain, Wrench } from 'lucide-react'
+import { LayoutDashboard, GraduationCap, CreditCard, Users, Settings, LogOut, Sparkles, Menu, X, BookOpen, ShoppingBag, Brain, Wrench, Shield, Target, Vault, Network, MonitorPlay } from 'lucide-react'
+import { CreditULogo } from '@/components/common/CreditULogo'
 import { GuideAgent } from '@/components/ai/GuideAgent'
+import { useGamification } from '@/hooks/useGamification'
+import { LevelUpOverlay } from '@/components/gamification/LevelUpOverlay'
+import { HexMatrixBackground } from '@/components/layout/HexMatrixBackground'
 
 function UserHeader() {
     const { profile, loading } = useProfile()
@@ -60,6 +64,8 @@ const SidebarItem = ({ icon: Icon, label, path, isActive, onClick }: any) => (
 export default function CampusLayout({ children }: { children: React.ReactNode }) {
     const location = useLocation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { showLevelUp, newLevel, dismissLevelUp } = useGamification()
+    const { profile } = useProfile()
 
     // Close mobile menu on route change
     React.useEffect(() => {
@@ -68,10 +74,15 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
 
     const navItems = [
         { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", match: "/dashboard" },
+        { icon: Target, label: "Dream Architect", path: "/dashboard/dream-architect", match: "/dashboard/dream-architect" },
+        { icon: Shield, label: "Neural Protocol", path: "/dashboard/financial-nervous-system", match: "/dashboard/financial-nervous-system" },
+        { icon: Network, label: "Neural Network", path: "/dashboard/neural-network", match: "/dashboard/neural-network" },
         { icon: GraduationCap, label: "Curriculum", path: "/dashboard/curriculum", match: "/dashboard/curriculum" },
         { icon: BookOpen, label: "Knowledge Center", path: "/dashboard/knowledge", match: "/dashboard/knowledge" },
         { icon: Wrench, label: "Tools Hub", path: "/dashboard/tools", match: "/dashboard/tools" },
-        { icon: Brain, label: "Credit Quest", path: "/dashboard/quest", match: "/dashboard/quest" },
+        { icon: Vault, label: "The Vault", path: "/dashboard/vault", match: "/dashboard/vault" },
+        { icon: Brain, label: "Credit Quest", path: "/dashboard/credit-quest", match: "/dashboard/credit-quest" },
+        { icon: MonitorPlay, label: "Lecture Hall", path: "/dashboard/lecture-hall", match: "/dashboard/lecture-hall" },
         { icon: CreditCard, label: "Credit Lab", path: "/dashboard/credit-lab", match: "/dashboard/credit-lab" },
         { icon: Users, label: "Global Campus", path: "/dashboard/community", match: "/dashboard/community" },
         { icon: Sparkles, label: "Vision Board", path: "/dashboard/vision", match: "/dashboard/vision" },
@@ -80,12 +91,14 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
     ];
 
     return (
-        <div className="min-h-screen bg-[#020412] text-white flex font-sans selection:bg-indigo-500/30">
+        <div className="min-h-screen bg-transparent text-white flex font-sans selection:bg-indigo-500/30 relative">
+            <HexMatrixBackground />
+
             {/* Mobile Header */}
             <header className="md:hidden fixed top-0 w-full z-40 bg-[#020412]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-4 h-16">
                 <div className="flex items-center gap-2">
-                    <div className="bg-indigo-600 p-1.5 rounded-lg">
-                        <Crown size={18} className="text-white" />
+                    <div className="bg-indigo-950 p-1 rounded-lg border border-white/10 overflow-hidden">
+                        <CreditULogo className="w-8 h-8" variant="white" showShield={false} iconClassName="w-7 h-7" />
                     </div>
                     <span className="font-heading font-black tracking-tight text-lg">CREDIT U</span>
                 </div>
@@ -103,10 +116,8 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
                 <div className="h-24 flex items-center px-8 border-b border-white/5 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-transparent"></div>
                     <div className="flex items-center gap-3 relative z-10">
-                        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 border border-white/10">
-                            <video autoPlay loop muted playsInline className="w-full h-full object-cover">
-                                <source src="/assets/logo-animated.mp4" type="video/mp4" />
-                            </video>
+                        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 border border-white/10">
+                            <CreditULogo className="w-full h-full" showShield={false} iconClassName="w-11 h-11" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-heading font-black text-xl tracking-tight text-white leading-none">CREDIT U</span>
@@ -138,6 +149,12 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
                     <div className="mt-6 text-center text-[10px] text-slate-700 font-mono">
                         v2.0.4 • HIGH TABLE
                     </div>
+
+                    {profile?.role === 'admin' && (
+                        <Link to="/admin" className="mt-4 block px-4 py-2 bg-slate-900 rounded-lg border border-slate-800 text-center text-xs font-bold text-slate-400 hover:text-white hover:border-indigo-500/50 transition-all">
+                            ADMIN PORTAL ACCESS
+                        </Link>
+                    )}
                 </div>
             </aside>
 
@@ -184,7 +201,12 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
             </div>
 
             <GuideAgent />
-            {/* <TheDean /> */}
+            {showLevelUp && (
+                <LevelUpOverlay
+                    newLevel={newLevel}
+                    onDismiss={dismissLevelUp}
+                />
+            )}
         </div>
     )
 }
