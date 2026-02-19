@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Shield, Lock, Activity, Sparkles, CreditCard } from 'lucide-react';
+import { Check, Shield, Lock, Activity, CreditCard, RefreshCw, ArrowLeft, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -106,7 +106,7 @@ const ArrivalStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => {
             <div className="absolute inset-0 bg-gradient-to-b from-[#0f1742] via-[#050818] to-[#020412] -z-30" />
             <FadeIn delay={0.2} duration={0.8}>
                 <div className="relative group cursor-pointer mb-10 transform transition-transform duration-500 hover:scale-105">
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-4xl animate-[spin_8s_linear_infinite_reverse] opacity-80 filter drop-shadow-[0_0_15px_rgba(251,191,36,0.6)]">👑</div>
+                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-4xl animate-[spin_8s_linear_infinite_reverse] opacity-80 filter drop-shadow-[0_0_15px_rgba(251,191,36,0.6)]">≡ƒææ</div>
                     <div className="w-40 h-40 bg-black/40 rounded-full flex items-center justify-center border-2 border-amber-500/50 shadow-[0_0_60px_-10px_rgba(251,191,36,0.5)] relative z-10 backdrop-blur-md group-hover:border-amber-400 overflow-hidden">
                         <CreditULogo className="w-full h-full" variant="gold" showShield={false} iconClassName="w-36 h-36" />
                     </div>
@@ -256,7 +256,7 @@ const IdentityStep = ({ setStep, saveState, userState }: { setStep: (s: Onboardi
 const MapStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => (
     <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-4xl mx-auto px-6 z-10 text-center">
         <FadeIn delay={0}>
-            <div className="text-4xl mb-6">🗺️</div>
+            <div className="text-4xl mb-6">≡ƒù║∩╕Å</div>
             <h1 className="text-3xl font-black text-white mb-4 uppercase italic">Protocol Blueprint</h1>
             <p className="text-slate-400 font-light text-lg mb-12 max-w-xl">Observe your trajectory. The sequence is locked. You are now entering the tactical phase.</p>
         </FadeIn>
@@ -280,37 +280,107 @@ const ApprovalMeter = () => {
     );
 };
 
-const DayScript = ({ dayId, theme, script, task, onClose, checklistItems = [] }: any) => {
+const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [], videoUrl, requiresInput, userState, saveState }: any) => {
     const [checklist, setChecklist] = useState<boolean[]>(new Array(checklistItems.length).fill(false));
+    const [inputValue, setInputValue] = useState(userState?.primaryMission || '');
+    const [videoEnded, setVideoEnded] = useState(false);
+
     const toggleCheck = (index: number) => {
         const nc = [...checklist]; nc[index] = !nc[index]; setChecklist(nc);
     };
-    const allChecked = checklist.length === 0 || checklist.every(Boolean);
+
+    const isVideoRequired = !!videoUrl;
+    const isInputRequired = !!requiresInput;
+
+    const allChecked = (checklist.length === 0 || checklist.every(Boolean)) &&
+        (!isVideoRequired || videoEnded) &&
+        (!isInputRequired || inputValue.length > 5);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-2xl mx-auto px-6 z-10 text-center py-20">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-4xl mx-auto px-6 z-10 text-center py-20 relative">
+            <button
+                onClick={onBack}
+                className="absolute top-10 left-6 flex items-center gap-2 text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors group"
+            >
+                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                Return to Protocols
+            </button>
             <div className="text-xs font-bold text-indigo-400 mb-4 uppercase tracking-[0.4em]">Day 0{dayId} // {theme}</div>
-            <div className="space-y-6 text-xl text-slate-300 font-light text-left w-full mb-12 leading-relaxed">
+
+            {videoUrl && (
+                <div className="w-full aspect-video bg-black rounded-3xl overflow-hidden border border-white/10 mb-12 shadow-2xl relative group">
+                    <video
+                        src={videoUrl}
+                        controls
+                        className="w-full h-full object-cover"
+                        onEnded={() => setVideoEnded(true)}
+                    />
+                    {!videoEnded && (
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-[10px] font-mono text-amber-500 uppercase tracking-widest animate-pulse">
+                            Watch to Unlock
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="space-y-6 text-xl text-slate-300 font-light text-left w-full mb-12 leading-relaxed max-w-2xl mx-auto">
                 {script && script.map((line: string, i: number) => <p key={i}>{line}</p>)}
             </div>
+
             {dayId === 3 && <ApprovalMeter />}
-            <div className="bg-[#0F1629] border border-white/10 p-8 rounded-2xl w-full text-left mb-12 shadow-2xl">
-                <h3 className="text-white font-bold mb-6 uppercase tracking-wider text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-emerald-500" /> Daily Mission: {task}
-                </h3>
-                <div className="space-y-4">
-                    {checklistItems.map((item: string, idx: number) => (
-                        <div key={idx} onClick={() => toggleCheck(idx)} className="flex items-center gap-4 cursor-pointer group">
-                            <div className={cn("w-6 h-6 rounded border flex items-center justify-center transition-all", checklist[idx] ? "bg-emerald-500 border-emerald-500" : "border-white/10 group-hover:border-white/30")}>
-                                {checklist[idx] && <Check className="w-4 h-4 text-black" />}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mb-12 max-w-4xl">
+                <div className="bg-[#0F1629] border border-white/10 p-8 rounded-2xl text-left shadow-2xl">
+                    <h3 className="text-white font-bold mb-6 uppercase tracking-wider text-sm flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-emerald-500" /> Mission Checklist
+                    </h3>
+                    <div className="space-y-4">
+                        {checklistItems.map((item: string, idx: number) => (
+                            <div key={idx} onClick={() => toggleCheck(idx)} className="flex items-center gap-4 cursor-pointer group">
+                                <div className={cn("w-6 h-6 rounded border flex items-center justify-center transition-all", checklist[idx] ? "bg-emerald-500 border-emerald-500" : "border-white/10 group-hover:border-white/30")}>
+                                    {checklist[idx] && <Check className="w-4 h-4 text-black" />}
+                                </div>
+                                <span className={cn("text-sm transition-colors", checklist[idx] ? "text-emerald-400" : "text-slate-400 group-hover:text-white")}>{item}</span>
                             </div>
-                            <span className={cn("text-sm transition-colors", checklist[idx] ? "text-emerald-400" : "text-slate-400 group-hover:text-white")}>{item}</span>
-                        </div>
-                    ))}
+                        ))}
+                        {isVideoRequired && (
+                            <div className="flex items-center gap-4 opacity-50">
+                                <div className={cn("w-6 h-6 rounded border flex items-center justify-center", videoEnded ? "bg-amber-500 border-amber-500" : "border-white/10")}>
+                                    {videoEnded && <Check className="w-4 h-4 text-black" />}
+                                </div>
+                                <span className={cn("text-sm transition-colors", videoEnded ? "text-amber-400" : "text-slate-500")}>Video Transmission Complete</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {requiresInput && (
+                    <div className="bg-[#0F1629] border border-white/10 p-8 rounded-2xl text-left shadow-2xl flex flex-col">
+                        <h3 className="text-white font-bold mb-6 uppercase tracking-wider text-sm flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-indigo-400" /> Mission Briefing
+                        </h3>
+                        <textarea
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            placeholder="Type your primary mission objective here..."
+                            className="flex-1 bg-black/40 border border-white/10 rounded-xl p-4 text-slate-200 text-sm focus:outline-none focus:border-indigo-500/50 resize-none min-h-[120px]"
+                        />
+                        <div className="mt-4 text-[10px] text-slate-500 font-mono uppercase tracking-widest">
+                            {inputValue.length > 5 ? "Input Validated" : "Requires at least 5 characters"}
+                        </div>
+                    </div>
+                )}
             </div>
-            <Button onClick={onClose} disabled={!allChecked} className={cn("px-12 py-6 rounded-full text-lg font-black uppercase tracking-widest transition-all", allChecked ? "bg-white text-black hover:scale-105" : "bg-white/5 text-slate-600 cursor-not-allowed")}>
-                {allChecked ? "Execute Action" : "Complete Steps First"}
+
+            <Button
+                onClick={() => {
+                    if (requiresInput) saveState({ primaryMission: inputValue });
+                    onClose();
+                }}
+                disabled={!allChecked}
+                className={cn("px-16 py-8 rounded-full text-xl font-black uppercase tracking-[0.2em] transition-all", allChecked ? "bg-white text-black hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.2)]" : "bg-white/5 text-slate-600 cursor-not-allowed")}
+            >
+                {allChecked ? "Execute Action" : "Complete Protocol Steps"}
             </Button>
         </div>
     );
@@ -319,7 +389,7 @@ const DayScript = ({ dayId, theme, script, task, onClose, checklistItems = [] }:
 const DayCompletionOverlay = ({ onClose }: { onClose: () => void }) => (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-in fade-in duration-500">
         <div className="text-center p-6 bg-[#050914] border border-emerald-500/30 rounded-3xl shadow-[0_0_100px_rgba(16,185,129,0.1)] py-20 px-12">
-            <div className="text-6xl mb-8 animate-bounce">🛡️</div>
+            <div className="text-6xl mb-8 animate-bounce">≡ƒ¢í∩╕Å</div>
             <h2 className="text-5xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none">Mission <br />Complete</h2>
             <p className="text-emerald-500 font-mono tracking-widest text-[10px] uppercase mb-12">PROTOCOL SYNCHRONIZATION SUCCESSFUL</p>
             <Button onClick={onClose} className="bg-white text-black px-16 py-8 text-xl font-black rounded-full hover:scale-105 transition-transform uppercase tracking-widest">CONTINUE OP</Button>
@@ -350,18 +420,17 @@ const AccessProtocol = ({ dayId, onComplete }: { dayId: number, onComplete: () =
     );
 };
 
-const MenuStep = ({ setStep, userState, saveState, profile, setShowIDCard, dailyLoginTime }: any) => {
+const MenuStep = ({ setStep, userState, saveState, setShowIDCard, dailyLoginTime }: any) => {
     const [activeDay, setActiveDay] = useState<number | null>(null);
     const [isAccessing, setIsAccessing] = useState(false);
     const [completedDay, setCompletedDay] = useState<any>(null);
-    const navigate = useNavigate();
 
     const coreDays = [
-        { id: 1, title: 'Mindset', theme: 'IDENTITY REFRAME', intro: ["Welcome to your first reset sequence.", "Today we rebuild the psychological foundation."], task: "Protocol Initiation", checklistItems: ["Watch initiation video", "Record primary mission objectives"] },
-        { id: 2, title: 'Architect', theme: 'CREDIT ARCHITECT', intro: ["Tactical data analysis is active.", "We are auditing the reports for structural flaws."], task: "Bureau Review", checklistItems: ["Access bureau reports", "Identify legacy errors"] },
-        { id: 3, title: 'Funding', theme: 'FUNDING SECURED', intro: ["Optimization sequence active.", "Positioning profile for elite institutional capital."], task: "Approval Positioning", checklistItems: ["Verify utilization compliance", "Check inquiry velocity"] },
+        { id: 1, title: 'Mindset', theme: 'IDENTITY REFRAME', intro: ["Welcome to your first reset sequence.", "Today we rebuild the psychological foundation."], videoUrl: "/assets/dean-welcome-v2.mp4", requiresInput: true, task: "Protocol Initiation", checklistItems: ["Watch initiation video", "Record primary mission objectives"] },
+        { id: 2, title: 'Architect', theme: 'CREDIT ARCHITECT', intro: ["Tactical data analysis is active.", "We are auditing the reports for structural flaws."], videoUrl: "/assets/dr-leverage-matrix.mp4", task: "Bureau Review", checklistItems: ["Access bureau reports", "Identify legacy errors"] },
+        { id: 3, title: 'Funding', theme: 'FUNDING SECURED', intro: ["Optimization sequence active.", "Positioning profile for elite institutional capital."], videoUrl: "/assets/dean-part-2.mp4", task: "Approval Positioning", checklistItems: ["Verify utilization compliance", "Check inquiry velocity"] },
         { id: 4, title: 'Systems', theme: 'WEALTH SYSTEMS', intro: ["Automation is the goal.", "Removing the human factor from the funding equation."], task: "System Setup", checklistItems: ["Configure auto-pilot systems"] },
-        { id: 5, title: 'Reset', theme: 'THE GRADUATION', intro: ["Final verification sequence.", "You are ready to enter the next phase of the protocol."], task: "Oath of Excellence", checklistItems: ["Sign the graduation oath"] }
+        { id: 5, title: 'Reset', theme: 'THE GRADUATION', intro: ["Final verification sequence.", "You are ready to enter the next phase of the protocol."], videoUrl: "/assets/celebration-loop.mp4", task: "Oath of Excellence", checklistItems: ["Sign the graduation oath"] }
     ];
 
     if (completedDay) {
@@ -376,11 +445,11 @@ const MenuStep = ({ setStep, userState, saveState, profile, setShowIDCard, daily
     if (activeDay) {
         if (!isAccessing) return <AccessProtocol dayId={activeDay} onComplete={() => setIsAccessing(true)} />;
         const day = coreDays.find(d => d.id === activeDay);
-        return <DayScript {...day} onClose={() => { setCompletedDay(day); setActiveDay(null); }} />;
+        return <DayScript {...day} userState={userState} saveState={saveState} onBack={() => { setActiveDay(null); setIsAccessing(false); }} onClose={() => { setCompletedDay(day); setActiveDay(null); }} />;
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-5xl mx-auto px-6 z-10 w-full py-20">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-5xl mx-auto px-6 z-10 w-full py-20 relative">
             <SecurityTimer dailyLoginTime={dailyLoginTime} />
             <FadeIn delay={0} className="text-center mb-20">
                 <h1 className="text-3xl font-thin text-white tracking-[0.3em] uppercase opacity-80">
@@ -419,7 +488,7 @@ const MenuStep = ({ setStep, userState, saveState, profile, setShowIDCard, daily
                     <CreditCard className="w-4 h-4 mr-2" /> View Digital ID
                 </Button>
             </div>
-        </div>
+        </div >
     );
 };
 
@@ -480,7 +549,17 @@ export default function Orientation() {
             <NervousSystemBackground />
 
             <div className="absolute top-0 w-full p-8 flex justify-between items-center z-50">
-                <div className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase">Credit U // Dorm Week</div>
+                <div className="flex items-center gap-6">
+                    <div className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase">Credit U // Dorm Week</div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-slate-500 hover:text-white flex items-center gap-2 uppercase tracking-[0.2em] text-[10px] h-auto p-0"
+                        onClick={() => navigate('/dashboard')}
+                    >
+                        <ChevronLeft className="w-3 h-3" /> Back to Campus
+                    </Button>
+                </div>
                 <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((_, i) => (
                         <div key={i} className={cn("w-1 h-1 rounded-full transition-all duration-500", (userState.completedDays?.length || 0) > i ? "bg-emerald-500" : "bg-white/10")} />
@@ -519,6 +598,18 @@ export default function Orientation() {
                     />
                 </div>
             )}
+
+            <div className="fixed bottom-4 right-4 z-[100] flex items-center gap-4">
+                <button
+                    onClick={() => {
+                        localStorage.removeItem('credit_u_reset_state');
+                        window.location.reload();
+                    }}
+                    className="flex items-center gap-2 text-[10px] text-white/30 hover:text-white uppercase tracking-widest font-mono border border-white/10 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm transition-all shadow-sm hover:shadow-md"
+                >
+                    <RefreshCw className="w-3 h-3" /> Refresh Protocol
+                </button>
+            </div>
 
             <div className="absolute bottom-4 w-full text-center text-[8px] font-black uppercase tracking-[0.5em] text-white/10 pointer-events-none">
                 Authorization Node: ACTIVE // Security Layer: ENFORCED

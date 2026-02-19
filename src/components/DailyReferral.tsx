@@ -8,7 +8,11 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 
-export function DailyReferral() {
+export interface DailyReferralProps {
+    variant?: 'default' | 'compact';
+}
+
+export function DailyReferral({ variant = 'default' }: DailyReferralProps) {
     const { profile } = useProfile();
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -17,6 +21,9 @@ export function DailyReferral() {
     const [error, setError] = useState('');
     const [todayReferrals, setTodayReferrals] = useState(0);
     const [copied, setCopied] = useState(false);
+    const [showEmailForm, setShowEmailForm] = useState(false);
+
+    const isCompact = variant === 'compact';
 
     useEffect(() => {
         const fetchTodayCount = async () => {
@@ -125,6 +132,7 @@ export function DailyReferral() {
                     referrerName: profile.first_name || 'A friend',
                     referredEmail: email,
                     referralCode: referralCode,
+                    referralCodeLink: `${window.location.origin}/signup?code=${referralCode}`, // Ensure link is passed if needed by edge function
                     customMessage: message || defaultMessage
                 }
             });
@@ -204,168 +212,191 @@ export function DailyReferral() {
     };
 
     return (
-        <div className="bg-[#0A0F1E] rounded-2xl border border-white/10 p-6 shadow-2xl relative overflow-hidden group">
-            {/* Ambient Glow */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700" />
+        <div className={cn("bg-[#0A0F1E] rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden group transition-all", isCompact ? "p-4" : "p-6")}>
+            {/* Ambient Glow - Hidden in compact mode to save visual noise */}
+            {!isCompact && <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700" />}
 
             {/* Header */}
-            <div className="flex items-start justify-between mb-6 relative z-10">
+            <div className={cn("flex items-start justify-between relative z-10", isCompact ? "mb-4" : "mb-6")}>
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                            <Mail className="w-5 h-5 text-blue-400" />
+                        <div className={cn("bg-blue-500/10 rounded-lg border border-blue-500/20", isCompact ? "p-1.5" : "p-2")}>
+                            <Mail className={cn("text-blue-400", isCompact ? "w-4 h-4" : "w-5 h-5")} />
                         </div>
-                        <h3 className="text-xl font-black text-white uppercase tracking-wider">Protocol: Sharing</h3>
+                        <h3 className={cn("font-black text-white uppercase tracking-wider", isCompact ? "text-sm" : "text-xl")}>
+                            {isCompact ? "Invite & Earn" : "Protocol: Sharing"}
+                        </h3>
                     </div>
-                    <p className="text-xs text-slate-400 font-medium">
-                        Initialize referral sequence and secure{' '}
-                        <span className="text-amber-400 font-bold">100 Moo Points</span>
-                    </p>
+                    {!isCompact && (
+                        <p className="text-xs text-slate-400 font-medium">
+                            Initialize referral sequence and secure{' '}
+                            <span className="text-amber-400 font-bold">100 Moo Points</span>
+                        </p>
+                    )}
                 </div>
-                <div className="bg-black/40 rounded-full px-3 py-1.5 border border-white/10 backdrop-blur-md">
-                    <div className="flex items-center gap-2">
-                        <Users className="w-3 h-3 text-blue-400" />
-                        <span className="text-[10px] font-black text-white tracking-widest uppercase">
-                            {todayReferrals} ENVOYS
-                        </span>
+                {!isCompact && (
+                    <div className="bg-black/40 rounded-full px-3 py-1.5 border border-white/10 backdrop-blur-md">
+                        <div className="flex items-center gap-2">
+                            <Users className="w-3 h-3 text-blue-400" />
+                            <span className="text-[10px] font-black text-white tracking-widest uppercase">
+                                {todayReferrals} ENVOYS
+                            </span>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
-            {/* Form */}
-            <div className="space-y-4 relative z-10">
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
-                        Target Email
-                    </label>
-                    <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="RECIPIENT@GMAIL.COM"
-                        className="bg-black/50 border-white/10 focus:border-blue-500/50 text-white h-12 rounded-xl transition-all font-mono text-sm"
-                        disabled={isSubmitting}
-                    />
-                </div>
+            {/* Quick Actions Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
+                <Button
+                    onClick={copyReferralLink}
+                    variant="outline"
+                    className={cn("border-white/10 font-bold text-slate-400 uppercase tracking-widest hover:bg-white/5", isCompact ? "text-[9px] h-9" : "text-[10px] h-10 rounded-xl")}
+                >
+                    {copied ? <Check className="w-3 h-3 mr-2 text-emerald-500" /> : <Copy className="w-3 h-3 mr-2" />}
+                    {copied ? "COPIED" : "COPY LINK"}
+                </Button>
+                <Button
+                    onClick={() => handleSocialShare('whatsapp')}
+                    variant="outline"
+                    className={cn("border-white/10 font-bold text-slate-400 uppercase tracking-widest hover:bg-white/5", isCompact ? "text-[9px] h-9" : "text-[10px] h-10 rounded-xl")}
+                >
+                    <MessageCircle className="w-3 h-3 mr-2 text-emerald-500" /> WHATSAPP
+                </Button>
+            </div>
 
-                <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
-                        Encrypted Message
-                    </label>
-                    <textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder={defaultMessage}
-                        rows={3}
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl focus:border-blue-500/50 outline-none resize-none text-white text-xs font-medium leading-relaxed"
-                        disabled={isSubmitting}
-                    />
-                </div>
-
-                {!profile?.id && (
-                    <div className="bg-blue-500/5 border border-blue-500/10 text-blue-300 px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest leading-relaxed">
-                        <span className="text-amber-400">Note:</span> Enrollment is required to secure automated referral rewards. Use the personal options below to share as a guest.
+            {/* Conditional Form Rendering for Compact Mode */}
+            {isCompact && !showEmailForm ? (
+                <Button
+                    onClick={() => setShowEmailForm(true)}
+                    className="w-full text-[10px] font-black uppercase tracking-widest h-9 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400"
+                >
+                    <Mail className="w-3 h-3 mr-2" /> Open Email Protocol
+                </Button>
+            ) : (
+                <div className="space-y-4 relative z-10 animate-in slide-in-from-top-2 duration-300">
+                    <div>
+                        {!isCompact && (
+                            <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
+                                Target Email
+                            </label>
+                        )}
+                        <Input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="RECIPIENT@GMAIL.COM"
+                            className={cn("bg-black/50 border-white/10 focus:border-blue-500/50 text-white transition-all font-mono text-sm", isCompact ? "h-10 text-xs" : "h-12")}
+                            disabled={isSubmitting}
+                        />
                     </div>
-                )}
 
-                {error && (
-                    <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest">
-                        ERROR: {error}
-                    </div>
-                )}
+                    {!isCompact && (
+                        <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
+                                Encrypted Message
+                            </label>
+                            <textarea
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                placeholder={defaultMessage}
+                                rows={3}
+                                className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl focus:border-blue-500/50 outline-none resize-none text-white text-xs font-medium leading-relaxed"
+                                disabled={isSubmitting}
+                            />
+                        </div>
+                    )}
 
-                <div className="flex flex-col gap-3">
-                    {!profile?.id ? (
-                        <Link to="/apply" className="w-full">
+                    {!profile?.id && (
+                        <div className="bg-blue-500/5 border border-blue-500/10 text-blue-300 px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest leading-relaxed">
+                            <span className="text-amber-400">Note:</span> Enrollment is required to secure automated referral rewards. Use the personal options below to share as a guest.
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest">
+                            ERROR: {error}
+                        </div>
+                    )}
+
+                    <div className="flex flex-col gap-3">
+                        {!profile?.id ? (
+                            <Link to="/apply" className="w-full">
+                                <Button
+                                    className={cn("w-full relative group overflow-hidden bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black uppercase tracking-[0.2em] transition-all shadow-xl", isCompact ? "h-10 text-[10px]" : "h-14 text-xs rounded-xl")}
+                                >
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                        <Lock className="w-4 h-4" />
+                                        ENROLL TO UNLOCK
+                                    </span>
+                                </Button>
+                            </Link>
+                        ) : (
                             <Button
-                                className="w-full relative group overflow-hidden bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs uppercase tracking-[0.2em] h-14 rounded-xl transition-all shadow-xl"
+                                onClick={handleSendReferral}
+                                disabled={!email || isSubmitting || success}
+                                className={cn(
+                                    "w-full relative group overflow-hidden text-white font-black uppercase tracking-[0.2em] transition-all shadow-xl",
+                                    "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500",
+                                    isCompact ? "h-10 text-[10px]" : "h-14 text-xs rounded-xl"
+                                )}
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-2">
-                                    <Lock className="w-4 h-4" />
-                                    ENROLL TO UNLOCK AUTO-SEND
+                                    {success ? (
+                                        <>
+                                            <Check className="w-4 h-4" />
+                                            SENT
+                                        </>
+                                    ) : isSubmitting ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            SENDING...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send className="w-4 h-4" />
+                                            SEND INVITE
+                                        </>
+                                    )}
                                 </span>
+                                <div className="absolute inset-0 -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
                             </Button>
-                        </Link>
-                    ) : (
-                        <Button
-                            onClick={handleSendReferral}
-                            disabled={!email || isSubmitting || success}
-                            className={cn(
-                                "w-full relative group overflow-hidden text-white font-black text-xs uppercase tracking-[0.2em] h-14 rounded-xl transition-all shadow-xl",
-                                "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500"
-                            )}
-                        >
-                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                {success ? (
-                                    <>
-                                        <Check className="w-4 h-4" />
-                                        SEQUENCE SUCCESSFUL
-                                    </>
-                                ) : isSubmitting ? (
-                                    <>
-                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        ENCRYPTING...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Send className="w-4 h-4" />
-                                        INITIALIZE REFERRAL
-                                    </>
-                                )}
-                            </span>
-                            <div className="absolute inset-0 -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
-                        </Button>
-                    )}
+                        )}
 
-                    <div className="grid grid-cols-2 gap-3">
                         <Button
-                            onClick={copyReferralLink}
+                            onClick={handleManualSend}
                             variant="outline"
-                            className="border-white/10 font-bold text-[10px] text-slate-400 uppercase tracking-widest h-10 rounded-xl hover:bg-white/5"
+                            disabled={!email}
+                            className={cn("w-full border-white/10 font-bold text-slate-400 uppercase tracking-widest hover:bg-white/5", isCompact ? "h-8 text-[9px]" : "h-10 text-[10px] rounded-xl")}
                         >
-                            {copied ? <Check className="w-3 h-3 mr-2 text-emerald-500" /> : <Copy className="w-3 h-3 mr-2" />}
-                            {copied ? "COPIED" : "COPY LINK"}
+                            <ExternalLink className="w-3 h-3 mr-2" /> SEND VIA MAILTO
                         </Button>
-                        <Button
-                            onClick={() => handleSocialShare('whatsapp')}
-                            variant="outline"
-                            className="border-white/10 font-bold text-[10px] text-slate-400 uppercase tracking-widest h-10 rounded-xl hover:bg-white/5"
-                        >
-                            <MessageCircle className="w-3 h-3 mr-2 text-emerald-500" /> WHATSAPP
-                        </Button>
+
+                        {error && error.includes('Automated') && (
+                            <div className="text-[10px] text-amber-500 font-bold uppercase tracking-[0.2em] text-center mt-2 p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-pulse">
+                                Delivery Blocked: Use Manual Options Above
+                            </div>
+                        )}
                     </div>
+                </div>
+            )}
 
-                    <Button
-                        onClick={handleManualSend}
-                        variant="outline"
-                        disabled={!email}
-                        className="w-full border-white/10 font-bold text-[10px] text-slate-400 uppercase tracking-widest h-10 rounded-xl hover:bg-white/5"
-                    >
-                        <ExternalLink className="w-3 h-3 mr-2" /> SEND VIA PERSONAL EMAIL (MAILTO)
-                    </Button>
-
-                    {error && error.includes('Automated') && (
-                        <div className="text-[10px] text-amber-500 font-bold uppercase tracking-[0.2em] text-center mt-2 p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-pulse">
-                            Delivery Blocked: Use Manual Options Above
+            {/* Bonus Info - Hidden in compact mode or shown simplified? Hidden to save space as requested. */}
+            {!isCompact && (
+                <div className="mt-6 bg-amber-500/5 border border-amber-500/10 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                        <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">Incentive Protocol</h4>
+                            <ul className="text-[10px] text-slate-400 space-y-1 font-medium">
+                                <li>• <span className="text-blue-400">ACTIVE STATUS REQUIRED:</span> YOU MUST BE ENROLLED TO CLAIM REWARDS.</li>
+                                <li>• <span className="text-emerald-400">2,600 POINTS</span> SECURED UPON REFERRAL ENROLLMENT.</li>
+                                <li>• TRACK ALL TRANSMISSIONS IN YOUR DASHBOARD.</li>
+                            </ul>
                         </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Bonus Info */}
-            <div className="mt-6 bg-amber-500/5 border border-amber-500/10 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                    <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                        <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">Incentive Protocol</h4>
-                        <ul className="text-[10px] text-slate-400 space-y-1 font-medium">
-                            <li>• <span className="text-blue-400">ACTIVE STATUS REQUIRED:</span> YOU MUST BE ENROLLED TO CLAIM REWARDS.</li>
-                            <li>• <span className="text-emerald-400">2,600 POINTS</span> SECURED UPON REFERRAL ENROLLMENT.</li>
-                            <li>• TRACK ALL TRANSMISSIONS IN YOUR DASHBOARD.</li>
-                        </ul>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

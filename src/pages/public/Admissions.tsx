@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Shield, RefreshCw } from 'lucide-react'
 import { CreditULogo } from '@/components/common/CreditULogo'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -19,15 +19,29 @@ export default function Admissions() {
         if (saved && !applicant.firstName) {
             try {
                 const data = JSON.parse(saved);
-                if (data.firstName || data.lastName) {
+
+                // Map goals from Dorm Week to Admissions format
+                let mappedGoal = '';
+                const dwGoal = data.primaryMission || '';
+                if (dwGoal === 'Build business credit') {
+                    mappedGoal = 'Build Business Credit';
+                } else if (dwGoal) {
+                    mappedGoal = 'Fix Personal Credit';
+                }
+
+                if (data.firstName || data.lastName || data.email || data.studentIdCode) {
                     updateApplicant({
                         firstName: data.firstName || '',
                         lastName: data.lastName || '',
+                        email: data.email || '',
+                        goal: mappedGoal || applicant.goal,
+                        studentId: data.studentIdCode || '',
+                        academicLevel: data.studentLevel || 'Freshman'
                     });
                 }
             } catch (e) { console.error(e); }
         }
-    }, [updateApplicant, applicant.firstName]);
+    }, [updateApplicant, applicant.firstName, applicant.goal]);
 
     const handleProceed = () => {
         // In real app, validate fields here
@@ -114,8 +128,28 @@ export default function Admissions() {
                     <Card className="bg-[#0a0f29]/80 border-white/10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 to-indigo-500"></div>
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl font-heading text-white">New Student Application</CardTitle>
-                            <CardDescription className="text-slate-400">Secure your spot in the incoming class.</CardDescription>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <CardTitle className="text-2xl font-heading text-white">New Student Application</CardTitle>
+                                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20">
+                                            <RefreshCw className="w-2 h-2 text-blue-400 animate-spin-slow" />
+                                            <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest">DORM WEEK DATA SYNC</span>
+                                        </div>
+                                    </div>
+                                    <CardDescription className="text-slate-400">Secure your spot in the incoming class.</CardDescription>
+                                </div>
+                                {applicant.studentId && (
+                                    <div className="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-lg flex flex-col items-end">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">ID VERIFIED</span>
+                                            <Shield className="w-2.5 h-2.5 text-emerald-500" />
+                                        </div>
+                                        <span className="text-[10px] font-mono text-white">{applicant.studentId}</span>
+                                        <span className="text-[8px] font-bold text-slate-500 uppercase mt-0.5">{applicant.academicLevel}</span>
+                                    </div>
+                                )}
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">

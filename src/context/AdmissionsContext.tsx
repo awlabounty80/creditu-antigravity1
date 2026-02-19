@@ -10,6 +10,7 @@ export interface ApplicantData {
     goal: string;
     plan?: 'auditor' | 'semester' | 'founders';
     studentId?: string;
+    academicLevel?: string;
 }
 
 interface AdmissionsContextType {

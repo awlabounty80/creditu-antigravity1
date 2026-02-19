@@ -10,7 +10,6 @@ import { CreditULogo } from '@/components/common/CreditULogo'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { useAmaraReEntry } from '@/lib/amara-reentry'
 
 export default function Login() {
     const [loading, setLoading] = useState(false)
@@ -21,7 +20,6 @@ export default function Login() {
     const [sent, setSent] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
-    const reEntry = useAmaraReEntry()
 
     // Get the return url from location state - prioritizing Orientation for Dorm Week
     const from = location.state?.from?.pathname || "/dashboard/orientation"
@@ -106,15 +104,10 @@ export default function Login() {
 
                         <CardContent className="pt-8 px-8 pb-8">
 
-                            {/* Header */}
-                            <div className="text-center mb-8">
-                                <div className="mx-auto w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-4 overflow-hidden border border-white/10">
-                                    <CreditULogo className="w-full h-full" variant="white" showShield={false} iconClassName="w-22 h-22" />
+                            <div className="text-center mb-12">
+                                <div className="mx-auto w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/10 mb-2 overflow-hidden border border-white/5 opacity-50">
+                                    <CreditULogo className="w-full h-full" variant="white" showShield={false} iconClassName="w-16 h-16" />
                                 </div>
-                                <h1 className="font-heading text-2xl font-bold text-white tracking-tight mb-2">Dorm Week Check-In</h1>
-                                <p className="text-slate-400 text-sm">
-                                    {usePassword ? "Enter credentials for clearance." : "Secure sequence initialized."}
-                                </p>
                             </div>
 
                             {sent ? (
@@ -125,7 +118,7 @@ export default function Login() {
                                         </div>
                                         <h3 className="font-bold text-lg mb-1">Access Key Dispatched</h3>
                                         <p className="text-sm opacity-80 leading-relaxed">
-                                            Your Dorm Week entry link has been sent to <span className="text-white font-mono">{email}</span>.
+                                            Your secure entry link has been sent to <span className="text-white font-mono">{email}</span>.
                                             <br /><span className="text-xs text-amber-500 mt-2 block font-medium">⚠️ Check your spam/promotions folder if it doesn't appear instantly.</span>
                                         </p>
                                     </div>
@@ -136,13 +129,6 @@ export default function Login() {
                                             onClick={() => setSent(false)}
                                         >
                                             Use a different email
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            className="text-amber-500/50 hover:text-amber-400 text-[10px] font-bold uppercase tracking-widest"
-                                            onClick={() => navigate('/dashboard')}
-                                        >
-                                            [DEV] Bypass Wait: Go to Dashboard
                                         </Button>
                                     </div>
                                 </div>
@@ -220,22 +206,6 @@ export default function Login() {
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                 Secure Connection: TLS 1.3
                             </p>
-                            {/* Developer Shortcut (Visible to help user) */}
-                            <div className="mt-2 p-2 bg-indigo-900/10 border border-indigo-500/10 rounded overflow-hidden">
-                                <p className="text-[9px] text-indigo-300/50 font-mono select-all">
-                                    DEV ACCESS: dev.access@gmail.com / dev-password-123
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        reEntry.trigger()
-                                        navigate('/dashboard')
-                                    }}
-                                    className="block w-full mt-2 text-[9px] text-amber-500/50 hover:text-amber-400 uppercase font-bold tracking-wider hover:bg-amber-500/10 rounded py-1 transition-colors"
-                                >
-                                    [DEV] Simulate Long Absence (Re-Entry)
-                                </button>
-                            </div>
                         </div>
                     </Card>
                 </motion.div>

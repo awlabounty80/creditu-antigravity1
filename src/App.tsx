@@ -77,7 +77,7 @@ import { ProfileProvider } from './context/ProfileContext'
 import { RequireAuth } from './components/auth/RequireAuth'
 
 import FreshmanClassroom from './pages/classroom/FreshmanClassroom'
-import SystemStatus from './components/debug/SystemStatus'
+
 import { NodeRoutes, AdminNodeRoutes } from './nodes/NodeRouter'
 
 function App() {
@@ -98,7 +98,7 @@ function App() {
 
                         {/* New Mandatory Orientation (Placeholder) */}
                         <Route path="/onboarding" element={<Onboarding />} />
-                        {/* Orientation: Made Public to bypass Login issues */}
+                        {/* Orientation: Restored Auth Requirement to ensure Check-In flow */}
                         <Route path="/dashboard/orientation" element={<Orientation />} />
                         <Route path="/dashboard/orientation-white" element={<OrientationWhite />} />
 
