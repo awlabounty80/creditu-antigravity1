@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import CampusLayout from './layouts/CampusLayout'
 import PublicLayout from './layouts/PublicLayout'
 import AdminLayout from './layouts/AdminLayout'
@@ -219,6 +221,8 @@ function App() {
                     <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono">
                         v1.0.5 - RESTORED
                     </div>
+                    <SpeedInsights />
+                    <VercelAnalytics />
                 </Router >
             </AdmissionsProvider >
         </ProfileProvider>
