@@ -1,0 +1,121 @@
+src/components/admin/LessonVideoBinder.tsx(3,55): error TS6133: 'Video' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(5,1): error TS6133: 'Checkbox' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(7,5): error TS6133: 'AlertCircle' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(8,24): error TS6133: 'Scroll' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(8,32): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(8,46): error TS6133: 'Lock' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(8,52): error TS6133: 'Gavel' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(8,59): error TS6133: 'Layers' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(14,1): error TS6133: 'supabase' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(55,11): error TS6133: 'profile' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(64,12): error TS6133: 'disputeType' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(77,12): error TS6133: 'saving' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(77,20): error TS6133: 'setSaving' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(78,12): error TS6133: 'saveSuccess' is declared but its value is never read.
+src/components/credit-lab/DisputeWizard.tsx(78,25): error TS6133: 'setSaveSuccess' is declared but its value is never read.
+src/components/credit-lab/OnboardingVault.tsx(57,21): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/components/credit-lab/OnboardingVault.tsx(65,21): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/components/credit-lab/OnboardingVault.tsx(73,21): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/components/dashboard/AgentIDCard.tsx(4,1): error TS6133: 'cn' is declared but its value is never read.
+src/components/dashboard/BureauConnectModal.tsx(3,10): error TS6133: 'Shield' is declared but its value is never read.
+src/components/dashboard/BureauConnectModal.tsx(6,1): error TS6133: 'cn' is declared but its value is never read.
+src/components/dashboard/DashboardResetMode.tsx(5,32): error TS6133: 'Play' is declared but its value is never read.
+src/components/dashboard/DeansWelcome.tsx(9,11): error TS6133: 'transcript' is declared but its value is never read.
+src/components/dashboard/FiveDaySystemBlueprint.tsx(1,1): error TS6133: 'motion' is declared but its value is never read.
+src/components/dashboard/FiveDaySystemBlueprint.tsx(2,10): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/components/dashboard/FiveDaySystemBlueprint.tsx(2,29): error TS6133: 'Monitor' is declared but its value is never read.
+src/components/dashboard/FiveDaySystemBlueprint.tsx(2,65): error TS6133: 'Flag' is declared but its value is never read.
+src/components/dashboard/ProfessorGenerative.tsx(2,1): error TS6133: 'React' is declared but its value is never read.
+src/components/dashboard/ProfessorGenerative.tsx(14,5): error TS6133: 'guidance' is declared but its value is never read.
+src/components/dashboard/ProfessorGenerative.tsx(15,5): error TS6133: 'professorImage' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,10): error TS6133: 'ShieldCheck' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,38): error TS6133: 'Brain' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,61): error TS6133: 'Lock' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,67): error TS6133: 'Terminal' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,77): error TS6133: 'Cpu' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,82): error TS6133: 'Network' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,91): error TS6133: 'Server' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(2,99): error TS6133: 'Globe' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(10,12): error TS6133: 'tick' is declared but its value is never read.
+src/components/dashboard/SystemGaugeGrid.tsx(124,34): error TS6133: 'i' is declared but its value is never read.
+src/components/debug/ErrorBoundary.tsx(2,8): error TS6133: 'React' is declared but its value is never read.
+src/components/gamification/LevelUpOverlay.tsx(1,31): error TS6133: 'useRef' is declared but its value is never read.
+src/components/gamification/LevelUpOverlay.tsx(45,28): error TS6133: 'prev' is declared but its value is never read.
+src/components/gamification/LevelUpOverlay.tsx(48,27): error TS6133: 'letter' is declared but its value is never read.
+src/components/gamification/ScoreBoard.tsx(2,43): error TS6133: 'animate' is declared but its value is never read.
+src/components/gamification/ScoreBoard.tsx(4,10): error TS6133: 'Trophy' is declared but its value is never read.
+src/components/gamification/ScoreBoard.tsx(4,18): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/components/gamification/ScoreBoard.tsx(26,71): error TS6133: 'maxScore' is declared but its value is never read.
+src/components/VoiceDrill.tsx(1,28): error TS6133: 'useEffect' is declared but its value is never read.
+src/components/VoiceDrill.tsx(2,23): error TS6133: 'Play' is declared but its value is never read.
+src/components/VoiceDrill.tsx(2,29): error TS6133: 'RefreshCw' is declared but its value is never read.
+src/components/VoiceDrill.tsx(2,40): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/components/VoiceDrill.tsx(17,30): error TS6133: 'id' is declared but its value is never read.
+src/data/full-articles.ts(1,1): error TS6192: All imports in import declaration are unused.
+src/hooks/useCourse.ts(5,1): error TS6133: 'FRESHMAN_FOUNDATIONS_COURSE' is declared but its value is never read.
+src/lib/batch-processor.ts(1,71): error TS6133: 'MEDIA_STANDARDS' is declared but its value is never read.
+src/lib/credit-parser.ts(53,13): error TS6133: 'bufferCount' is declared but its value is never read.
+src/lib/deepgram.ts(15,9): error TS2345: Argument of type 'Blob' is not assignable to parameter of type 'FileSource'.
+  Type 'Blob' is missing the following properties from type 'Buffer<ArrayBufferLike>': subarray, write, toJSON, equals, and 96 more.
+src/lib/deepgram.ts(27,40): error TS6133: 'text' is declared but its value is never read.
+src/lib/knowledge-search.ts(86,43): error TS6133: 'query' is declared but its value is never read.
+src/lib/sfx.ts(4,7): error TS6133: 'CLICK_SFX' is declared but its value is never read.
+src/nodes/BudgetPaydown/BudgetPaydown.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/nodes/CreditMonitoringGuide/CreditMonitoringGuide.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/nodes/DisputeLab/DisputeLab.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/nodes/LabsLauncher.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/nodes/VisibilityLab/VisibilityLab.tsx(98,25): error TS2872: This kind of expression is always truthy.
+src/pages/admin/NodeSwitchboard.tsx(6,10): error TS6133: 'Shield' is declared but its value is never read.
+src/pages/classroom/FreshmanClassroom.tsx(8,24): error TS6133: 'Lock' is declared but its value is never read.
+src/pages/classroom/FreshmanClassroom.tsx(8,48): error TS6133: 'Pause' is declared but its value is never read.
+src/pages/classroom/FreshmanClassroom.tsx(8,55): error TS6133: 'Volume2' is declared but its value is never read.
+src/pages/classroom/FreshmanClassroom.tsx(9,18): error TS6133: 'AnimatePresence' is declared but its value is never read.
+src/pages/classroom/FreshmanClassroom.tsx(171,55): error TS2339: Property 'action_step' does not exist on type '{ id: string; title: string; description: string; duration_minutes: number; xp_reward: number; content_url: string; }'.
+src/pages/credit-lab/DisputePage.tsx(10,9): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/pages/credit-lab/DisputePage.tsx(18,9): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/pages/credit-lab/DisputePage.tsx(26,9): error TS2741: Property 'bureau' is missing in type '{ id: string; creditorName: string; accountNumber: string; status: string; balance: string; openedDate: string; }' but required in type 'ParsedAccount'.
+src/pages/credit-lab/IdentityTheftCenter.tsx(4,97): error TS6133: 'AlertTriangle' is declared but its value is never read.
+src/pages/credit-lab/ReportAuditor.tsx(12,5): error TS6133: 'AlertTriangle' is declared but its value is never read.
+src/pages/credit-lab/ReportAuditor.tsx(13,5): error TS6133: 'AlertCircle' is declared but its value is never read.
+src/pages/credit-lab/ReportAuditor.tsx(14,5): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/credit-lab/SecurityFreeze.tsx(5,5): error TS6133: 'Unlock' is declared but its value is never read.
+src/pages/credit-lab/SecurityFreeze.tsx(8,5): error TS6133: 'Info' is declared but its value is never read.
+src/pages/credit-lab/SecurityFreeze.tsx(183,11): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/CreditTools.tsx(99,29): error TS6133: 'defaultTab' is declared but its value is never read.
+src/pages/Dashboard.tsx(30,12): error TS6133: 'enrollments' is declared but its value is never read.
+src/pages/FinancialNervousSystem.tsx(5,25): error TS6133: 'Pause' is declared but its value is never read.
+src/pages/FinancialNervousSystem.tsx(160,7): error TS6133: 'HoldButton' is declared but its value is never read.
+src/pages/KnowledgeCenter.tsx(23,5): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/pages/KnowledgeCenter.tsx(39,1): error TS6192: All imports in import declaration are unused.
+src/pages/LearningPath.tsx(5,41): error TS6133: 'BookOpen' is declared but its value is never read.
+src/pages/LearningPath.tsx(79,41): error TS6133: 'idx' is declared but its value is never read.
+src/pages/LectureHall.tsx(3,10): error TS6133: 'MonitorPlay' is declared but its value is never read.
+src/pages/LectureHall.tsx(53,15): error TS6133: 'chatSub' is declared but its value is never read.
+src/pages/LectureHall.tsx(57,15): error TS6133: 'streamSub' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(8,5): error TS6133: 'FileText' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(9,5): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(10,5): error TS6133: 'Landmark' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(11,5): error TS6133: 'Scroll' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(12,5): error TS6133: 'AlertTriangle' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(13,5): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/pages/library/ConsumerLaw.tsx(135,11): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/library/LibraryHome.tsx(135,29): error TS6133: 'prev' is declared but its value is never read.
+src/pages/public/DormWeek.tsx(12,19): error TS6133: 'toast' is declared but its value is never read.
+src/pages/public/DormWeek_TAKEOVER_BACKUP.tsx(6,65): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/pages/public/Tuition.tsx(2,68): error TS6133: 'Sparkles' is declared but its value is never read.
+src/pages/public/Tuition.tsx(2,78): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/pages/tools/DebtToIncomeCalculator.tsx(17,5): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/tools/DebtToIncomeCalculator.tsx(19,5): error TS6133: 'Calculator' is declared but its value is never read.
+src/pages/tools/InteractiveQuiz.tsx(19,45): error TS6133: 'QuizQuestion' is declared but its value is never read.
+src/pages/worksheets/ApprovalFormulaWorksheet.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/worksheets/ApprovalFormulaWorksheet.tsx(4,38): error TS6133: 'Lock' is declared but its value is never read.
+src/pages/worksheets/BurnRitualWorksheet.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/worksheets/BurnRitualWorksheet.tsx(10,12): error TS6133: 'fears' is declared but its value is never read.
+src/pages/worksheets/BurnRitualWorksheet.tsx(10,19): error TS6133: 'setFears' is declared but its value is never read.
+src/pages/worksheets/BurnRitualWorksheet.tsx(11,12): error TS6133: 'regrets' is declared but its value is never read.
+src/pages/worksheets/BurnRitualWorksheet.tsx(11,21): error TS6133: 'setRegrets' is declared but its value is never read.
+src/pages/worksheets/StrategicMoveWorksheet.tsx(11,12): error TS6133: 'authorizedUser' is declared but its value is never read.
+src/pages/worksheets/StrategicMoveWorksheet.tsx(11,28): error TS6133: 'setAuthorizedUser' is declared but its value is never read.
+src/pages/worksheets/StrategicMoveWorksheet.tsx(12,12): error TS6133: 'errors' is declared but its value is never read.
+src/pages/worksheets/StrategicMoveWorksheet.tsx(12,20): error TS6133: 'setErrors' is declared but its value is never read.
+src/pages/worksheets/WealthSystemsWorksheet.tsx(1,8): error TS6133: 'React' is declared but its value is never read.

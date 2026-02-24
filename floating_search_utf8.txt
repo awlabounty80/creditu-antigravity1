@@ -1,0 +1,26 @@
+﻿src\components\orientation\FloatingCreditCards.tsx:export function FloatingCreditCards() {
+src\pages\admin\KnowledgeCockpit.tsx:                                {/* Floating Toolbar Hint */}
+src\pages\credit-lab\ReportAuditor.tsx:                {/* Floating Footer */}
+src\pages\library\LibraryHome.tsx:                    {/* Floating Particles (Decorative) */}
+src\pages\Orientation.tsx:import { FloatingCreditCards } from '@/components/orientation/FloatingCreditCards';
+src\pages\Orientation.tsx:const FloatingCreditCard = ({ className, delay = 0 }: { className?: string, delay?: number }) => (
+src\pages\Orientation.tsx:            {/* Floating Party Elements */}
+src\pages\Orientation.tsx:                <FloatingCreditCard className="top-10 left-10 rotate-12 scale-125 from-purple-500 to-indigo-600 border-purple-400" />
+src\pages\Orientation.tsx:                <FloatingCreditCard className="bottom-10 right-10 -rotate-12 scale-125 from-amber-500 to-orange-600 border-amber-400" />
+src\pages\Orientation.tsx:            <FloatingCreditCards />
+src\pages\OrientationDark.tsx:const FloatingCreditCard = ({ className, delay = 0 }: { className?: string, delay?: number }) => (
+src\pages\OrientationDark.tsx:            <FloatingCreditCard className="top-20 left-10 from-blue-600 to-purple-600 border-blue-400 rotate-[-12deg]" delay={0} />
+src\pages\OrientationDark.tsx:            <FloatingCreditCard className="bottom-32 right-10 from-amber-500 to-red-600 border-amber-400 rotate-[12deg]" delay={1.5} />
+src\pages\OrientationDark.tsx:            <FloatingCreditCard className="top-1/2 right-20 from-emerald-500 to-teal-600 border-emerald-400 rotate-[-5deg] scale-75 blur-[1px]" delay={0.8} />
+src\pages\OrientationDark.tsx:            {/* Floating Party Elements */}
+src\pages\OrientationDark.tsx:                <FloatingCreditCard className="top-10 left-10 rotate-12 scale-125 from-purple-500 to-indigo-600 border-purple-400" />
+src\pages\OrientationDark.tsx:                <FloatingCreditCard className="bottom-10 right-10 -rotate-12 scale-125 from-amber-500 to-orange-600 border-amber-400" />
+src\pages\public\CreditUniversityLanding.tsx:// Floating Badge Component
+src\pages\public\CreditUniversityLanding.tsx:                {/* Floating Elements (Atmosphere) */}
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:const FloatingCreditCard = ({ className, delay = 0 }: { className?: string, delay?: number }) => (
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:            {/* Floating 3D Elements */}
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:                    <FloatingCreditCard className="top-[10%] left-[5%] from-blue-600 to-indigo-900 border-blue-400" delay={0} />
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:                    <FloatingCreditCard className="bottom-[20%] right-[5%] from-amber-500 to-orange-900 border-amber-400" delay={2} />
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:                    <FloatingCreditCard className="top-[40%] right-[15%] from-emerald-500 to-green-900 border-emerald-400 scale-75 blur-[1px]" delay={1} />
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:                            {/* Floating coins effect (simulated) */}
+src\pages\public\Tuition.tsx:        {/* Floating Particles */}

@@ -95,7 +95,6 @@ export default function VisibilityLab() {
                             ))}
                         </div>
                     ) : scanResults ? (
-                        <Zap className="opacity-0 w-0 h-0" /> &&
                         <div className="space-y-6">
                             <Card className="bg-gradient-to-br from-blue-900/20 to-black border-blue-500/20">
                                 <CardContent className="p-8 text-center space-y-4">

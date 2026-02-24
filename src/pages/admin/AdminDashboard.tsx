@@ -10,7 +10,8 @@ export default function AdminDashboard() {
         userCount: 0,
         totalPoints: 0,
         disputeCount: 0,
-        revenue: 0
+        revenue: 0,
+        dormLeads: 0
     })
 
     useEffect(() => {
@@ -28,11 +29,15 @@ export default function AdminDashboard() {
             // Check if table exists (it might not if they didn't run SQL), so wrap in try/catch or just 'user_disputes'
             const { count: disputeCount } = await supabase.from('user_disputes').select('*', { count: 'exact', head: true })
 
+            // 4. Dorm Week Leads
+            const { count: dormLeads } = await supabase.from('dorm_week_pre_reg').select('*', { count: 'exact', head: true })
+
             setStats({
                 userCount: userCount || 0,
                 totalPoints: (userCount || 0) * 1500, // Estimated avg
                 disputeCount: disputeCount || 0,
-                revenue: (userCount || 0) * 97 // $97/mo avg
+                revenue: (userCount || 0) * 97, // $97/mo avg
+                dormLeads: (dormLeads || 0) // Placeholder logic, usually filtered by status
             })
         }
         fetchStats()
@@ -40,7 +45,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 <Card className="bg-slate-900 border-slate-800 text-slate-200">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <CardTitle className="text-sm font-medium text-slate-400">Total Users</CardTitle>
@@ -49,6 +54,16 @@ export default function AdminDashboard() {
                     <CardContent>
                         <div className="text-2xl font-bold text-white">{stats.userCount}</div>
                         <p className="text-xs text-slate-500 mt-1">Active Accounts</p>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900 border-slate-800 text-slate-200">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardTitle className="text-sm font-medium text-slate-400">Dorm Week Leads</CardTitle>
+                        <Activity className="w-4 h-4 text-amber-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-white">{stats.dormLeads}</div>
+                        <p className="text-xs text-slate-500 mt-1">Ready for Induction</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-slate-900 border-slate-800 text-slate-200">

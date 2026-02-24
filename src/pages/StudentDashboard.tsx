@@ -13,6 +13,7 @@ import { StudentHeader } from '@/components/dashboard/StudentHeader'
 import { QuickActionsFAB } from '@/components/dashboard/QuickActionsFAB'
 import { StudentIdCard } from '@/components/dashboard/StudentIdCard'
 import { FoundationCoreClass } from '@/components/dashboard/FoundationCoreClass'
+import { CreditUTV } from '@/components/dashboard/CreditUTV'
 // import { ProfessorGenerative } from '@/components/dashboard/ProfessorGenerative'
 
 import { JulesTerminal } from '@/components/dashboard/JulesTerminal'
@@ -395,6 +396,9 @@ export default function StudentDashboard() {
                                 guidance={amaraGuidance || undefined}
                             /> 
                             */}
+
+                            <CreditUTV videoUrl="/assets/dorm-welcome.mp4" />
+
                             {/* PROFESSOR GENERATIVE: SAFE MODE (Static Fallback) */}
                             <div className="relative w-full aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black group shadow-3xl">
                                 <img

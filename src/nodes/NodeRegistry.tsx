@@ -75,6 +75,15 @@ export const NODES: NodeMetadata[] = [
         component: React.lazy(() => import('@/nodes/BudgetPaydown/BudgetPaydown')),
         permissions: ['student', 'founder'],
         featureFlag: 'NODE_BUDGET_PAYDOWN'
+    },
+    {
+        id: 'dorm-pre-reg',
+        name: 'Dorm Pre-Registration',
+        purpose: 'Initial intake for the incoming class.',
+        route: '/pre-reg',
+        component: React.lazy(() => import('@/nodes/DormWeekPreReg/DormWeekPreReg')),
+        permissions: ['public', 'student', 'founder'],
+        featureFlag: 'NODE_DORM_PRE_REG'
     }
 ];
 

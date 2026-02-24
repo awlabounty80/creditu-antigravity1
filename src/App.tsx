@@ -14,6 +14,7 @@ import StatusPortal from './pages/public/StatusPortal'
 import Tuition from './pages/public/Tuition'
 import WelcomeFreshman from './pages/public/WelcomeFreshman'
 import DormWeek from './pages/public/DormWeek'
+import DormWeekPreReg from './nodes/DormWeekPreReg/DormWeekPreReg'
 import CreditPositionSnapshot from './pages/worksheets/CreditPositionSnapshot'
 import StrategicMoveWorksheet from './pages/worksheets/StrategicMoveWorksheet'
 import BurnRitualWorksheet from './pages/worksheets/BurnRitualWorksheet'
@@ -90,6 +91,7 @@ function App() {
                         {/* Public Front Door */}
                         <Route path="/" element={<CreditUniversityLanding />} />
                         <Route path="/dorm-week" element={<DormWeek />} />
+                        <Route path="/pre-reg" element={<DormWeekPreReg />} />
 
                         {/* The Gate (Secure Portal) */}
                         <Route path="/gate" element={<TheGate />} />

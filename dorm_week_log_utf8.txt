@@ -1,0 +1,2 @@
+﻿3509a92 [version] Rebuilt YARD/HOMECOMING DormWeek + saved TAKEOVER backup
+157bfc7 Infrastructure Hardening: Pin dependencies, generate core manifest, and initialize 6 modular nodes with admin switchboard

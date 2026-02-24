@@ -11,8 +11,8 @@ export const deepgram = createClient(deepgramApiKey || '');
 export const transcribeAudio = async (audioBlob: Blob) => {
     if (!deepgramApiKey) throw new Error('Deepgram API Key is missing');
 
-    const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
-        audioBlob,
+    const { result, error } = await (deepgram.listen.prerecorded as any).transcribeFile(
+        audioBlob as any,
         {
             model: 'nova-2',
             smart_format: true,

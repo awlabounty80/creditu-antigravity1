@@ -1,0 +1,659 @@
+﻿src\api\knowledge-search.ts:        .or(`title.ilike.%${query}%,summary.ilike.%${query}%`)
+src\components\admin\LessonVideoBinder.tsx:            .replace(/VIDEO_URL:.*(\n|$)/g, '')
+src\components\admin\LessonVideoBinder.tsx:            .replace(/VIDEO_MODE:.*(\n|$)/g, '')
+src\components\admin\LessonVideoBinder.tsx:        newContent = `VIDEO_URL: ${videoUrl}\n${modeTag}\n${newContent}`;
+src\components\admin\LessonVideoBinder.tsx:            newContent = `${newContent}\n\nCHAT_LOG_START\n${chatLog.trim()}\nCHAT_LOG_END`;
+src\components\admin\MediaUploader.tsx:            const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+src\components\admin\MediaUploader.tsx:            const filePath = `uploads/${fileName}`;
+src\components\ai\AmaraSpotlight.tsx:                            className={`w-full text-left p-3 rounded-xl transition-all border ${isCurrent
+src\components\ai\AmaraSpotlight.tsx:                                <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border ${isCurrent ? "bg-amber-500 border-amber-500 text-white" : isDone ? "bg-emerald-500 border-emerald-500 text-white" : "border-slate-300 text-slate-400"
+src\components\ai\AmaraSpotlight.tsx:                                    <div className={`text-sm font-bold ${isCurrent ? "text-slate-800" : "text-slate-600"}`}>
+src\components\ai\CinematicSummonOverlay.tsx:                                ? `scale(${config.scale}) translateY(0)`
+src\components\ai\CinematicSummonOverlay.tsx:                        background: `conic-gradient(from 0deg, transparent 0%, ${config.glow} 50%, transparent 100%)`,
+src\components\ai\CinematicSummonOverlay.tsx:                        animation: `amaraSpin ${config.speed} linear infinite`,
+src\components\ai\CinematicSummonOverlay.tsx:                        animation: `amaraSpin ${parseInt(config.speed) * 1.5}s linear infinite reverse`,
+src\components\ai\CinematicSummonOverlay.tsx:                            boxShadow: `0 10px 40px ${config.glow}`,
+src\components\ai\CinematicSummonOverlay.tsx:                            <Sparkles size={16} className={`inline ml-2 ${intensity === 'HIGH' ? 'text-red-400' : 'text-amber-400'}`} />
+src\components\ai\GuideAgent.tsx:                    ${GUIDE_PERSONA.identity}
+src\components\ai\GuideAgent.tsx:                    - User: ${resolvedUserName}
+src\components\ai\GuideAgent.tsx:                    - Location: ${contextConfig.label}
+src\components\ai\GuideAgent.tsx:                    - Emotion: ${emotion.state}
+src\components\ai\GuideAgent.tsx:                    ${(() => {
+src\components\ai\GuideAgent.tsx:                            return `${label}: ${el.textContent?.trim()}`;
+src\components\ai\GuideAgent.tsx:                        if (content) parts.push(`Main Text:\n${content}`);
+src\components\ai\GuideAgent.tsx:                        if (visionTargets.length > 0) parts.push(`Key Values:\n${visionTargets.join('\n')}`);
+src\components\ai\GuideAgent.tsx:                    ${pageGuidance.speak}
+src\components\ai\GuideAgent.tsx:                    ${GUIDE_PERSONA.instructions}
+src\components\ai\GuideAgent.tsx:                    - User: ${resolvedUserName}
+src\components\ai\GuideAgent.tsx:                    - Current Page: ${contextConfig.label}
+src\components\ai\GuideAgent.tsx:                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+src\components\ai\GuideAgent.tsx:            const text = `I'd like to ${choice.label}`
+src\components\ai\GuideAgent.tsx:                            ${uiPolicy.intensity === 'LOW' ? 'border-amber-500/30' : 'border-amber-500/80 animate-pulse'}
+src\components\ai\GuideAgent.tsx:                        <Sparkles className={`absolute bottom-2 w-4 h-4 text-amber-400 ${uiPolicy.intensity === 'MEDIUM' ? 'animate-pulse' : ''}`} />
+src\components\ai\GuideAgent.tsx:                            <div className={`absolute inset-0 bg-gradient-to-t ${contextConfig.color} mix-blend-overlay transition-colors duration-1000`}></div>
+src\components\ai\GuideAgent.tsx:                                    <div className={`w-2 h-2 rounded-full ${isThinking ? 'bg-amber-400 animate-bounce' : 'bg-emerald-500 animate-pulse'}`}></div>
+src\components\ai\GuideAgent.tsx:                                    <span className={`text-[10px] font-bold uppercase tracking-widest ${contextConfig.accent}`}>{contextConfig.label}</span>
+src\components\ai\GuideAgent.tsx:                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+src\components\ai\GuideAgent.tsx:                                    <div className={`max-w-[85%] p-4 text-sm leading-relaxed shadow-lg backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white font-medium rounded-2xl rounded-tr-none' : 'bg-white/5 border border-white/10 text-slate-200 rounded-2xl rounded-tl-none'}`}>
+src\components\ai\GuideAgent.tsx:                                <Button type="button" onClick={startListening} className={`shrink-0 rounded-full w-12 h-12 ${isListening ? 'bg-red-500 animate-pulse text-white' : 'bg-white/10 hover:bg-white/20 text-slate-300'}`}>
+src\components\CourseCard.tsx:                    <Link to={`/course/${course.id}`} className="w-full">
+src\components\credit-lab\CreditCowChat.tsx:                const contextBlock = sources.map(s => `Title: ${s.title}\nContent: ${s.content}`).join('\n\n')
+src\components\credit-lab\CreditCowChat.tsx:                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+src\components\credit-lab\CreditCowChat.tsx:                            { role: 'system', content: `You are Credit Cow, the AI mascot of Credit University. Answer the user based on the following CONTEXT from our knowledge base. If the answer isn't in the context, say so, but offer general advice. \n\nCONTEXT:\n${contextBlock}` },
+src\components\credit-lab\CreditCowChat.tsx:            setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: `ΓÜá∩╕Å Brain Freeze: ${e.message}.` }])
+src\components\credit-lab\CreditCowChat.tsx:                    <div key={m.id} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+src\components\credit-lab\CreditCowChat.tsx:                        <div className={`max-w-[85%] p-4 rounded-2xl ${m.role === 'user'
+src\components\credit-lab\CreditCowChat.tsx:                                                to={`/dashboard/library/article/${source.slug}`}
+src\components\credit-lab\DisputeWizard.tsx:        "This account was included in a Chapter 7 Bankruptcy (Case #[CASE_NUMBER]) and discharged on [DATE]. Reporting it with a balance or 'Past Due' status violates the permanent discharge injunction under 11 U.S.C. ┬º 524. Update status to 'Discharged' with $0 balance immediately.",
+src\components\credit-lab\DisputeWizard.tsx:                        description: `Auto-selected ${autoCount} negative items for dispute.`
+src\components\credit-lab\DisputeWizard.tsx:        toast.info(`Dr. Leverage is analyzing ${selectedAccountIds.size} accounts...`)
+src\components\credit-lab\DisputeWizard.tsx:        const notesSection = notes ? `\n\nAdditional Context:\n${notes}` : ''
+src\components\credit-lab\DisputeWizard.tsx:ITEM #${index + 1}
+src\components\credit-lab\DisputeWizard.tsx:Creditor: ${acc.creditorName}
+src\components\credit-lab\DisputeWizard.tsx:Account Number: ${acc.accountNumber}
+src\components\credit-lab\DisputeWizard.tsx:Reason: ${reasonTitle}
+src\components\credit-lab\DisputeWizard.tsx:details: ${content}
+src\components\credit-lab\DisputeWizard.tsx:${today}
+src\components\credit-lab\DisputeWizard.tsx:I am writing to formally dispute the accuracy of the following items on my credit report. I have identified ${targetAccounts.length} separate instances of inaccurate, unverified, or incomplete information.
+src\components\credit-lab\DisputeWizard.tsx:${itemsSection}
+src\components\credit-lab\DisputeWizard.tsx:${notesSection}
+src\components\credit-lab\DisputeWizard.tsx:            <div style="font-family: 'Times New Roman', serif; padding: 40px; white-space: pre-wrap; line-height: 1.5; color: black;">${letterContent}</div>
+src\components\credit-lab\DisputeWizard.tsx:                ${footer}
+src\components\credit-lab\DisputeWizard.tsx:            filename: `dispute_batch_${selectedAccountIds.size}_items.pdf`,
+src\components\credit-lab\DisputeWizard.tsx:            toast.success("Batch Dispute Generated", { description: `${selectedAccountIds.size} Items Processed. +${100 * selectedAccountIds.size} Moo Points.` })
+src\components\credit-lab\DisputeWizard.tsx:                                        ${isSelected
+src\components\credit-lab\DisputeWizard.tsx:                                    <div className={`absolute top-4 right-4 w-6 h-6 rounded-full border flex items-center justify-center transition-all ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'border-slate-600 bg-transparent'}`}>
+src\components\credit-lab\DisputeWizard.tsx:                                        <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded border ${acc.status.includes('Late') || acc.status.includes('Collection') ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-slate-500/10 text-slate-400 border-slate-500/20'}`}>
+src\components\credit-lab\DisputeWizard.tsx:                                            <div className="bg-gradient-to-r from-red-500 to-emerald-500 h-full" style={{ width: `${successProbability}%` }}></div>
+src\components\credit-lab\OnboardingVault.tsx:                        balance: '$1,294.00',
+src\components\credit-lab\OnboardingVault.tsx:                        balance: '$550.00',
+src\components\credit-lab\OnboardingVault.tsx:                        balance: '$0.00',
+src\components\credit-lab\OnboardingVault.tsx:                <Card className={`border-2 border-dashed transition-all duration-300 ${isDragging ? 'border-primary bg-primary/5' : 'border-slate-800 bg-slate-900/50'
+src\components\credit-lab\OnboardingVault.tsx:                        <div className={`p-6 rounded-full bg-slate-900 transition-all duration-500 ${uploading ? 'animate-pulse' : ''}`}>
+src\components\credit-lab\ResourcesTab.tsx:I am writing regarding the above-referenced account. I am willing to pay this account in the amount of $[Amount] as settlement in full, PROVIDED THAT you agree to delete this account from all credit reporting agencies (Equifax, Experian, and TransUnion).
+src\components\credit-lab\ResourcesTab.tsx:            <div style="font-family: monospace; padding: 40px; white-space: pre-wrap;">${template.content}</div>
+src\components\credit-lab\ResourcesTab.tsx:                ${footer}
+src\components\credit-lab\ResourcesTab.tsx:            filename: `${template.id}_template.pdf`,
+src\components\DailyReferral.tsx:            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+src\components\DailyReferral.tsx:            const referralCode = `CRU-${profile.id.substring(0, 8)}-${Date.now().toString(36)}`.toUpperCase();
+src\components\DailyReferral.tsx:                        p_description: `Daily email referral to ${email}`,
+src\components\DailyReferral.tsx:                    referralCodeLink: `${window.location.origin}/signup?code=${referralCode}`, // Ensure link is passed if needed by edge function
+src\components\DailyReferral.tsx:        const subject = encodeURIComponent(`${profile?.first_name || 'A friend'} invited you to Credit U`);
+src\components\DailyReferral.tsx:        const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+src\components\DailyReferral.tsx:        const referralCode = `CRU-${profile?.id?.substring(0, 8) || 'GUEST'}-${Date.now().toString(36)}`.toUpperCase();
+src\components\DailyReferral.tsx:        const link = `${window.location.origin}/signup?code=${referralCode}`;
+src\components\DailyReferral.tsx:        const referralCode = `CRU-${profile?.id?.substring(0, 8) || 'GUEST'}-${Date.now().toString(36)}`.toUpperCase();
+src\components\DailyReferral.tsx:        const link = `${window.location.origin}/signup?code=${referralCode}`;
+src\components\DailyReferral.tsx:        const text = encodeURIComponent(`Hey! Join me at Credit U Academy! Use my code ${referralCode} to get started: ${link}`);
+src\components\DailyReferral.tsx:            window.open(`https://wa.me/?text=${text}`, '_blank');
+src\components\DailyReferral.tsx:            window.open(`https://t.me/share/url?url=${link}&text=${text}`, '_blank');
+src\components\DailyReferral.tsx:        toast.success(`Opening ${platform} protocol...`);
+src\components\dashboard\AdvancedProfessorPlayer.tsx:            return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&modestbranding=1&rel=0`;
+src\components\dashboard\AdvancedProfessorPlayer.tsx:            return `https://player.vimeo.com/video/${vimeoId}?autoplay=1&background=1`;
+src\components\dashboard\AdvancedProfessorPlayer.tsx:            return `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}&autoplay=true&muted=false`;
+src\components\dashboard\AdvancedProfessorPlayer.tsx:                    <div className={`w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,1)] ${isPlaying || isEmbed ? 'animate-pulse' : ''}`} />
+src\components\dashboard\AdvancedProfessorPlayer.tsx:                            <div className="h-full bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.8)] transition-all duration-300" style={{ width: `${progress}%` }} />
+src\components\dashboard\AgentIDCard.tsx:                    transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`,
+src\components\dashboard\AgentIDCard.tsx:                                src={`https://api.dicebear.com/7.x/shapes/svg?seed=${profile?.id}`}
+src\components\dashboard\FoundationCoreClass.tsx:                            className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${isLocked
+src\components\dashboard\FoundationCoreClass.tsx:                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isCompleted ? 'bg-emerald-500/20 text-emerald-400' :
+src\components\dashboard\FoundationCoreClass.tsx:                                <h4 className={`text-sm font-bold ${isLocked ? 'text-slate-500' : 'text-white'}`}>{lesson.title}</h4>
+src\components\dashboard\FoundationCoreClass.tsx:    return <span className={`px-2 py-0.5 rounded text-xs font-semibold ${className}`}>{children}</span>
+src\components\dashboard\FundingUnlock.tsx:                            style={{ width: `${readinessScore}%` }}
+src\components\dashboard\JulesTerminal.tsx:                            <span className={`w-1.5 h-1.5 rounded-full ${hasKey ? 'bg-emerald-500' : 'bg-red-500'}`} />
+src\components\dashboard\QuickActionsFAB.tsx:                                <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg ${action.color} text-white group-hover:scale-110 transition-transform`}>
+src\components\dashboard\QuickActionsFAB.tsx:                className={`w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ${isOpen ? 'bg-red-500 rotate-45' : 'bg-white hover:bg-slate-200 text-black'}`}
+src\components\dashboard\StudentIdCard.tsx:                            <div key={i} className={`bg-black w-[${Math.random() > 0.5 ? '2px' : '4px'}] h-full`}></div>
+src\components\dashboard\SystemGaugeGrid.tsx:                                        height: `${20 + Math.random() * 60}%`,
+src\components\dashboard\SystemGaugeGrid.tsx:                        <div className="text-2xl font-bold text-white mb-1">$50,000 - $150,000</div>
+src\components\debug\SystemStatus.tsx:                    if (error) setErrorMessage(`DB Error: ${error.message}`)
+src\components\debug\SystemStatus.tsx:                setErrorMessage(`DB Exception: ${e.message}`)
+src\components\debug\SystemStatus.tsx:                    if (!errorMessage) setErrorMessage(`Auth Error: ${authError.message}`)
+src\components\DormResetCertificate.tsx:    const studentName = propName || (profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}`.trim() : "Credit Architect");
+src\components\DormResetCertificate.tsx:            filename: `CreditU_Certificate_${studentName.replace(/\s+/g, '_')}.pdf`,
+src\components\DormResetCertificate.tsx:                                <div key={i} className={`absolute ${pos} w-32 h-32 text-[#b8860b]`}>
+src\components\DormWeekCertificate.tsx:    const studentName = `${first} ${last}`.trim();
+src\components\DormWeekCertificate.tsx:                            <div key={i} className={`absolute ${pos} w-24 h-24 text-[#b8860b] opacity-80`}>
+src\components\DownloadableCertificate.tsx:    const studentName = propName || (profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}`.trim() : "Credit Architect");
+src\components\DownloadableCertificate.tsx:            filename: `CreditU_Official_Certificate_${studentName.replace(/\s+/g, '_')}.pdf`,
+src\components\DownloadableCertificate.tsx:                        <div key={i} className={`absolute ${pos} w-40 h-40 text-[#b8860b]`}>
+src\components\gamification\LevelUpOverlay.tsx:const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+src\components\gamification\LevelUpOverlay.tsx:        <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-700 ${step >= 1 ? 'bg-black/90 backdrop-blur-xl' : 'bg-transparent pointer-events-none'}`}>
+src\components\gamification\LevelUpOverlay.tsx:            <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${step >= 1 ? 'opacity-100' : 'opacity-0'}`}>
+src\components\gamification\LevelUpOverlay.tsx:                        ${step >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+src\components\gamification\LevelUpOverlay.tsx:                        ${step === 2 ? 'animate-impact' : ''} 
+src\components\gamification\LevelUpOverlay.tsx:                        transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${step >= 2 ? 1 : 0.5})`,
+src\components\gamification\ScoreBoard.tsx:                            animate={{ width: `${progress}%` }}
+src\components\layout\HexMatrixBackground.tsx:                drawHex(x, y, `rgba(99, 102, 241, ${opacity})`, true);
+src\components\layout\HexMatrixBackground.tsx:                drawHex(x, y, `rgba(167, 139, 250, ${opacity + 0.2})`); // Outline
+src\components\library\ArticleCard.tsx:            <Link to={`/dashboard/library/article/${slug}`}>
+src\components\library\InteractiveEBook.tsx:        awardPoints(metadata.reward, `Completed eBook: ${metadata.title}`);
+src\components\library\InteractiveEBook.tsx:                                    <Checkbox id={`check-${i}`} className="border-indigo-500/50 data-[state=checked]:bg-indigo-600" />
+src\components\library\InteractiveEBook.tsx:                                    <label htmlFor={`check-${i}`} className="text-sm font-medium cursor-pointer">{item}</label>
+src\components\orientation\FloatingCreditCards.tsx:                        x: `${card.x}vw`,
+src\components\orientation\FloatingCreditCards.tsx:                        y: `${card.y}vh`,
+src\components\orientation\FloatingCreditCards.tsx:                        x: [`${card.x}vw`, `${card.x + (Math.random() * 10 - 5)}vw`],
+src\components\orientation\FloatingCreditCards.tsx:                        y: [`${card.y}vh`, `${card.y + (Math.random() * 10 - 5)}vh`],
+src\components\orientation\FloatingCreditCards.tsx:                    className={`absolute ${card.color}`}
+src\components\referral\ReferralThanksForm.tsx:                    description: `Thanked ${referrerName} for the referral`
+src\components\referral\ReferralThanksForm.tsx:                        placeholder={`Hey ${referrerName}, thanks for getting me into Credit U! Let's crush our goals.`}
+src\components\SocialShare.tsx:                        description: `Shared certificate on ${platform}`,
+src\components\SocialShare.tsx:            url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
+src\components\SocialShare.tsx:            url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
+src\components\SocialShare.tsx:            url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+src\components\SocialShare.tsx:            url: `mailto:?subject=${encodeURIComponent('Check out my Credit U Achievement!')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`
+src\components\SocialShare.tsx:                                        className={`${platform.color} text-white font-semibold gap-2 relative overflow-hidden`}
+src\components\ui\progress.tsx:            style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+src\components\VoiceDrill.tsx:            toast.success(`Excellent! ${accuracy}% Accuracy`);
+src\components\VoiceDrill.tsx:            toast.info(`Good try! ${accuracy}% Accuracy. Try again for perfection.`);
+src\components\VoiceDrill.tsx:            toast.warning(`Low accuracy (${accuracy}%). Try speaking clearer.`);
+src\context\AdmissionsContext.tsx:                    emailRedirectTo: `${window.location.origin}/onboarding`,
+src\context\ProfileContext.tsx:            .channel(`public:profiles:id=eq.${user.id}`)
+src\context\ProfileContext.tsx:                    filter: `id=eq.${user.id}`
+src\data\calculators.ts:            interpretation = `You will be debt-free in ${years} years and ${remainingMonths} months.`;
+src\data\calculators.ts:                `Total amount paid: $${totalPaid.toFixed(2)}`,
+src\data\calculators.ts:                `Total interest paid: $${totalInterest.toFixed(2)}`,
+src\data\ebooks\fcra-ebook.ts:        content: "The FCRA isn't just a set of rules; it has teeth. If a credit bureau or lender knowingly violates your rights, you can seek enforcement. \n\nPotential remedies include: \n- Actual damages sustained by the consumer \n- Statutory penalties ($100 - $1,000 per violation) \n- Attorney's fees and costs \n- Formal complaints via the CFPB and FTC.",
+src\data\full-articles.ts:                <li>Pay off all credit cards to $0 before the statement closing date.</li>
+src\data\full-articles.ts:                <li>Leave a small balance (e.g., $10-$20) on <strong>one</strong> major bank card (like Chase or Amex).</li>
+src\data\full-articles.ts:                <li><strong>Cons:</strong> If your highest rate debt is large (e.g., $15k Student Loan), it may take months to see a "win" (an account hitting $0), leading to burnout.</li>
+src\data\glossary.ts:        context: 'FCRA requires credit bureaus to maintain accurate information, investigate disputes within 30 days, remove unverified data, and limit who can access your credit report. Violations can result in statutory damages of $100-$1,000 per violation.',
+src\data\glossary.ts:        context: 'FDCPA limits when collectors can contact you, prohibits harassment and false statements, and requires debt validation. It applies to third-party collectors, not original creditors. Violations can result in damages up to $1,000 plus attorney fees.',
+src\data\knowledge-base.ts:Your credit report is private. Only entities with a "Permissible Purpose" (like a lender you applied with, or a landlord) can look at it. If an unauthorized person pulls your credit, you can sue them for $1,000 per violation.
+src\data\knowledge-base.ts:1. Pay off every credit card to $0 before the statement cuts.
+src\data\knowledge-base.ts:2. Leave a tiny balance (e.g., $10-$20) on **one** bank credit card.
+src\data\knowledge-base.ts:FICO penalizes "non-use" slightly. If every single revolving account reports $0, the algorithm thinks you aren't using credit. You lose ~15-20 points. By reporting $10 on one card, you avoid the "all zero" penalty.
+src\data\knowledge-base.ts:                explanation: 'AZEO stands for All Zero Except One, a strategy where all cards report $0 except for one card reporting a small balance.'
+src\data\knowledge-base.ts:                explanation: 'FICO scoring models often apply a small penalty if all revolving accounts report $0 balance, assuming inactivity.'
+src\data\knowledge-base.ts:- **Win fast**: You might pay off a $500 medical bill in month 1.
+src\data\knowledge-base.ts:You are asking: "Show me the original contract with my wet signature. Show me the billing history that proves this balance is exactly $452.12."
+src\data\knowledge-base.ts:                options: ['Same penalty', 'Worse penalty', 'It ignores them entirely', 'Only counts if >$500'],
+src\data\knowledge-base.ts:Collectors buy this debt for pennies. They call you. "Just pay $5 good faith."
+src\data\knowledge-base.ts:**DO NOT PAY $5.**
+src\data\knowledge-base.ts:3. **Under $500**: Medical collection debt under $500 is generally not reported by the big three bureaus.
+src\data\knowledge-base.ts:                options: ['Yes, for 7 years', 'No, it is removed entirely', 'Only if over $500', 'Yes, but as "Paid"'],
+src\data\knowledge-base.ts:                options: ['$10 per bureau', '$30 one-time fee', 'Free (Federally Mandated)', '$5 per month'],
+src\data\knowledge-base.ts:- **Process**: You agree to make 9 reasonable monthly payments (often $5 based on income) within 10 months.
+src\data\knowledge-base.ts:- **Example**: A family of 4 in the Midwest needs ~$1,003 in residual income.
+src\data\lessons-26-50.ts:        lessonId: `FRESH-CF-${String(lessonNum).padStart(3, '0')}`,
+src\data\lessons-26-50.ts:        teachingObjective: `Students will understand ${topics[i].toLowerCase()} and apply strategies effectively.`,
+src\data\lessons-26-50.ts:            introContext: `This lesson covers ${topics[i].toLowerCase()}ΓÇöa critical component of credit mastery.`,
+src\data\lessons-26-50.ts:            reinforcementSummary: `Master ${topics[i].toLowerCase()} to take control of your credit trajectory.`
+src\data\lessons-51-75.ts:        lessonId: `FRESH-CF-${String(lessonNum).padStart(3, '0')}`,
+src\data\lessons-51-75.ts:        teachingObjective: `Students will understand ${topics[i].toLowerCase()} and legal protections.`,
+src\data\lessons-51-75.ts:            introContext: `${topics[i]} is a critical recovery topic governed by federal law.`,
+src\data\lessons-51-75.ts:            reinforcementSummary: `${topics[i]} requires knowledge of your rights. Use the law as your shield.`
+src\data\lessons-76-100.ts:        lessonId: `FRESH-CF-${String(lessonNum).padStart(3, '0')}`,
+src\data\lessons-76-100.ts:        teachingObjective: `Students will understand ${topics[i].toLowerCase()} and strategic applications.`,
+src\data\lessons-76-100.ts:                : `${topics[i]} represents advanced credit knowledge for real-world application.`,
+src\data\lessons-76-100.ts:                : `${topics[i]} is a tool for financial leverage. Use it wisely.`
+src\data\letter-templates.ts:Failure to comply may result in a formal complaint to the CFPB and a lawsuit for FDCPA violations, seeking $1,000 in statutory damages plus legal fees.
+src\data\letter-templates.ts:1. Statutory damages of $1,000.
+src\data\letter-templates.ts:I have been a cardholder for over 10 years. In that time, I have spent over $50,000 on this card and paid thousands in interest and fees.
+src\data\letter-templates.ts:I am willing to pay the full balance of $[Amount] immediately.
+src\data\letter-templates.ts:If you want to receive $[Amount] from me, I need the deletion. Otherwise, I will retain my funds and utilize the statutory dispute process to challenge the validity of this debt, which will cost your agency time and resources.
+src\data\letter-templates.ts:I am writing to offer payment in full ($[Amount]) for the above-referenced medical account.
+src\data\letter-templates.ts:I will pay $[Amount] (40% of balance) to settle this account, ONLY if you agree to delete the negative trade line.
+src\data\letter-templates.ts:1. [Your Name] agrees to pay the sum of $[Amount] by [Date].
+src\data\letter-templates.ts:        title: 'Under $500 Threshold Dispute',
+src\data\letter-templates.ts:        desc: 'Medical debts under $500 should not be reported.',
+src\data\letter-templates.ts:RE: DISPUTE - MEDICAL DEBT UNDER $500
+src\data\letter-templates.ts:The initial balance of this medical collection is under $500.
+src\data\letter-templates.ts:Under current credit reporting agency guidelines (effective 2023), medical collections with an initial reporting balance of less than $500 should no longer appear on credit reports.
+src\data\letter-templates.ts:I have enclosed a copy of my bank statement (Redacted) showing that check #[Check Number] in the amount of $[Amount] cleared my account on [Date Cleared].
+src\data\letter-templates.ts:        desc: 'Stops harassment. If they call you after receiving this, you can sue for $1,000 per call.',
+src\data\letter-templates.ts:The original debt was $[Amount]. You are attempting to collect $[Higher Amount].
+src\data\letter-templates.ts:Correct this item to $0 immediately or delete it.
+src\data\quizzes.ts:                    'Only for damages over $10,000'
+src\data\quizzes.ts:                explanation: 'You can sue credit bureaus for willful or negligent FCRA violations and recover actual damages, statutory damages ($100-$1,000 per violation), and attorney fees.',
+src\data\quizzes.ts:            feedback.push(`Γ£ô Question ${index + 1}: Correct`);
+src\data\quizzes.ts:            feedback.push(`Γ£ù Question ${index + 1}: Incorrect. ${q.explanation}`);
+src\data\static-course.ts:        id: `mod-${moduleIndex + 1}`,
+src\data\static-course.ts:        title: `Module ${moduleIndex + 1}: Lessons ${moduleIndex * 10 + 1}-${(moduleIndex + 1) * 10}`,
+src\data\static-course.ts:        description: `Credit education module ${moduleIndex + 1}`,
+src\data\static-course.ts:            let markdownContent = `# ${lesson.lessonTitle}
+src\data\static-course.ts:${lesson.teachingObjective}
+src\data\static-course.ts:${lesson.structurePoints.introContext}
+src\data\static-course.ts:${lesson.structurePoints.coreInstruction.map((point, i) => `${i + 1}. ${point}`).join('\n\n')}
+src\data\static-course.ts:${lesson.structurePoints.reinforcementSummary}
+src\data\static-course.ts:**Professor**: ${lesson.professorPersonaId}  
+src\data\static-course.ts:**Duration**: ${lesson.minutes} minutes  
+src\data\static-course.ts:**Level**: ${lesson.courseLevel}
+src\hooks\useCourse.ts:                console.log(`Generating simulation for missing course: ${courseId}`)
+src\hooks\useCourse.ts:                    title: `Simulated Module: ${courseId.toUpperCase()}`,
+src\hooks\useCourse.ts:                            id: `mod-${courseId}-1`,
+src\hooks\useCourse.ts:                                    id: `l-${courseId}-1`,
+src\hooks\useCourse.ts:                                    id: `l-${courseId}-2`,
+src\hooks\useCourse.ts:                            .replace(/VIDEO_URL:.*(\n|$)/g, '')
+src\hooks\useCourse.ts:                            .replace(/VIDEO_MODE:.*(\n|$)/g, '')
+src\hooks\useDean.ts:                    text: `Status Report: You are operating at the ${level} level. Consistency builds momentum.`,
+src\hooks\useGamification.ts:            console.log(`[DEV MODE] Awarded ${amount} points for: ${reason}`)
+src\hooks\useGamification.ts:            console.log(`Awarded ${amount} points for: ${reason}`)
+src\hooks\useRevenue.ts:            value: '$50k Potential',
+src\hooks\useRevenue.ts:            value: '$150k Potential',
+src\lib\amara-answer-engine.ts:    const name = userName ? `${userName}, ` : "";
+src\lib\amara-answer-engine.ts:            return `${name}letΓÇÖs slow it down together.`;
+src\lib\amara-answer-engine.ts:            return `${name}IΓÇÖll be clear and you stay in control.`;
+src\lib\amara-answer-engine.ts:            return `${name}youΓÇÖre exploring the right wayΓÇöletΓÇÖs connect the dots.`;
+src\lib\amara-answer-engine.ts:            return `${name}hereΓÇÖs the fastest path.`;
+src\lib\amara-answer-engine.ts:            return `${name}no pressureΓÇöI'm here if you want help.`;
+src\lib\amara-answer-engine.ts:    const identityLine = `YouΓÇÖre on: ${ctx.map.pageTitle} ΓÇö ${ctx.map.pageIdentity}.`;
+src\lib\amara-answer-engine.ts:    const purposeLine = `Purpose: ${ctx.map.pagePurpose}.`;
+src\lib\amara-answer-engine.ts:            text: `${header}\n\nYou're asking about the deep strategy ("Why"). That's Dr. Leverage's specialty.\n\nWould you like a deeper explanation from Dr. Leverage, our Credit U professor?\nHe focuses on the logic behind the strategy. You can return to me anytime.`,
+src\lib\amara-answer-engine.ts:                `Start with one step: **${formatAction(next)}**.`,
+src\lib\amara-answer-engine.ts:                next2 ? `If you prefer, you can also: **${formatAction(next2)}**.` : "",
+src\lib\amara-answer-engine.ts:            ? bullets.map((b) => `ΓÇó ${b}`).join("\n")
+src\lib\amara-answer-engine.ts:                ? `Steps:\n${steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}`
+src\lib\amara-answer-engine.ts:                : `ΓÇó ${identityLine}\nΓÇó ${purposeLine}`;
+src\lib\amara-answer-engine.ts:        text: `${header}\n\n${body}`,
+src\lib\amara-emotion-logic.ts:    const name = args.userName ? `${args.userName}, ` : "";
+src\lib\amara-emotion-logic.ts:    const page = args.pageLabel ? ` on ${args.pageLabel}` : "";
+src\lib\amara-emotion-logic.ts:        `${name}${adj.openingLine}\n` +
+src\lib\amara-emotion-logic.ts:        `${adj.supportLine}\n` +
+src\lib\amara-emotion-logic.ts:        `${whyLine}\n` +
+src\lib\amara-emotion-logic.ts:        (adj.choicePrompts.length ? `\n${adj.choicePrompts[0]}` : "") +
+src\lib\amara-emotion-logic.ts:        `${page ? `\n\n(YouΓÇÖre here${page}.)` : ""}`;
+src\lib\amara-knowledge-maps.ts:        if (available.has(a)) return { action: a, reason: `This aligns with the page purpose: ${map.pagePurpose}.` };
+src\lib\amara-knowledge-maps.ts:    const namePrefix = ctx.userName ? `${ctx.userName}, ` : "";
+src\lib\amara-knowledge-maps.ts:        ? `${namePrefix}${map.keyScriptLogic}`
+src\lib\amara-onboarding.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-onboarding.ts:        const key = `${STORAGE_KEY}:${userId}`;
+src\lib\amara-onboarding.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-pause.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-pause.ts:        const key = `${STORAGE_KEY}:${userId}`;
+src\lib\amara-pause.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-playbook.tsx:        const key = `${playbook.pageId}:${playbook.action}`;
+src\lib\amara-preferences.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-preferences.ts:        const key = `${STORAGE_KEY}:${userId}`;
+src\lib\amara-preferences.ts:        const storageKey = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-reentry.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-reentry.ts:        const key = `${STORAGE_KEY}:${userId}`;
+src\lib\amara-reentry.ts:        const key = userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+src\lib\amara-voice.ts:            console.warn(`[AmaraVoice] No suitable voice found for ${persona}. Maintaining silence.`);
+src\lib\batch-processor.ts:        console.log(`[BatchProcessor] Initializing batch of ${batch.length} lessons.`);
+src\lib\batch-processor.ts:        console.log(`[BatchProcessor] TEAMS: ${GOVERNANCE_PROTOCOLS.CULTURAL_SAFETY}`);
+src\lib\batch-processor.ts:                    CONTEXT: ${lesson.structurePoints.introContext}
+src\lib\batch-processor.ts:                    OBJECTIVE: ${lesson.teachingObjective}
+src\lib\batch-processor.ts:                    [CORE INSTRUCTION - ${lesson.minutes}m]
+src\lib\batch-processor.ts:                    ${lesson.structurePoints.coreInstruction.map(p => `- ${p}`).join('\n')}
+src\lib\batch-processor.ts:                    TAKEAWAY: ${lesson.structurePoints.reinforcementSummary}
+src\lib\batch-processor.ts:                console.error(`[BatchProcessor] Failed lesson ${lesson.lessonId}:`, error);
+src\lib\batch-validator.ts:    console.log(`≡ƒôª Batch Size: ${FRESHMAN_CREDIT_BATCH.length} lessons`);
+src\lib\batch-validator.ts:    console.log(`Γ£à Successful: ${results.success.length}`);
+src\lib\batch-validator.ts:    console.log(`Γ¥î Failed: ${results.failures.length}`);
+src\lib\batch-validator.ts:    console.log(`ΓÅ▒∩╕Å  Total Time: ${((endTime - startTime) / 1000).toFixed(2)}s`);
+src\lib\batch-validator.ts:            console.log(`   - ${asset.lessonIdRef}: ${asset.durationSeconds}s (${asset.metadata.version})`);
+src\lib\batch-validator.ts:            console.log(`   - ${failure.id}: ${failure.reason}`);
+src\lib\batch-validator.ts:    console.log(`   Cultural Safety Check: ${allHaveCulturalCheck ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\batch-validator.ts:    console.log(`   Version Control: ${allHaveVersions ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\batch-validator.ts:    console.log(`   Duration Standards: ${allWithinDuration ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\calendar-generator.ts:            `DTSTART:${formatDate(date)}`,
+src\lib\calendar-generator.ts:            `DTEND:${formatDate(end)}`,
+src\lib\calendar-generator.ts:            `SUMMARY:≡ƒò╕ ${event.title}`,
+src\lib\calendar-generator.ts:            `DESCRIPTION:${event.desc}`,
+src\lib\client-curriculum.ts:        const moduleKey = `module-${moduleNumber}`;
+src\lib\client-curriculum.ts:        const markdown = `# ${lesson.lessonTitle}
+src\lib\client-curriculum.ts:${lesson.teachingObjective}
+src\lib\client-curriculum.ts:${lesson.structurePoints.introContext}
+src\lib\client-curriculum.ts:${lesson.structurePoints.coreInstruction.map((point, i) => `${i + 1}. ${point}`).join('\n\n')}
+src\lib\client-curriculum.ts:${lesson.structurePoints.reinforcementSummary}
+src\lib\client-curriculum.ts:**Professor**: ${lesson.professorPersonaId}  
+src\lib\client-curriculum.ts:**Duration**: ${lesson.minutes} minutes  
+src\lib\client-curriculum.ts:**Level**: ${lesson.courseLevel}  
+src\lib\client-curriculum.ts:                id: `mod-${moduleNumber}`,
+src\lib\client-curriculum.ts:                title: `Module ${moduleNumber}: Lessons ${startLesson}-${endLesson}`,
+src\lib\client-curriculum.ts:                description: `${modulesData[key][0]?.title} through ${modulesData[key][modulesData[key].length - 1]?.title}`,
+src\lib\credit-parser.ts:    balance: /(?:Balance|Current\s*Balance)[:\s]*\$?([\d,]+\.?\d*)/i,
+src\lib\credit-parser.ts:        console.log(`Parsed ${accounts.length} accounts.`);
+src\lib\credit-parser.ts:        balance: partial.balance ? `$${partial.balance}` : "$0",
+src\lib\governance.ts:    return `Generated by Credit UΓäó Secure Lab | ${date} | Session: ${session}`;
+src\lib\jules-client.ts:        const response = await fetch(`${JULES_API_ENDPOINT}${path}`, {
+src\lib\jules-client.ts:            throw new Error(error.message || `Jules API Error: ${response.status}`);
+src\lib\jules-client.ts:        const data = await this.request(`/sessions?pageSize=${pageSize}`);
+src\lib\jules-client.ts:        const data = await this.request(`/sessions/${sessionId}/activities?pageSize=30`);
+src\lib\jules-client.ts:        await this.request(`/sessions/${sessionId}:sendMessage`, {
+src\lib\knowledge-search.ts:            title: `Template: ${template.title}`,
+src\lib\knowledge-search.ts:            content: `[LETTER TEMPLATE - ${template.category.toUpperCase()}]\n\n${template.desc}\n\n${template.content}`,
+src\lib\knowledge-search.ts:        return `I found a perfect letter template for you: **${topMatch.title}**.\n\nDescription: ${snippet}...\n\nYou can find this full template in the Letter Library!`;
+src\lib\knowledge-search.ts:    return `Here is what I found in the Knowledge Center regarding **${topMatch.title}**:\n\n"${snippet}..."\n\nYou should read the full article for the step-by-step guide.`;
+src\lib\lesson-content-map.ts:    const markdown = `# ${lesson.lessonTitle}
+src\lib\lesson-content-map.ts:${lesson.teachingObjective}
+src\lib\lesson-content-map.ts:${lesson.structurePoints.introContext}
+src\lib\lesson-content-map.ts:${lesson.structurePoints.coreInstruction.map((point: string, i: number) => `${i + 1}. ${point}`).join('\n\n')}
+src\lib\lesson-content-map.ts:${lesson.structurePoints.reinforcementSummary}
+src\lib\lesson-content-map.ts:**Professor**: ${lesson.professorPersonaId}  
+src\lib\lesson-content-map.ts:**Duration**: ${lesson.minutes} minutes  
+src\lib\lesson-content-map.ts:**Level**: ${lesson.courseLevel}  
+src\lib\mock-media-factory.ts:            id: `asset-${input.lessonId}-${Date.now()}`,
+src\lib\mock-media-factory.ts:            url: `/assets/generated/${input.lessonId}.mp4`,
+src\lib\mock-media-factory.ts:            thumbnailUrl: `/assets/thumbnails/${input.lessonId}.jpg`,
+src\lib\mock-media-factory.ts:        console.log(`[MockFactory] Generated: ${asset.id} (${asset.durationSeconds}s)`);
+src\lib\process-100-lessons.ts:    console.log(`≡ƒôè Total Lessons: ${LESSON_COUNT}`);
+src\lib\process-100-lessons.ts:    console.log(`Γ£à Successful: ${results.success.length}/${LESSON_COUNT}`);
+src\lib\process-100-lessons.ts:    console.log(`Γ¥î Failed: ${results.failures.length}`);
+src\lib\process-100-lessons.ts:    console.log(`ΓÅ▒∩╕Å  Processing Time: ${((endTime - startTime) / 1000).toFixed(2)}s`);
+src\lib\process-100-lessons.ts:    console.log(`≡ƒô╣ Total Video Duration: ${(totalDuration / 60).toFixed(1)} minutes`);
+src\lib\process-100-lessons.ts:    console.log(`≡ƒôè Average Lesson Length: ${avgDuration.toFixed(0)}s`);
+src\lib\process-100-lessons.ts:        results.failures.forEach(f => console.log(`   - ${f.id}: ${f.reason}`));
+src\lib\process-100-lessons.ts:    console.log(`   Cultural Safety: ${culturalPass ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\process-100-lessons.ts:    console.log(`   Version Control: ${versionPass ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\process-100-lessons.ts:    console.log(`   Duration Standards: ${durationPass ? 'Γ£à PASS' : 'Γ¥î FAIL'}`);
+src\lib\quest-data.ts:        desc: () => "You try to buy coffee for $5 but have $3 in your account. The transaction is declined. Is this good?",
+src\lib\quest-data.ts:            { id: 'A', text: "No, it's embarrassing.", feedback: "Maybe, but it saved you a $35 overdraft fee because you didn't 'Opt-In' to overdraft protection.", isCorrect: true, points: 50, statImpact: { score: 0, cash: +35 } },
+src\lib\quest-data.ts:            { id: 'B', text: "Yes, I want it to go through.", feedback: "Bad move. That coffee would cost you $5 + $35 fee. Always opt-out of debit overdrafts.", isCorrect: false, points: 10, statImpact: { score: 0, cash: -35 } }
+src\lib\quest-data.ts:        desc: () => "You transfer $5,000 to a 0% APR card. The transfer fee is 3%. How much does it cost upfront?",
+src\lib\quest-data.ts:            { id: 'A', text: "$0", feedback: "Incorrect. 0% Interest doesn't mean $0 fees.", isCorrect: false, points: 0, statImpact: { score: 0, cash: -150 } },
+src\lib\quest-data.ts:            { id: 'B', text: "$150", feedback: "Correct. 3% of $5,000 is $150. Still cheaper than paying 20% interest!", isCorrect: true, points: 75, statImpact: { score: +10, cash: -150 } }
+src\lib\quest-data.ts:        desc: () => "Your $95 annual fee card is renewing, but you don't use the perks anymore. What's the best credit move?",
+src\lib\quest-data.ts:        desc: () => "You get a text: 'Wells Fargo Alert: Suspicious charge of $900. Click here to verify.' You have a Wells Fargo card.",
+src\lib\quest-data.ts:        desc: () => "You owe $20k on your car. It gets totaled, but insurance only pays the value: $15k. Who pays the $5k gap?",
+src\lib\quest-data.ts:        desc: () => "You have a $1,000 limit card. You spend $900 but pay it off in full on the due date. The statement closes with $900.",
+src\lib\quest-data.ts:            { id: 'A', text: "Score drops significantly.", feedback: "Correct! The statement balance is what reports. $900/$1000 is 90% utilization.", isCorrect: true, points: 50, statImpact: { score: -20, cash: 0 } },
+src\lib\quest-data.ts:        desc: (age: number) => `You have a card you haven't used in ${age} years. It has no annual fee. Should you close it?`,
+src\lib\quest-data.ts:            { id: 'A', text: "None ($0).", feedback: "Correct! This is the 'Grace Period'. Use the bank's money for free.", isCorrect: true, points: 75, statImpact: { score: 0, cash: +20 } },
+src\lib\quest-engine.ts:        desc: (amount: number, balance: number) => `You just received a $${amount} bonus! Your credit card balance is $${balance}. What's the strategic move?`,
+src\lib\quest-engine.ts:                    text: `Buy a luxury item for $${Math.floor(amount * 0.6)} and pay the rest on debt.`,
+src\lib\quest-engine.ts:                    text: `Pay off the $${balance} balance completely.`,
+src\lib\quest-engine.ts:                    text: `Put all $${amount} in savings.`,
+src\lib\quest-engine.ts:        desc: (discount: number) => `The clerk offers ${discount}% off your purchase if you open a store credit card right now. Do you take it?`,
+src\lib\quest-engine.ts:        desc: (age: number) => `A collector calls about a debt from ${age} years ago. They are aggressive. What do you do?`,
+src\lib\quest-engine.ts:                feedback: "Critical Error! Paying even $1 can 'revive' the Statute of Limitations, making the whole debt legally collectible again.",
+src\lib\quest-engine.ts:        desc: () => `Your bank offers to increase your credit limit from $1,000 to $3,000. It requires a Soft Pull.`,
+src\lib\quest-engine.ts:        desc: (amount: number) => `A collection agency agrees to settle a $${amount} debt for $${Math.floor(amount * 0.5)}. They send a letter saying 'Paid in Full'.`,
+src\lib\quest-engine.ts:                feedback: "Perfect. The 'Statement Balance' is what gets reported to bureaus, not the active balance. Leave $5 (AZEO) to avoid '0 usage' penalties.",
+src\lib\quest-engine.ts:        desc: (age: number) => `A friend with perfect credit offers to add you as an Authorized User on their ${age}-year-old card.`,
+src\lib\student-progress.ts:            description: `Complete ${progress.currentLevel} level`,
+src\lib\student-progress.ts:            description: `Watch ${nextLessonMilestone} lessons`,
+src\lib\studentId.ts:    return `CU-${year}-${semester}-${randomBlock}`;
+src\pages\admin\AdminDashboard.tsx:                revenue: (userCount || 0) * 97 // $97/mo avg
+src\pages\admin\AdminDashboard.tsx:                        <div className="text-2xl font-bold text-white">${stats.revenue.toLocaleString()}</div>
+src\pages\admin\AdminReferralLog.tsx:                referrer_name: `${r.referrer?.first_name || ''} ${r.referrer?.last_name || ''}`.trim() || 'Unknown',
+src\pages\admin\AdminReferralLog.tsx:        a.download = `referrals_${new Date().toISOString().split('T')[0]}.csv`;
+src\pages\admin\KnowledgeCockpit.tsx:Start with a hook about ${title}.
+src\pages\admin\NodeSwitchboard.tsx:        toast.success(`${flag} status updated.`);
+src\pages\admin\UserManager.tsx:                                                    if (confirm(`View as ${user.first_name}?`)) {
+src\pages\Analytics.tsx:                    <Card className={`${dynamicStats ? dynamicStats.metric1.bg + ' ' + dynamicStats.metric1.border : 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/20'}`}>
+src\pages\Analytics.tsx:                                {dynamicStats ? <dynamicStats.metric1.icon className={`w-8 h-8 ${dynamicStats.metric1.color}`} /> : <Users className="w-8 h-8 text-indigo-400" />}
+src\pages\Analytics.tsx:                    <Card className={`${dynamicStats ? dynamicStats.metric2.bg + ' ' + dynamicStats.metric2.border : 'bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20'}`}>
+src\pages\Analytics.tsx:                                {dynamicStats ? <dynamicStats.metric2.icon className={`w-8 h-8 ${dynamicStats.metric2.color}`} /> : <Trophy className="w-8 h-8 text-emerald-400" />}
+src\pages\Analytics.tsx:                    <Card className={`${dynamicStats ? dynamicStats.metric3.bg + ' ' + dynamicStats.metric3.border : 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20'}`}>
+src\pages\Analytics.tsx:                                {dynamicStats ? <dynamicStats.metric3.icon className={`w-8 h-8 ${dynamicStats.metric3.color}`} /> : <BookOpen className="w-8 h-8 text-amber-400" />}
+src\pages\Analytics.tsx:                    <Card className={`${dynamicStats ? dynamicStats.metric4.bg + ' ' + dynamicStats.metric4.border : 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20'}`}>
+src\pages\Analytics.tsx:                                {dynamicStats ? <dynamicStats.metric4.icon className={`w-8 h-8 ${dynamicStats.metric4.color}`} /> : <Award className="w-8 h-8 text-purple-400" />}
+src\pages\Analytics.tsx:                                                style={{ width: `${lesson.completion}%` }}
+src\pages\campus\DeansHonorRoll.tsx:                    display_name: profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}` : 'Scholar',
+src\pages\campus\DeansHonorRoll.tsx:                                                                    {student.display_name || `Scholar #${student.id.slice(0, 6)}`}
+src\pages\campus\VoiceTrainingLab.tsx:                                className={`p-6 rounded-2xl border cursor-pointer transition-all group relative overflow-hidden ${activeDrill === drill.id
+src\pages\campus\VoiceTrainingLab.tsx:                                        <div className={`p-3 rounded-full bg-black/50 border border-white/10 ${drill.color}`}>
+src\pages\campus\VoiceTrainingLab.tsx:                                            <span className={`text-xs px-2 py-0.5 rounded border border-white/10 bg-black/20 ${drill.difficulty === 'Basic' ? 'text-emerald-400' :
+src\pages\campus\VoiceTrainingLab.tsx:                                        onComplete={(score) => console.log(`Completed ${drill.id} with ${score}`)}
+src\pages\CertificateDownload.tsx:        ? `${profile.first_name} ${profile.last_name}`
+src\pages\classroom\FreshmanClassroom.tsx:    const currentClass = FOUNDATION_SYLLABI.find(c => c.id === `freshman-${classId}`) || FOUNDATION_SYLLABI[0]
+src\pages\classroom\FreshmanClassroom.tsx:            navigate(`/dashboard/class/freshman/${nextId}`)
+src\pages\classroom\FreshmanClassroom.tsx:                                className={`w-full h-full object-cover transition-opacity duration-1000 ${isPlaying ? 'opacity-100' : 'opacity-60'}`}
+src\pages\classroom\FreshmanClassroom.tsx:                                    style={{ width: `${progress}%` }}
+src\pages\classroom\FreshmanClassroom.tsx:                                            {progress < 95 ? `Watch Lecture (${Math.round(progress)}%)` : "Mark Assignment Complete"}
+src\pages\Community.tsx:                    name: `${p.first_name || 'Student'} ${p.last_name?.charAt(0) || ''}.`,
+src\pages\Community.tsx:                    avatar: `${p.first_name?.charAt(0) || 'S'}${p.last_name?.charAt(0) || ''}`.toUpperCase(),
+src\pages\Community.tsx:                    { id: 'm3', title: 'Just booked Emirates First Class for $80!', category: 'General', views: 3400, created_at: new Date(Date.now() - 172800000).toISOString(), author_id: 'sys', replies_count: 156 },
+src\pages\CoursePlayer.tsx:            const saved = localStorage.getItem(`notes-${activeLesson.id}`)
+src\pages\CoursePlayer.tsx:            localStorage.setItem(`notes-${activeLesson.id}`, val)
+src\pages\CoursePlayer.tsx:                                style={{ width: `${course.progress || 0}%` }}
+src\pages\CoursePlayer.tsx:                                                    const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
+src\pages\CoursePlayer.tsx:                                                    embedSrc = `https://www.khanacademy.org/embed_video?v=${match[1]}`;
+src\pages\CoursePlayer.tsx:                                                    embedSrc = `https://www.youtube.com/embed/${videoId}`;
+src\pages\credit-lab\DisputePage.tsx:            balance: "$4,520",
+src\pages\credit-lab\DisputePage.tsx:            balance: "$1,200",
+src\pages\credit-lab\DisputePage.tsx:            balance: "$0",
+src\pages\credit-lab\IdentityTheftCenter.tsx:                            <p className="text-[10px] text-center text-slate-500">Includes $1M Insurance & Neural Monitoring</p>
+src\pages\credit-lab\IdentityTheftCenter.tsx:                        <button onClick={() => setActiveTab('emergency')} className={`w-full text-left p-4 rounded-xl border transition-all ${activeTab === 'emergency' ? 'bg-red-500/10 border-red-500 text-white' : 'bg-[#0A0F1E] border-white/5 text-slate-400 hover:border-red-500/50'}`}>
+src\pages\credit-lab\IdentityTheftCenter.tsx:                        <button onClick={() => setActiveTab('legal')} className={`w-full text-left p-4 rounded-xl border transition-all ${activeTab === 'legal' ? 'bg-amber-500/10 border-amber-500 text-white' : 'bg-[#0A0F1E] border-white/5 text-slate-400 hover:border-amber-500/50'}`}>
+src\pages\credit-lab\IdentityTheftCenter.tsx:                                <Gavel className={`w-5 h-5 ${activeTab === 'legal' ? 'text-amber-400' : 'text-slate-500'}`} />
+src\pages\credit-lab\IdentityTheftCenter.tsx:                        <button onClick={() => setActiveTab('protection')} className={`w-full text-left p-4 rounded-xl border transition-all ${activeTab === 'protection' ? 'bg-blue-500/10 border-blue-500 text-white' : 'bg-[#0A0F1E] border-white/5 text-slate-400 hover:border-blue-500/50'}`}>
+src\pages\credit-lab\IdentityTheftCenter.tsx:                                <Fingerprint className={`w-5 h-5 ${activeTab === 'protection' ? 'text-blue-400' : 'text-slate-500'}`} />
+src\pages\credit-lab\IdentityTheftCenter.tsx:                                            Most consumer disputes (Section 611) take 30 days. <span className="text-white font-bold">Section 605B takes 4 days.</span> If you confirm identity theft, do NOT use the standard dispute process. Use the "Block" provision. If the bureau fails to block within 4 days, they are in willful non-compliance ($1,000 statutory damages per violation).
+src\pages\credit-lab\IdentityTheftCenter.tsx:                                            Enroll in $1M Identity Protection
+src\pages\credit-lab\IdentityTheftCenter.tsx:    <svg className={`w-5 h-5 ${active ? 'text-red-500' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+src\pages\credit-lab\ReportAuditor.tsx:        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${colors[level]}`}>
+src\pages\credit-lab\ReportAuditor.tsx:                                                ${isChecked ? 'bg-indigo-500/10 border-indigo-500/30' : 'bg-white/5 border-transparent hover:bg-white/10'}
+src\pages\credit-lab\SecurityFreeze.tsx:                        <Card key={bureau.id} className={`bg-[#0A0F1E] border-white/5 transition-all group overflow-hidden ${bureau.border}`}>
+src\pages\credit-lab\SecurityFreeze.tsx:                                    <Badge variant="outline" className={`bg-black/40 border-white/10 ${bureau.color}`}>
+src\pages\credit-lab\SecurityFreeze.tsx:                                <CardTitle className={`text-2xl font-bold ${bureau.color} group-hover:brightness-125 transition-all`}>
+src\pages\credit-lab\SecurityFreeze.tsx:                        <Card key={bureau.id} className={`bg-[#0A0F1E] border-white/5 transition-all group overflow-hidden ${bureau.border}`}>
+src\pages\credit-lab\SecurityFreeze.tsx:                                    <Badge variant="outline" className={`bg-black/40 border-white/10 ${bureau.color}`}>
+src\pages\credit-lab\SecurityFreeze.tsx:                                <CardTitle className={`text-xl font-bold ${bureau.color}`}>
+src\pages\CreditQuest.tsx:            awardPoints(total, `Quest: ${currentScenario.title}`)
+src\pages\CreditTools.tsx:                        <div className={`absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity ${tool.color}`}>
+src\pages\CreditTools.tsx:                            <div className={`w-12 h-12 rounded-xl ${tool.bg} ${tool.border} border flex items-center justify-center mb-4 text-white`}>
+src\pages\Curriculum.tsx:                                                            style={{ width: `${course.progress}%` }}
+src\pages\Curriculum.tsx:                                                        <Link to={course.id === 'freshman-foundations' ? '/dashboard/course/freshman-foundations' : `/dashboard/course/${course.id}`} className="w-full">
+src\pages\DreamArchitect.tsx:                                            ${price.toLocaleString()}
+src\pages\DreamArchitect.tsx:                                                <div className="text-4xl font-mono font-bold text-white">${reqs.down.toLocaleString()}</div>
+src\pages\DreamArchitect.tsx:                                To acquire your <span className="text-white font-bold">${price.toLocaleString()} {selectedDream.label}</span> in {reqs.timeline}, here is your mission:
+src\pages\DreamArchitect.tsx:                                    <div className="text-xl font-bold text-white">${reqs.down.toLocaleString()}</div>
+src\pages\DreamArchitect.tsx:                                    <div className="text-sm text-emerald-400 mt-1">Save ${(reqs.down / 6).toFixed(0)}/mo</div>
+src\pages\FinancialNervousSystem.tsx:                    style={{ width: `${progress}%` }}
+src\pages\KnowledgeCenter.tsx:                <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center ${passed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+src\pages\KnowledgeCenter.tsx:                    className={`w-full py-6 text-lg ${passed ? 'bg-green-600 hover:bg-green-500' : 'bg-slate-700 hover:bg-slate-600'}`}
+src\pages\KnowledgeCenter.tsx:                            style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
+src\pages\KnowledgeCenter.tsx:                            className={`w-full text-left p-4 rounded-xl border transition-all duration-200 flex items-center justify-between group ${stateStyles}`}
+src\pages\KnowledgeCenter.tsx:                                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'articles'
+src\pages\KnowledgeCenter.tsx:                                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'glossary'
+src\pages\KnowledgeCenter.tsx:                                    className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedCategory === 'All'
+src\pages\KnowledgeCenter.tsx:                                        className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedCategory === cat
+src\pages\KnowledgeCenter.tsx:                                                            <span key={tag} className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border ${badgeColor}`}>
+src\pages\LearningPath.tsx:                                className={`transition-all cursor-pointer ${status === 'completed' ? 'bg-emerald-500/10 border-emerald-500/30' :
+src\pages\LearningPath.tsx:                                    } ${isSelected ? 'ring-2 ring-indigo-500' : ''}`}
+src\pages\LearningPath.tsx:                                            <div className={`w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl ${status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' :
+src\pages\LectureHall.tsx:            user: profile ? `${profile.first_name} ${profile.last_name?.[0] || ''}.` : 'You',
+src\pages\LectureHall.tsx:                full_name: `${profile.first_name} ${profile.last_name}`,
+src\pages\library\ArticleView.tsx:2. **Utilization (30%)**: This is the "hidden killer." If you have a $1,000 limit and spend $900, you look risky. Ideally, keep this under 10%, or better yet, under 3% (AZEO method).
+src\pages\library\ArticleView.tsx:3. **Undercapitalize**: Starting with $0 and 100% debt.
+src\pages\library\ArticleView.tsx:This ensures the **Statement Balance** (which is reported) is near $0, maximizing your score.
+src\pages\library\ArticleView.tsx:                localStorage.setItem(`article_completed_${article.id}`, 'true')
+src\pages\library\ArticleView.tsx:                awardPoints(50, `Read Article: ${article.title}`)
+src\pages\library\ConsumerLaw.tsx:        strategy: 'Keep a call log. If they call excessively (e.g., 7 times in 7 days), you may be entitled to $1,000 in statutory damages per lawsuit.'
+src\pages\library\ConsumerLaw.tsx:                                    <span className={`text-[10px] font-bold px-2 py-1 rounded border uppercase tracking-widest ${law.act === 'FCRA'
+src\pages\library\LetterLibrary.tsx:                                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-all ${activeCategory === cat.id && !searchQuery
+src\pages\library\LetterLibrary.tsx:                                        <cat.icon className={`w-4 h-4 ${activeCategory === cat.id && !searchQuery ? 'text-white' : cat.color}`} />
+src\pages\library\LetterLibrary.tsx:                            {searchQuery ? `Search Results for "${searchQuery}"` : CATEGORY_CONFIG.find(c => c.id === activeCategory)?.name}
+src\pages\library\LetterLibrary.tsx:                                                className={`w-full gap-2 border-none transition-all ${copiedId === template.id
+src\pages\Login.tsx:                        emailRedirectTo: `${window.location.origin}/dashboard/orientation`,
+src\pages\MooStore.tsx:        content: `[Date]\n\n[Collection Agency Name]\n[Address]\n\nRE: Pay for Delete Offer - Account # [Account Number]\n\nTo Whom It May Concern,\n\nI am writing to settle the account referenced above. I am aware of the unpaid balance of $[Amount]. While I dispute the validity of the full amount, I am willing to pay the full balance of $[Amount] as a settlement in full, IF AND ONLY IF you agree to the following terms:\n\n1. You agree to DELETE this account listing entirely from all three credit reporting agencies (Equifax, Experian, TransUnion).\n2. You will not sell or transfer this debt to another agency.\n3. You will consider the account "Paid in Full" with a $0 balance.\n\nUpon receipt of a signed letter on your company letterhead agreeing to these terms, I will send a cashier's check or money order immediately.\n\nPlease sign and return this agreement to the address above.\n\nSincerely,\n\n[Your Name]`
+src\pages\MooStore.tsx:        if (!confirm(`Confirm Exchange: ${reward.cost} Points for "${reward.title}"?`)) return
+src\pages\MooStore.tsx:                    <h1 style="font-size: 18pt; text-align: center; margin-bottom: 30px; font-weight: bold; text-transform: uppercase;">${rewardId.replace(/_/g, ' ').toUpperCase()}</h1>
+src\pages\MooStore.tsx:                    ${item.content.replace(/\n/g, '<br/>')}
+src\pages\MooStore.tsx:                    Generated by Credit UΓäó Secure Docs ΓÇó ${new Date().toLocaleDateString()}
+src\pages\MooStore.tsx:                                            <div className={`h-full bg-slate-900/40 backdrop-blur-sm border ${isOwned ? 'border-emerald-500/20 bg-emerald-900/5' : canAfford ? 'border-white/10 hover:border-indigo-500/50' : 'border-white/5 opacity-70'} rounded-2xl p-6 flex flex-col transition-all group relative overflow-hidden`}>
+src\pages\MooStore.tsx:                                                    <div className={`p-3 rounded-xl ${isOwned ? 'bg-emerald-500/10 text-emerald-400' : canAfford ? 'bg-indigo-500/10 text-indigo-400' : 'bg-slate-800/50 text-slate-600'}`}>
+src\pages\MooStore.tsx:                                                <h3 className={`font-bold text-lg mb-2 leading-tight ${canAfford ? 'text-white' : 'text-slate-500'}`}>
+src\pages\MooStore.tsx:                                                    <div className={`font-mono font-bold ${canAfford ? 'text-white' : 'text-slate-600'}`}>
+src\pages\MooStore.tsx:                                                        className={`h-8 px-4 font-bold text-xs transition-all ${isOwned
+src\pages\NeuralNetwork.tsx:                                    x1={`${from.x}%`}
+src\pages\NeuralNetwork.tsx:                                    y1={`${from.y}%`}
+src\pages\NeuralNetwork.tsx:                                    x2={`${to.x}%`}
+src\pages\NeuralNetwork.tsx:                                    y2={`${to.y}%`}
+src\pages\NeuralNetwork.tsx:                            style={{ left: `${node.x}%`, top: `${node.y}%` }}
+src\pages\OnboardingLegacy.tsx:                            style={{ width: `${progress}%` }}
+src\pages\Orientation.tsx:                setTimeLeft(`WARMING UP: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\Orientation.tsx:                setTimeLeft(`DAILY ACCESS: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\Orientation.tsx:        studentIdCode: userState.studentIdCode || `CU-${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+src\pages\Orientation.tsx:            `ESTABLISHING SECURE CONNECTION TO DAY 0${dayId}...`,
+src\pages\Orientation.tsx:                    {step === 'certificate' && <motion.div className="w-full h-full" key="cer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}><DormResetCertificate studentName={`${userState.firstName || ''} ${userState.lastName || ''}`.trim() || 'Credit Architect'} /></motion.div>}
+src\pages\OrientationDark.tsx:                setTimeLeft(`WARMING UP: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\OrientationDark.tsx:                setTimeLeft(`DAILY ACCESS: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\OrientationDark.tsx:        studentIdCode: userState.studentIdCode || `CU-${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+src\pages\OrientationDark.tsx:            `ESTABLISHING SECURE CONNECTION TO DAY 0${dayId}...`,
+src\pages\OrientationDark.tsx:                    {step === 'certificate' && <motion.div className="w-full h-full" key="cer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}><DormResetCertificate studentName={`${userState.firstName || ''} ${userState.lastName || ''}`.trim() || 'Credit Architect'} /></motion.div>}
+src\pages\OrientationWhite.tsx:                setTimeLeft(`WARMING UP: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\OrientationWhite.tsx:                setTimeLeft(`DAILY ACCESS: ${m}:${s.toString().padStart(2, '0')}`);
+src\pages\OrientationWhite.tsx:        studentIdCode: userState.studentIdCode || `CU-${Math.random().toString(36).substring(2, 9).toUpperCase()}`
+src\pages\OrientationWhite.tsx:                    <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} className="h-full bg-slate-900 shadow-sm" />
+src\pages\OrientationWhite.tsx:                    {step === 'certificate' && <motion.div className="w-full h-full" key="cer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}><DormResetCertificate studentName={`${userState.firstName || ''} ${userState.lastName || ''}`.trim() || 'Credit Architect'} /></motion.div>}
+src\pages\public\CreditUniversityLanding.tsx:                            <Link key={item} to={`/${item.toLowerCase()}`} className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group">
+src\pages\public\DormWeek.tsx:        const yymm = `${date.getFullYear().toString().slice(-2)}${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+src\pages\public\DormWeek.tsx:        return `CU-DW-${yymm}-${random}`;
+src\pages\public\DormWeek.tsx:            signatureName: `${formData.firstName} ${formData.lastName}`,
+src\pages\public\DormWeek.tsx:                                        <div className={`absolute inset-0 bg-gradient-to-br ${day.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`} />
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:                    filename: `CreditU_ID_${studentID?.code}.pdf`,
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:        const yymm = `${date.getFullYear().toString().substr(-2)}${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:        return `CU-DW-${yymm}-${random}`;
+src\pages\public\DormWeek_TAKEOVER_BACKUP.tsx:            signatureName: `${formData.firstName} ${formData.lastName} `,
+src\pages\public\Tuition.tsx:                    top: `${Math.random() * 100}%`,
+src\pages\public\Tuition.tsx:                    left: `${Math.random() * 100}%`,
+src\pages\public\Tuition.tsx:                                $97.00
+src\pages\public\Tuition.tsx:                                    $39.99
+src\pages\public\Tuition_Legacy_3Tier.tsx:                        <div className="text-4xl font-bold mb-8">$49<span className="text-lg text-slate-500 font-normal">/mo</span></div>
+src\pages\public\Tuition_Legacy_3Tier.tsx:                        <div className="text-5xl font-bold mb-8 text-amber-400">$97<span className="text-lg text-slate-400 font-normal">/mo</span></div>
+src\pages\public\Tuition_Legacy_3Tier.tsx:                        <div className="text-4xl font-bold mb-8">$297<span className="text-lg text-slate-500 font-normal">/mo</span></div>
+src\pages\public\WelcomeFreshman.tsx:                                            <div key={i} className={`bg-black w-[${Math.random() > 0.5 ? '2px' : '4px'}] h-full`}></div>
+src\pages\Settings.tsx:                headers: { 'Authorization': `Bearer ${apiKey}` }
+src\pages\Settings.tsx:                description: `Successfully authenticated. Access to ${data.data.length} models confirmed.`
+src\pages\Settings.tsx:                                            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${pause.state.checkInPreference === 'OCCASIONAL' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+src\pages\Settings.tsx:                                            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${pause.state.checkInPreference === 'NONE' ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+src\pages\Settings.tsx:                                                    toast.success(`Voice set to: ${mode.replace(/_/g, ' ')}`)
+src\pages\Settings.tsx:                                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${preferences.preferences.voiceMode === mode ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+src\pages\StudentDashboard.tsx:                                                style={{ width: `${progress}%` }}
+src\pages\StudentDashboard.tsx:                                        onClick={() => { playClick(); navigate(`/dashboard/course/${enr.course_id}`); }}
+src\pages\StudentDashboard.tsx:                                                    style={{ width: `${enr.progress_percent}%` }}
+src\pages\tools\CreditScoreSimulator.tsx:                        strokeDasharray={`${(percentage / 100) * 251} 251`} // 251 is approx length of arc radius 80
+src\pages\tools\CreditScoreSimulator.tsx:                                                <div className={`w-3 h-3 rounded-full border ${activeBureau === bureau.key ? 'bg-indigo-500 border-indigo-500' : 'border-slate-500'}`}></div>
+src\pages\tools\CreditScoreSimulator.tsx:                                                <span className={`text-xs ${bureau.color}`}>{bureau.label}</span>
+src\pages\tools\CreditScoreSimulator.tsx:                                                className={`w-20 bg-black/40 border rounded px-2 py-1 text-right text-sm text-white focus:border-indigo-500 outline-none transition-colors ${activeBureau === bureau.key ? 'border-indigo-500/50 bg-indigo-500/10' : 'border-white/10'}`}
+src\pages\tools\CreditScoreSimulator.tsx:                                    <Badge variant="outline" className={`${paymentHistory === 100 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'} border-0`}>
+src\pages\tools\CreditScoreSimulator.tsx:                                                    ${paymentHistory === val
+src\pages\tools\CreditScoreSimulator.tsx:                                            {activeBureau !== 'generic' ? `Projected ${activeBureau.charAt(0).toUpperCase() + activeBureau.slice(1)}` : 'Projected FICO┬«'} Score
+src\pages\tools\CreditScoreSimulator.tsx:                                        <div className={`text-7xl font-black mb-2 font-mono ${getScoreColor(projectedScore)} transition-colors duration-500`}>
+src\pages\tools\CreditScoreSimulator.tsx:                                        <Badge variant="outline" className={`${getScoreColor(projectedScore)} border-current bg-transparent`}>
+src\pages\tools\CreditUtilizationCalculator.tsx:            name: `Card ${cards.length + 1}`,
+src\pages\tools\CreditUtilizationCalculator.tsx:                            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all text-sm font-bold ${openAdvanced ? 'bg-indigo-500 border-indigo-500 text-white' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                    <Label className="text-xs uppercase font-bold text-slate-500">Balance ($)</Label>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                    <Label className="text-xs uppercase font-bold text-slate-500">Limit ($)</Label>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                        <div className="text-2xl font-black text-white font-mono">${totalInterestPerMonth.toFixed(2)}</div>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                            <Label className="text-xs uppercase font-bold text-indigo-300/60">Simulator Payment Amount ($)</Label>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 font-bold">$</span>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                    Apply this <span className="text-white font-bold">${paymentAmount.toLocaleString()}</span> to the card with the highest utilization % first. This creates the biggest credit score jump.
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                style={{ width: `${Math.min(projectedUtil, 100)}%` }}
+src\pages\tools\CreditUtilizationCalculator.tsx:                        <Card className={`border-white/10 ${utilization > 30 ? 'bg-red-950/20' : utilization > 10 ? 'bg-indigo-950/20' : 'bg-emerald-950/20'} transition-colors duration-500`}>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                <div className={`text-6xl font-black font-mono mb-2 ${getStatusColor(utilization)}`}>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                        <div className="text-white text-lg">${totalBalance.toLocaleString()}</div>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                        <div className="text-white text-lg">${totalLimit.toLocaleString()}</div>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                <div className={`font-bold text-sm ${target.color}`}>{target.label}</div>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                                <div className="font-mono font-bold text-white">${payNeeded.toFixed(0)}</div>
+src\pages\tools\CreditUtilizationCalculator.tsx:                                "All Zero Except One" (AZEO) is a strategy where you pay off all cards to $0 balance before the statement date, except for one card which you leave with a small balance (under 8% or just $10-20). This maximizes your score.
+src\pages\tools\DebtToIncomeCalculator.tsx:        if (dti <= limit) return `Good / Borderline. You are within the ${limit}% limit for ${selectedLoanType} loans.`;
+src\pages\tools\DebtToIncomeCalculator.tsx:        return `Critical. Your DTI (${dti.toFixed(1)}%) exceeds the ${limit}% limit. Lower your target loan amount or pay off other debts.`;
+src\pages\tools\DebtToIncomeCalculator.tsx:                                            <span className="absolute left-4 text-emerald-500 font-bold">$</span>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                            <span className="text-xs font-mono text-emerald-400 font-bold">${monthlyIncome.toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</span>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                        <span className="text-indigo-400 font-mono">${totalMonthlyDebt.toLocaleString()}</span>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                <button onClick={() => setHousingMode('Payment')} className={`px-2 py-0.5 text-[8px] uppercase font-bold rounded ${housingMode === 'Payment' ? 'bg-indigo-500 text-white' : 'bg-white/5 text-slate-500'}`}>Payment</button>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                <button onClick={() => setHousingMode('LoanAmount')} className={`px-2 py-0.5 text-[8px] uppercase font-bold rounded ${housingMode === 'LoanAmount' ? 'bg-indigo-500 text-white' : 'bg-white/5 text-slate-500'}`}>Loan Amt</button>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                Est. Payment (PITI): ${debts.rent.toLocaleString()}/mo
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                    <item.icon className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${item.color} opacity-70`} />
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                    ${selectedLoanType === type
+src\pages\tools\DebtToIncomeCalculator.tsx:                                        <div className={`text-8xl font-black font-mono tracking-tighter ${getStatusColor(backEndDti)} drop-shadow-2xl transition-colors duration-500`}>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                        <div className={`absolute -right-6 -top-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-white/5 border border-white/10 ${getStatusColor(backEndDti)}`}>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                style={{ left: `${loanLimits[selectedLoanType] * 100}%` }}
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                className={`absolute top-1 bottom-1 w-1.5 rounded-full ${getStatusColor(backEndDti).replace('text-', 'bg-')} shadow-[0_0_15px_currentColor] transition-all duration-1000 ease-out`}
+src\pages\tools\DebtToIncomeCalculator.tsx:                                                style={{ left: `${Math.min(backEndDti, 98)}%` }}
+src\pages\tools\DebtToIncomeCalculator.tsx:                                            <span className="text-indigo-400 transition-all duration-500" style={{ transform: `translateX(${selectedLoanType === 'FHA' ? '20px' : '0'})` }}>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                        <div className="text-3xl font-bold text-emerald-400 font-mono mb-1">${residualIncome.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                        <div className={`text-5xl font-black font-mono tracking-tighter ${maxHousingPayment > 0 ? 'text-white' : 'text-red-400'}`}>
+src\pages\tools\DebtToIncomeCalculator.tsx:                                            ${maxHousingPayment.toFixed(0)}
+src\pages\tools\DebtToIncomeCalculator.tsx:                                            ${Math.max(0, estMortgagePower).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+src\pages\tools\DebtToIncomeCalculator.tsx:                                If you pay off <span className="text-white font-bold">${reductionSimulation || '...'}</span>/mo of debt:
+src\pages\tools\DebtToIncomeCalculator.tsx:                                placeholder="Reduction amount ($)"
+src\pages\tools\DebtToIncomeCalculator.tsx:                                    <span className={`font-bold font-mono ${getStatusColor(simulatedDti)}`}>
+src\pages\tools\DisputeLetterGenerator.tsx:        return `${data.yourName}
+src\pages\tools\DisputeLetterGenerator.tsx:${data.address}
+src\pages\tools\DisputeLetterGenerator.tsx:${data.city}, ${data.state} ${data.zip}
+src\pages\tools\DisputeLetterGenerator.tsx:${today}
+src\pages\tools\DisputeLetterGenerator.tsx:${bureauAddresses[bureau]}
+src\pages\tools\DisputeLetterGenerator.tsx:SSN: XXX-XX-${data.ssn.slice(-4)}
+src\pages\tools\DisputeLetterGenerator.tsx:Date of Birth: ${data.dob}
+src\pages\tools\DisputeLetterGenerator.tsx:Creditor/Account Name: ${data.accountName}
+src\pages\tools\DisputeLetterGenerator.tsx:Account Number: ${data.accountNumber}
+src\pages\tools\DisputeLetterGenerator.tsx:Reason for Dispute: ${data.disputeReason}
+src\pages\tools\DisputeLetterGenerator.tsx:${data.explanation}
+src\pages\tools\DisputeLetterGenerator.tsx:${data.yourName}
+src\pages\tools\DisputeLetterGenerator.tsx:        a.download = `Credit_Dispute_Letter_${bureau}_${new Date().toISOString().split('T')[0]}.txt`;
+src\pages\tools\DisputeLetterGenerator.tsx:                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= s ? 'bg-indigo-600 text-white' : 'bg-white/10 text-slate-500'
+src\pages\tools\DisputeLetterGenerator.tsx:                            {s < 4 && <div className={`flex-1 h-0.5 mx-2 ${step > s ? 'bg-indigo-600' : 'bg-white/10'}`} />}
+src\pages\tools\DisputeLetterGenerator.tsx:                                        className={`p-6 rounded-xl border-2 transition-all ${bureau === b
+src\pages\tools\InteractiveQuiz.tsx:                                    className={`relative border-white/5 bg-gradient-to-br ${meta.gradient} backdrop-blur-md hover:border-indigo-500/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group overflow-hidden`}
+src\pages\tools\InteractiveQuiz.tsx:                                            <div className={`p-4 rounded-2xl bg-black/40 border border-white/5 ${meta.color} shadow-inner`}>
+src\pages\tools\InteractiveQuiz.tsx:                    <Card className={`backdrop-blur-xl ${result.passed ? 'bg-emerald-950/40 border-emerald-500/30' : 'bg-amber-950/40 border-amber-500/30'}`}>
+src\pages\tools\InteractiveQuiz.tsx:                                <div className={`absolute inset-0 blur-xl ${result.passed ? 'bg-emerald-500/30' : 'bg-amber-500/30'}`}></div>
+src\pages\tools\InteractiveQuiz.tsx:                                    ? `Outstanding work! You've demonstrated mastery of ${activeQuiz.title}.`
+src\pages\tools\InteractiveQuiz.tsx:                                    : `You scored ${result.score.toFixed(0)}%. You need ${activeQuiz.passingScore}% to pass. Review the material and try again.`
+src\pages\tools\InteractiveQuiz.tsx:                            style={{ width: `${progress}%` }}
+src\pages\tools\InteractiveQuiz.tsx:                                        ${selectedAnswer === idx
+src\pages\tools\InteractiveQuiz.tsx:                                        ${showExplanation ? 'cursor-default' : 'active:scale-[0.99]'}
+src\pages\tools\InteractiveQuiz.tsx:                                            ${selectedAnswer === idx
+src\pages\tools\InteractiveQuiz.tsx:                                        <span className={`font-medium text-lg ${selectedAnswer === idx ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+src\pages\tools\InteractiveQuiz.tsx:                            <div className={`mt-6 p-6 rounded-2xl animate-in zoom-in-95 duration-300 ${isCorrect ? 'bg-emerald-950/40 border border-emerald-500/30' : 'bg-amber-950/40 border border-amber-500/30'}`}>
+src\pages\tools\InteractiveQuiz.tsx:                                    <div className={`p-2 rounded-lg h-fit ${isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
+src\pages\tools\InteractiveQuiz.tsx:                                        <h3 className={`font-bold text-lg ${isCorrect ? 'text-emerald-400' : 'text-amber-400'}`}>
+src\pages\ToolsHub.tsx:                                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} p-3 mb-4 group-hover:scale-110 transition-transform`}>
+src\pages\VisionCenter.tsx:                                                        data-tour-id={`cat-${cat.id}`}
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                            <input className="w-full text-xl font-bold border-b-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none py-2 bg-transparent transition-all" placeholder="$" />
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                            <input className="w-full text-xl font-bold border-b-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none py-2 bg-transparent transition-all" placeholder="$" />
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                                Total Balance ($)
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                                Total Credit Limit ($)
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                                    className={`text-5xl font-black ${zoneColor} print:text-black`}
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                            <div className={`text-sm font-bold uppercase tracking-widest ${zoneColor} mb-4 print:text-black`}>
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                                    animate={{ width: `${Math.min(utilization, 100)}%` }}
+src\pages\worksheets\ApprovalFormulaWorksheet.tsx:                                    className={`h-full ${utilization > 30 ? 'bg-red-500' : utilization > 10 ? 'bg-yellow-500' : 'bg-emerald-500'}`}
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                                    ${isClaimed ? `bg-white/10 ${item.border} border-2 shadow-[0_0_30px_rgba(255,255,255,0.1)]` : 'bg-white/5 border border-white/5 hover:bg-white/10'}
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                                {isClaimed && <div className={`absolute inset-0 ${item.bg} opacity-20`} />}
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                                <item.icon className={`w-8 h-8 ${item.color} transition-transform duration-300 ${isClaimed ? 'scale-110 mb-2' : 'group-hover:scale-110'}`} />
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                                    <span className={`text-[10px] uppercase font-bold tracking-widest transition-colors block mb-2 ${isClaimed ? 'text-white' : 'text-slate-400'}`}>
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                                        <CheckCircle2 className={`w-5 h-5 ${item.color}`} />
+src\pages\worksheets\ArchitectOathWorksheet.tsx:                    <DormResetCertificate studentName={profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}` : undefined} />
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.exp_name ? 'bg-blue-600 border-blue-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.exp_addy ? 'bg-blue-600 border-blue-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.equ_name ? 'bg-red-600 border-red-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.equ_addy ? 'bg-red-600 border-red-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.tu_name ? 'bg-cyan-600 border-cyan-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-5 h-5 border-2 border-slate-300 rounded flex items-center justify-center ${audit.tu_addy ? 'bg-cyan-600 border-cyan-600' : ''}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-12 h-6 rounded-full relative transition-colors ${audit.ln_frozen ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${audit.ln_frozen ? 'left-7' : 'left-1'}`} />
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-12 h-6 rounded-full relative transition-colors ${audit.chex_frozen ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${audit.chex_frozen ? 'left-7' : 'left-1'}`} />
+src\pages\worksheets\BureauControlWorksheet.tsx:                                    <div className={`w-12 h-6 rounded-full relative transition-colors ${audit.opt_out ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+src\pages\worksheets\BureauControlWorksheet.tsx:                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${audit.opt_out ? 'left-7' : 'left-1'}`} />
+src\pages\worksheets\CreditPositionSnapshot.tsx:                            <div className="absolute bottom-4 right-4 text-2xl font-black opacity-10 pointer-events-none">$</div>
+src\pages\worksheets\CreditPositionSnapshot.tsx:                            <div className="absolute bottom-4 right-4 text-2xl font-black opacity-10 pointer-events-none">$</div>
+src\pages\worksheets\CreditPositionSnapshot.tsx:                            <div className={`text-4xl font-black ${utilization > 30 ? 'text-red-600' : utilization < 10 ? 'text-emerald-600' : 'text-amber-500'}`}>
+src\pages\worksheets\CreditPositionSnapshot.tsx:                                {utilization === 0 && "CAUTION: 0% usage can hurt scores. Spend $10 and pay it off."}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                desc: `Your utilization is at ${utilization}%. To unlock Elite funding, you MUST be under 10%. Consider the "Balance Transfer" strategy or the "Weekly Payment" loop.`,
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                desc: `${inquiries} inquiries is too high for top-tier lenders (Chase/Amex). Halt all applications for 90 days to let these age or use the "Inquiry Decryptor" protocol.`,
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                desc: 'Your profile is perfect. Start with the Chase Trifecta then move to Amex Business cards. Your data points suggest $25k+ starting limits.',
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                        className={`p-8 md:p-12 rounded-2xl border-2 transition-all duration-500 flex flex-col items-center justify-center text-center gap-4 ${status.color} ${status.color.includes('border') ? '' : 'border-transparent'} relative overflow-hidden shadow-xl`}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <div className={`absolute inset-0 bg-gradient-to-br ${status.gradient} opacity-50`} />
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            {status.icon && <status.icon className={`w-20 h-20 ${status.text}`} strokeWidth={2.5} />}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                        <h2 className={`text-3xl md:text-5xl font-black uppercase tracking-tighter ${status.text} relative z-10`}>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <span className={`text-xs font-bold px-2 py-1 rounded ${parseInt(score) >= 700 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <span className={`text-xs font-bold px-2 py-1 rounded ${utilization < 10 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <span className={`text-xs font-bold px-2 py-1 rounded ${inquiries < 2 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                    className={`flex-1 py-3 rounded-lg font-bold border-2 transition-all ${inquiries === n ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <span className={`text-xs font-bold px-2 py-1 rounded ${derogs === 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                className={`flex-1 py-3 rounded-lg font-bold border-2 transition-all ${derogs === 0 ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}`}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                className={`flex-1 py-3 rounded-lg font-bold border-2 transition-all ${derogs > 0 ? 'bg-red-500 text-white border-red-500 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}`}
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                            <span className={`font-black uppercase ${status.text} text-lg`}>{status.label.split('//')[0]}</span>
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                    className={`p-6 rounded-xl border-2 shadow-sm relative overflow-hidden flex flex-col gap-3 bg-white ${rec.type === 'danger' ? 'border-red-200' :
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                        <div className={`p-2 rounded-lg ${rec.type === 'danger' ? 'bg-red-50' :
+src\pages\worksheets\FundingSecuredWorksheet.tsx:                                        <h4 className={`font-black uppercase tracking-tight ${rec.type === 'danger' ? 'text-red-900' :
+src\pages\worksheets\StrategicMoveWorksheet.tsx:                                <div className={`text-3xl font-black ${targetCard.utilization > 30 ? 'text-red-600' : 'text-emerald-600'}`}>
+src\pages\worksheets\StrategicMoveWorksheet.tsx:                                    <span className="text-gray-400 mr-1">$</span>
+src\pages\worksheets\StrategicMoveWorksheet.tsx:                                    <span className="text-gray-400 mr-1">$</span>
+src\pages\worksheets\StrategicMoveWorksheet.tsx:                                        placeholder="$0.00"
+src\pages\worksheets\WealthSystemsWorksheet.tsx:                            <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Total Balance ($)</label>
+src\pages\worksheets\WealthSystemsWorksheet.tsx:                            <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Total Credit Limit ($)</label>
+src\pages\worksheets\WealthSystemsWorksheet.tsx:                            <div className={`text-4xl font-black ${zoneColor} print:text-black`}>{utilization.toFixed(1)}%</div>
+src\pages\worksheets\WealthSystemsWorksheet.tsx:                        <div className={`text-sm font-bold uppercase tracking-widest ${zoneColor} mb-4 print:text-black`}>
+src\pages\worksheets\WealthSystemsWorksheet.tsx:                            <div className={`h-full transition-all duration-500 ${utilization > 30 ? 'bg-red-500' : utilization > 10 ? 'bg-yellow-500' : 'bg-emerald-500'}`} style={{ width: `${Math.min(utilization, 100)}%` }}></div>
+src\services\LiveStreamService.ts:            .channel(`chat:${roomId}`)
+src\services\LiveStreamService.ts:                    filter: `room_id=eq.${roomId}`
+src\services\LiveStreamService.ts:            .channel(`stream:${roomId}`)
+src\services\LiveStreamService.ts:                    filter: `id=eq.${roomId}`
