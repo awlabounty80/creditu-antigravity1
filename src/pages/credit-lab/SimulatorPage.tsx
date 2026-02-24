@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Calculator, BrainCircuit, ArrowLeft } from 'lucide-react'
+import { Calculator, BrainCircuit, ArrowLeft, Database } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,19 +14,58 @@ export default function SimulatorPage() {
     const [paymentHistory, setPaymentHistory] = useState([100])
     const [newCredit, setNewCredit] = useState([0])
     const [age, setAge] = useState([5])
+    const [isSynced, setIsSynced] = useState(false)
+
+    useEffect(() => {
+        const savedData = localStorage.getItem('credit_report_data')
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData)
+                if (parsed.score && parsed.score !== "N/A") {
+                    const realScore = parseInt(parsed.score)
+                    setScore(realScore)
+                    setIsSynced(true)
+                    // Optionally adjust sliders to match real data if we have it
+                    // For now, just setting the score as a baseline
+                }
+            } catch (e) {
+                console.error("Failed to sync simulator baseline", e)
+            }
+        }
+    }, [])
 
     const calculateScore = () => {
-        let base = 600
-        base -= (utilization[0] * 2.2)
-        base += (paymentHistory[0] * 1.5)
-        base -= (newCredit[0] * 8)
-        base += (age[0] * 4)
-        return Math.min(850, Math.max(300, Math.round(base)))
+        let base = isSynced ? score : 600
+        // Adjust logic slightly if we are simulating from a real base
+        if (isSynced) {
+            // Relative change simulation
+            let diff = 0
+            diff -= ((utilization[0] - 30) * 1.5) // Change from baseline
+            diff += ((paymentHistory[0] - 100) * 2.0)
+            diff -= (newCredit[0] * 5)
+            diff += ((age[0] - 5) * 3)
+            return Math.min(850, Math.max(300, Math.round(score + diff)))
+        } else {
+            // Standard static simulation
+            base -= (utilization[0] * 2.2)
+            base += (paymentHistory[0] * 1.5)
+            base -= (newCredit[0] * 8)
+            base += (age[0] * 4)
+            return Math.min(850, Math.max(300, Math.round(base)))
+        }
     }
 
-    React.useEffect(() => {
-        setScore(calculateScore())
+    useEffect(() => {
+        if (!isSynced) {
+            setScore(calculateScore())
+        }
     }, [utilization, paymentHistory, newCredit, age])
+
+    // Specific effect for synced simulation to avoid loop
+    const [projectedScore, setProjectedScore] = useState(720)
+    useEffect(() => {
+        setProjectedScore(calculateScore())
+    }, [utilization, paymentHistory, newCredit, age, score])
 
     const getScoreColor = (s: number) => {
         if (s >= 750) return "text-emerald-400"
@@ -117,10 +156,18 @@ export default function SimulatorPage() {
 
                 <Card className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-950 to-black border-white/10 relative overflow-hidden min-h-[400px]" data-tour-id="sim-result">
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5"></div>
+
+                    {isSynced && (
+                        <div className="absolute top-6 left-6 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-2 z-20">
+                            <Database className="w-3 h-3 text-emerald-400" />
+                            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Live Sync Active</span>
+                        </div>
+                    )}
+
                     <div className="relative z-10 flex flex-col items-center justify-center w-72 h-72 rounded-full border-4 border-white/5 bg-slate-900/80 backdrop-blur-xl shadow-[0_0_50px_rgba(79,70,229,0.2)]">
                         <span className="text-lg text-slate-400 mb-2 uppercase tracking-widest text-[10px]">Projected Score</span>
-                        <span className={cn("text-7xl font-bold font-heading tabular-nums tracking-tighter", getScoreColor(score))} data-amara-vision="Projected Score">
-                            {score}
+                        <span className={cn("text-7xl font-bold font-heading tabular-nums tracking-tighter", getScoreColor(projectedScore))} data-amara-vision="Projected Score">
+                            {projectedScore}
                         </span>
 
                         {/* Rotating Rings */}
@@ -133,7 +180,9 @@ export default function SimulatorPage() {
                             <BrainCircuit size={12} /> AI Projection
                         </div>
                         <p className="text-slate-500 text-sm">
-                            This is a simulation based on FICO® 8 algorithms. Actual scores may vary based on bureau data.
+                            {isSynced
+                                ? `Simulation initialized from your synced baseline of ${score}.`
+                                : "This is a simulation based on FICO® 8 algorithms. Actual scores may vary based on bureau data."}
                         </p>
                     </div>
                 </Card>
