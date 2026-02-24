@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Share2, Download, Shield, GraduationCap, ChevronRight, TrendingUp, UserCheck, DollarSign } from 'lucide-react';
+import { Share2, Download, Shield, GraduationCap, ChevronRight, TrendingUp, UserCheck, DollarSign, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -139,6 +139,14 @@ export default function DormWeek() {
         consent: false
     });
     const [studentID, setStudentID] = useState<StudentID | null>(null);
+    const [enrollmentCount, setEnrollmentCount] = useState(1284);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setEnrollmentCount(prev => prev + Math.floor(Math.random() * 3));
+        }, 8000);
+        return () => clearInterval(interval);
+    }, []);
 
     const formRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
@@ -366,7 +374,7 @@ export default function DormWeek() {
                             <FadeIn delay={0.2}>
                                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-black uppercase tracking-[0.2em] text-blue-300 mb-6 shadow-[0_0_20px_rgba(59,130,246,0.2)] animate-pulse">
                                     <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-                                    Reset Initiated // 2026
+                                    Reset Initiated // {enrollmentCount.toLocaleString()} INITIALIZED
                                 </div>
                             </FadeIn>
 
@@ -375,8 +383,11 @@ export default function DormWeek() {
                                     <GraffitiText className="absolute -top-12 -left-4 md:-left-12 rotate-[-12deg] text-3xl md:text-5xl text-pink-500 opacity-90 animate-pulse">
                                         WELCOME TO
                                     </GraffitiText>
-                                    <h1 className="text-7xl md:text-9xl font-black uppercase italic tracking-tighter leading-[0.8] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                                    <h1 className="text-7xl md:text-9xl font-black uppercase italic tracking-tighter leading-[0.8] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative">
                                         DORM WEEK<span className="text-amber-500">.</span>
+                                        {/* Glitch Overlay */}
+                                        <span className="absolute inset-0 text-indigo-500/30 translate-x-[2px] translate-y-[-1px] select-none pointer-events-none blur-[1px] animate-pulse">DORM WEEK.</span>
+                                        <span className="absolute inset-0 text-pink-500/20 translate-x-[-2px] translate-y-[1px] select-none pointer-events-none blur-[1px] animate-pulse">DORM WEEK.</span>
                                     </h1>
                                     <GraffitiText className="absolute -bottom-8 -right-4 md:-right-12 rotate-[6deg] text-3xl md:text-4xl text-blue-400 opacity-90">
                                         THE TAKEOVER
@@ -385,10 +396,14 @@ export default function DormWeek() {
                             </FadeIn>
 
                             <FadeIn delay={0.6}>
-                                <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto font-medium leading-relaxed mt-8 bg-black/40 backdrop-blur-sm p-4 rounded-xl border border-white/10">
-                                    The mandatory <span className="text-white font-black underline decoration-amber-500">5-Day Financial Reset</span>. <br className="hidden md:block" />
-                                    Stop trying to fix your credit. <span className="text-amber-400 font-bold">Rebuild your identity.</span>
-                                </p>
+                                <div className="relative max-w-2xl mx-auto mt-8">
+                                    <div className="absolute -left-4 -top-4 w-12 h-12 border-t-2 border-l-2 border-amber-500/50" />
+                                    <div className="absolute -right-4 -bottom-4 w-12 h-12 border-b-2 border-r-2 border-amber-500/50" />
+                                    <p className="text-xl md:text-2xl text-slate-300 font-medium leading-relaxed bg-black/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl">
+                                        The mandatory <span className="text-white font-black underline decoration-amber-500">5-Day Financial Reset</span>. <br className="hidden md:block" />
+                                        Stop trying to fix your credit. <span className="text-amber-400 font-bold italic">Rebuild your institutional identity.</span>
+                                    </p>
+                                </div>
                             </FadeIn>
 
                             <FadeIn delay={0.8} className="pt-8">
@@ -403,6 +418,36 @@ export default function DormWeek() {
                                 </Button>
                             </FadeIn>
                         </div>
+
+                        {/* --- MISSION BRIEFING --- */}
+                        <FadeIn delay={0.9} className="w-full max-w-4xl mt-12">
+                            <div className="bg-[#0A0F1E] border border-indigo-500/30 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
+
+                                <div className="relative z-10 w-24 h-24 flex-shrink-0">
+                                    <div className="absolute inset-0 bg-indigo-500/20 rounded-2xl animate-pulse" />
+                                    <div className="absolute inset-0 border border-indigo-400/30 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform" />
+                                    <div className="absolute inset-0 border border-pink-500/30 rounded-2xl rotate-[-3deg] group-hover:rotate-[-6deg] transition-transform" />
+                                    <div className="relative bg-black w-full h-full rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden shadow-2xl">
+                                        <Cpu className="w-12 h-12 text-indigo-400 animate-pulse-slow" />
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 text-left space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em]">Neural Uplink ///</span>
+                                        <span className="text-[10px] font-mono text-slate-500">MISSION_BRIEFING_v2.0</span>
+                                    </div>
+                                    <h4 className="text-xl font-black text-white uppercase italic tracking-tighter">Transmission from Dr. Leverage™</h4>
+                                    <p className="text-slate-400 font-mono text-xs leading-relaxed border-l-2 border-indigo-500/30 pl-4 py-1">
+                                        &gt; STUDENT_NOTICE: The old credit scoring models are being dismantled.
+                                        &gt; Only those with "Institutional Visibility" will survive the next liquidity shift.
+                                        &gt; Dorm Week is your 120-hour window to recalibrate your digital footprint.
+                                        &gt; Success is non-negotiable. Rebuild your identity. Reclaim your capital.
+                                    </p>
+                                </div>
+                            </div>
+                        </FadeIn>
 
                         {/* --- 5-DAY STRUCTURE PREVIEW --- */}
                         <FadeIn delay={1.0} className="w-full max-w-6xl mt-32">
