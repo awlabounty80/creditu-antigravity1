@@ -132,7 +132,9 @@ export default {
 				'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 				'scroll-left': 'scroll-left 30s linear infinite',
 				'float-up': 'float-up 15s linear infinite',
-				'rise': 'rise 10s ease-out infinite'
+				'rise': 'rise 10s ease-out infinite',
+				'scan': 'scan 3s linear infinite',
+				'pulse-2s': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			},
 			fontFamily: {
 				sans: [

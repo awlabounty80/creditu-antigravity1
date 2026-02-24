@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Lock, Activity, CreditCard, ChevronLeft, FileText, Award, CheckCircle2, ChevronRight, RefreshCw } from 'lucide-react';
@@ -14,6 +14,7 @@ import { ReferralThanksForm } from '@/components/referral/ReferralThanksForm';
 import { DigitalIDCard } from '@/components/referral/DigitalIDCard';
 import { DORM_WEEK_CURRICULUM } from '@/data/dorm-week-curriculum';
 import confetti from 'canvas-confetti';
+import { ProfessorGenerative } from '@/components/dashboard/ProfessorGenerative';
 
 // --- Types ---
 type OnboardingStep =
@@ -21,6 +22,7 @@ type OnboardingStep =
     | 'welcome'
     | 'reframe'
     | 'consent'
+    | 'calibration'
     | 'identity'
     | 'map'
     | 'day1_briefing'
@@ -250,7 +252,7 @@ const ConsentStep = ({ setStep, saveState }: { setStep: (s: OnboardingStep) => v
                             setIsSigned(true);
                             setTimeout(() => {
                                 saveState({ hasConsented: true, signatureName: signature });
-                                setStep('identity');
+                                setStep('calibration');
                             }, 1000);
                         }
                     }}
@@ -259,6 +261,32 @@ const ConsentStep = ({ setStep, saveState }: { setStep: (s: OnboardingStep) => v
                 >
                     {isSigned ? "Protocol Accepted" : "Initialize Reset"}
                 </Button>
+            </FadeIn>
+        </div>
+    );
+};
+
+const CalibrationStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => {
+    return (
+        <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-5xl mx-auto px-6 z-10 w-full">
+            <FadeIn delay={0.2} className="w-full">
+                <div className="mb-12">
+                    <ProfessorGenerative
+                        transcript="Architect, the foundation of your new reality begins here. We are about to calibrate your neural interface with the Credit U system core. This is not just a profile; it is your digital scoreboard. Be precise. Your legacy is being written in real-time. Proceed to identity synchronization."
+                        onComplete={() => { }}
+                    />
+                </div>
+                <div className="text-center">
+                    <h1 className="text-4xl font-black text-white italic uppercase mb-2 tracking-tighter">System Calibration</h1>
+                    <p className="text-indigo-400 font-mono text-[10px] tracking-[0.4em] uppercase animate-pulse mb-8">Establishing Neural Link...</p>
+
+                    <Button
+                        onClick={() => setStep('identity')}
+                        className="bg-white text-black hover:bg-indigo-50 px-12 py-8 rounded-2xl text-xl font-black uppercase tracking-widest shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-105 transition-all"
+                    >
+                        Sync Identity
+                    </Button>
+                </div>
             </FadeIn>
         </div>
     );
@@ -276,38 +304,112 @@ const IdentityStep = ({ setStep, saveState, userState }: { setStep: (s: Onboardi
     const isComplete = form.firstName && form.lastName && form.primaryMission;
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-4xl mx-auto px-6 z-10">
-            <FadeIn delay={0} className="text-center mb-12">
-                <h1 className="text-3xl font-black text-white mb-2 uppercase italic">Identity Reconstruction</h1>
-                <p className="text-slate-500 text-xs font-mono uppercase tracking-widest">Secure Entry Sequence Active</p>
-            </FadeIn>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full mb-12">
-                <div className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                        <Input value={form.firstName} onChange={e => setForm({ ...form, firstName: e.target.value })} placeholder="First Name" className="bg-black/40 border-white/10 h-14" />
-                        <Input value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value })} placeholder="Last Name" className="bg-black/40 border-white/10 h-14" />
+        <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-5xl mx-auto px-6 z-10 w-full">
+            <FadeIn delay={0} className="text-center mb-16 w-full">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                    <div className="p-3 bg-indigo-500/20 rounded-2xl border border-indigo-500/30">
+                        <Activity className="w-6 h-6 text-indigo-400 animate-pulse-2s" />
                     </div>
-                    <Input value={form.primaryMission} onChange={e => setForm({ ...form, primaryMission: e.target.value })} placeholder="Mission Objective (e.g. Financial Freedom)" className="bg-black/40 border-white/10 h-14" />
+                    <div>
+                        <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter">Biometric Uplink</h1>
+                        <p className="text-slate-500 text-[10px] font-mono uppercase tracking-[0.3em]">Neural Interface Calibration Active</p>
+                    </div>
                 </div>
-                <div className="aspect-[1.6/1] w-full bg-[#050914] rounded-2xl border border-white/10 p-8 flex flex-col justify-between shadow-2xl">
-                    <div className="text-white text-2xl font-black tracking-tighter italic uppercase">{form.firstName || '???'} {form.lastName}</div>
-                    <div className="text-amber-500 text-[10px] font-black uppercase tracking-[0.3em]">{form.primaryMission || 'ANALYZING MISSION...'}</div>
-                    <div className="flex justify-between items-end">
-                        <div className="text-slate-700 text-[8px] font-mono tracking-widest uppercase">{form.studentIdCode}</div>
-                        <CreditULogo className="w-12 h-12 opacity-50" variant="gold" showShield={false} />
+            </FadeIn>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full mb-12 items-center">
+                <div className="lg:col-span-6 space-y-8">
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-indigo-400/70 uppercase tracking-widest ml-2">Assign Legal Name</label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <Input
+                                value={form.firstName}
+                                onChange={e => setForm({ ...form, firstName: e.target.value })}
+                                placeholder="First Name"
+                                className="bg-black/60 border-indigo-500/20 h-16 text-lg focus:border-indigo-500/50 transition-all rounded-2xl"
+                            />
+                            <Input
+                                value={form.lastName}
+                                onChange={e => setForm({ ...form, lastName: e.target.value })}
+                                placeholder="Last Name"
+                                className="bg-black/60 border-indigo-500/20 h-16 text-lg focus:border-indigo-500/50 transition-all rounded-2xl"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-indigo-400/70 uppercase tracking-widest ml-2">Declare Primary Objective</label>
+                        <Input
+                            value={form.primaryMission}
+                            onChange={e => setForm({ ...form, primaryMission: e.target.value })}
+                            placeholder="e.g. $100K High Limit Funding"
+                            className="bg-black/60 border-indigo-500/20 h-16 text-lg focus:border-indigo-500/50 transition-all rounded-2xl"
+                        />
+                    </div>
+
+                    <div className="p-6 bg-indigo-950/20 border border-indigo-500/20 rounded-2xl">
+                        <p className="text-xs text-slate-400 leading-relaxed italic">
+                            "By syncing this identity, you authorize the Credit U engine to analyze your current visibility data and generate a customized roadmap for your transition from Consumer to Architect."
+                        </p>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-6">
+                    <div className="relative group">
+                        {/* Glow FX */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition-all" />
+
+                        <div className="relative aspect-[1.6/1] w-full bg-[#050914] rounded-[2.5rem] border border-white/10 p-10 flex flex-col justify-between shadow-3xl overflow-hidden">
+                            {/* Scanning Line */}
+                            <div className="absolute inset-x-0 h-[2px] bg-indigo-500/30 blur-[1px] top-0 animate-scan pointer-events-none" />
+
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <div className="text-indigo-400 font-mono text-[9px] uppercase tracking-[0.4em] mb-4">Identification Node</div>
+                                    <div className="text-white text-4xl font-black tracking-tighter italic uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+                                        {form.firstName || '???'} {form.lastName}
+                                    </div>
+                                </div>
+                                <div className="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center backdrop-blur-md">
+                                    <CreditULogo className="w-10 h-10 opacity-70" variant="gold" showShield={false} />
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="h-px w-full bg-gradient-to-r from-indigo-500/50 to-transparent" />
+                                <div className="flex justify-between items-end">
+                                    <div>
+                                        <div className="text-slate-500 font-mono text-[8px] uppercase tracking-widest mb-1">Status: CALIBRATING</div>
+                                        <div className="text-amber-500 text-xs font-black uppercase tracking-[0.2em]">{form.primaryMission || 'WAITING FOR DATA...'}</div>
+                                    </div>
+                                    <div className="text-slate-700 text-[10px] font-mono tracking-widest uppercase bg-white/5 px-3 py-1 rounded-md border border-white/5">
+                                        {form.studentIdCode}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <Button
-                disabled={!isComplete}
-                onClick={() => {
-                    saveState(form);
-                    setStep('map');
-                }}
-                className={cn("px-16 py-8 text-xl font-black rounded-full transition-all", isComplete ? "bg-white text-black hover:scale-105" : "bg-white/5 text-slate-600")}
-            >
-                {isComplete ? "LOCK IDENTIFICATION" : "COMPLETE INTEL"}
-            </Button>
+
+            <div className="flex flex-col items-center gap-6">
+                <Button
+                    disabled={!isComplete}
+                    onClick={() => {
+                        saveState(form);
+                        setStep('map');
+                    }}
+                    className={cn(
+                        "px-24 py-10 text-2xl font-black rounded-3xl transition-all shadow-3xl border-4",
+                        isComplete
+                            ? "bg-white text-black border-white hover:scale-105 hover:shadow-white/20"
+                            : "bg-black/50 text-slate-700 border-white/10"
+                    )}
+                >
+                    {isComplete ? "FINALIZE CALIBRATION" : "INPUT REQUIRED"}
+                </Button>
+                <p className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">Caution: Identity locks are permanent for this session.</p>
+            </div>
         </div>
     );
 };
@@ -1013,6 +1115,7 @@ export default function Orientation() {
                     {step === 'welcome' && <motion.div className="w-full h-full" key="wel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><WelcomeStep setStep={setStep} /></motion.div>}
                     {step === 'reframe' && <motion.div className="w-full h-full" key="ref" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><ReframeStep setStep={setStep} /></motion.div>}
                     {step === 'consent' && <motion.div className="w-full h-full" key="con" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><ConsentStep setStep={setStep} saveState={saveState} /></motion.div>}
+                    {step === 'calibration' && <motion.div className="w-full h-full" key="cal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><CalibrationStep setStep={setStep} /></motion.div>}
                     {step === 'identity' && <motion.div className="w-full h-full" key="ide" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><IdentityStep setStep={setStep} saveState={saveState} userState={userState} /></motion.div>}
                     {step === 'map' && <motion.div className="w-full h-full" key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><MapStep setStep={setStep} /></motion.div>}
                     {step === 'close' && <motion.div className="w-full h-full" key="clo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }} transition={{ duration: 0.5 }}><MenuStep setStep={setStep} userState={userState} saveState={saveState} profile={profile} setShowIDCard={setShowIDCard} dailyLoginTime={userState.dailyLoginTime} /></motion.div>}
