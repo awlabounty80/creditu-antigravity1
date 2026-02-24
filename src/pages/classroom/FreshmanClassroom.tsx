@@ -5,8 +5,8 @@ import { FOUNDATION_SYLLABI } from '@/components/dashboard/FoundationSyllabi'
 import { useFoundationProgress } from '@/hooks/useFoundationProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { CheckCircle2, Lock, ArrowRight, Play, Pause, Volume2, User } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle2, Lock, ArrowRight, Play, User } from 'lucide-react'
+import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 
 export default function FreshmanClassroom() {
@@ -14,9 +14,9 @@ export default function FreshmanClassroom() {
     const navigate = useNavigate()
     const { completeLesson, completedLessons } = useFoundationProgress()
 
-    // Find current class based on ID (adjusting to string/number logic if needed)
-    // Syllabus uses 'freshman-1', 'freshman-2'. URL might be '1', '2'.
-    const currentClass = FOUNDATION_SYLLABI.find(c => c.id === `freshman-${classId}`) || FOUNDATION_SYLLABI[0]
+    // Find current class based on index (1-indexed from URL)
+    const classIdx = Math.max(0, parseInt(classId || '1') - 1)
+    const currentClass = FOUNDATION_SYLLABI[classIdx] || FOUNDATION_SYLLABI[0]
 
     const [isPlaying, setIsPlaying] = useState(false)
     const [progress, setProgress] = useState(0)

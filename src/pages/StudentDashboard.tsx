@@ -385,71 +385,36 @@ export default function StudentDashboard() {
                     {/* Sidebar Column */}
                     <div className="space-y-8">
                         {/* PROFESSOR GENERATIVE EXPERIENCE - REPLACES BROKEN VIDEO */}
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center px-2">
-                                <h4 className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em]">Neural Link Status</h4>
-                                <span className="text-[10px] font-mono text-emerald-500">SYNCHRONIZED</span>
-                            </div>
-                            {/* PROFESSOR GENERATIVE DISABLED FOR DEBUGGING
-                            <ProfessorGenerative
-                                transcript="Welcome to the Wealth Game. I’m your professor, Dr. Leverage. Most people are taught that credit is a trap, a way to keep you in debt. That is the old way, the 'Consumer Mindset.' Here at Credit U, we build Architects. We view credit as a tool for Leverage. In the Wealth Game, cash is for spending, but Credit is for building. Your credit report isn't a judgment of your worth; it's a scoreboard of your discipline. A high score tells the world, 'I keep my promises.' Cash takes years to save. Credit allows you to access capital today to buy assets that pay you tomorrow. You are not here to fix a number; you are here to build a legacy. Let's begin."
-                                guidance={amaraGuidance || undefined}
-                            /> 
-                            */}
+                        <CreditUTV
+                            videoUrl="/assets/dorm-welcome.mp4"
+                            transcript="Welcome to the Wealth Game. I’m your professor, Dr. Leverage. Most people are taught that credit is a trap, a way to keep you in debt. That is the old way, the 'Consumer Mindset.' Here at Credit U, we build Architects. We view credit as a tool for Leverage. In the Wealth Game, cash is for spending, but Credit is for building. Your credit report isn't a judgment of your worth; it's a scoreboard of your discipline. A high score tells the world, 'I keep my promises.' Cash takes years to save. Credit allows you to access capital today to buy assets that pay you tomorrow. You are not here to fix a number; you are here to build a legacy. Let's begin."
+                        />
 
-                            <CreditUTV videoUrl="/assets/dorm-welcome.mp4" />
+                        {/* Resource of the Week Card */}
+                        <div className="rounded-2xl bg-indigo-900/10 border border-indigo-500/20 p-4 relative overflow-hidden group hover:border-indigo-500/40 transition-all">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl -mr-10 -mt-10"></div>
 
-                            {/* PROFESSOR GENERATIVE: SAFE MODE (Static Fallback) */}
-                            <div className="relative w-full aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black group shadow-3xl">
-                                <img
-                                    src="/assets/dr-leverage-transmission.png"
-                                    className="w-full h-full object-cover opacity-80"
-                                    alt="Dr. Leverage"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                                <div className="absolute bottom-6 left-6 right-6">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-[0.2em]">Transmission Ready</span>
-                                    </div>
-                                    <h3 className="text-white text-2xl font-heading font-black uppercase italic tracking-tighter mb-1">
-                                        Wealth Game <span className="text-indigo-400">part I</span>
-                                    </h3>
+                            <div className="flex justify-between items-start mb-3 relative z-10">
+                                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] font-bold uppercase tracking-wider border border-indigo-500/20">
+                                    <Sparkles className="w-3 h-3" />
+                                    Intel Drop
                                 </div>
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors cursor-pointer" onClick={() => navigate('/dashboard/curriculum')}>
-                                    <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
-                                        <Play className="w-6 h-6 text-white fill-current translate-x-1" />
-                                    </div>
-                                </div>
+                                <Clock className="w-4 h-4 text-slate-500" />
                             </div>
 
+                            <h3 className="font-bold text-white text-lg leading-tight mb-2 group-hover:text-indigo-300 transition-colors">
+                                {resourceOfTheWeek.title}
+                            </h3>
+                            <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                                {resourceOfTheWeek.description}
+                            </p>
 
-                            {/* Resource of the Week Card */}
-                            <div className="rounded-2xl bg-indigo-900/10 border border-indigo-500/20 p-4 relative overflow-hidden group hover:border-indigo-500/40 transition-all">
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl -mr-10 -mt-10"></div>
-
-                                <div className="flex justify-between items-start mb-3 relative z-10">
-                                    <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] font-bold uppercase tracking-wider border border-indigo-500/20">
-                                        <Sparkles className="w-3 h-3" />
-                                        Intel Drop
-                                    </div>
-                                    <Clock className="w-4 h-4 text-slate-500" />
-                                </div>
-
-                                <h3 className="font-bold text-white text-lg leading-tight mb-2 group-hover:text-indigo-300 transition-colors">
-                                    {resourceOfTheWeek.title}
-                                </h3>
-                                <p className="text-sm text-slate-400 mb-4 line-clamp-2">
-                                    {resourceOfTheWeek.description}
-                                </p>
-
-                                <Button
-                                    className="w-full bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 transition-all font-bold"
-                                    onClick={() => window.open(resourceOfTheWeek.url, '_blank')}
-                                >
-                                    Access Resource <ArrowRight className="w-4 h-4 ml-2" />
-                                </Button>
-                            </div>
+                            <Button
+                                className="w-full bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 transition-all font-bold"
+                                onClick={() => window.open(resourceOfTheWeek.url, '_blank')}
+                            >
+                                Access Resource <ArrowRight className="w-4 h-4 ml-2" />
+                            </Button>
                         </div>
 
                         {/* INGESTED COMPONENT: Identity */}

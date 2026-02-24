@@ -102,12 +102,17 @@ export async function parseCreditReport(file: File): Promise<CreditReportData> {
             accounts.push(finalizeAccount(currentAccount));
         }
 
-        console.log(`Parsed ${accounts.length} accounts.`);
+        // Detect Scores
+        const scoreMatch = fullText.match(PATTERNS.bureauScores);
+        const detectedScore = scoreMatch ? scoreMatch[1] : undefined;
+
+        console.log(`Parsed ${accounts.length} accounts. Detected score: ${detectedScore}`);
 
         return {
             rawText: fullText,
             accounts: accounts,
-            reportDate: new Date().toISOString()
+            reportDate: new Date().toISOString(),
+            score: detectedScore
         };
 
     } catch (error) {

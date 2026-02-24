@@ -25,7 +25,22 @@ export const transcribeAudio = async (audioBlob: Blob) => {
 };
 
 export const synthesizeSpeech = async (text: string) => {
-    // Placeholder for Deepgram Aura TTS integration
-    // Currently Deepgram Node SDK supports this, but for browser usage we might fetch directly or use a proxy if needed
-    // This is a placeholder for future expansion
+    if (!deepgramApiKey) throw new Error('Deepgram API Key is missing');
+
+    const response = await fetch('https://api.deepgram.com/v1/speak?model=aura-asteria-en', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Token ${deepgramApiKey}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`TTS failed: ${error.err_msg || response.statusText}`);
+    }
+
+    const audioBlob = await response.blob();
+    return URL.createObjectURL(audioBlob);
 };
