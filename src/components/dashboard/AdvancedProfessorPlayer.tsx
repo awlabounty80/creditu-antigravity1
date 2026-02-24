@@ -5,6 +5,7 @@ import * as THREE from 'three';
 // @ts-ignore
 import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 import { useSound } from '@/hooks/useSound';
+import { synthesizeSpeech } from '@/lib/deepgram';
 
 interface AdvancedProfessorPlayerProps {
     transcript: string;
@@ -57,6 +58,7 @@ export function AdvancedProfessorPlayer({
     // References
     const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const auraAudioRef = useRef<HTMLAudioElement | null>(null);
 
     // 3D Specific Refs
     const viewerRef = useRef<any>(null);
@@ -138,25 +140,51 @@ export function AdvancedProfessorPlayer({
 
         // ... (Existing TTS logic) ...
         const synth = window.speechSynthesis;
-        const initUtterance = () => {
+        let auraUrl = '';
+
+        const initTTS = async () => {
             if (!transcript) return;
-            const utterance = new SpeechSynthesisUtterance(transcript);
-            // ... (Voice selection logic omitted for brevity, using defaults) ...
-            utterance.rate = 0.95;
-            utterance.onboundary = (event) => {
-                if (event.name === 'word') {
-                    setCurrentWord(transcript.substring(event.charIndex, event.charIndex + event.charLength));
-                }
-            };
-            utterance.onend = () => {
-                setIsPlaying(false);
-                setProgress(100);
-                playSuccess();
-                if (onComplete) onComplete();
-            };
-            utteranceRef.current = utterance;
+
+            // Try Deepgram Aura first
+            try {
+                console.log("Initializing Deepgram Aura TTS...");
+                const url = await synthesizeSpeech(transcript);
+                auraUrl = url;
+                const audio = new Audio(url);
+                auraAudioRef.current = audio;
+
+                audio.ontimeupdate = () => {
+                    const pct = (audio.currentTime / audio.duration) * 100;
+                    setProgress(pct);
+                };
+
+                audio.onended = () => {
+                    setIsPlaying(false);
+                    setProgress(100);
+                    playSuccess();
+                    if (onComplete) onComplete();
+                };
+
+                console.log("Aura TTS Ready.");
+            } catch (err) {
+                console.warn("Aura TTS failed, falling back to Web Speech API:", err);
+                const utterance = new SpeechSynthesisUtterance(transcript);
+                utterance.rate = 0.95;
+                utterance.onboundary = (event) => {
+                    if (event.name === 'word') {
+                        setCurrentWord(transcript.substring(event.charIndex, event.charIndex + event.charLength));
+                    }
+                };
+                utterance.onend = () => {
+                    setIsPlaying(false);
+                    setProgress(100);
+                    playSuccess();
+                    if (onComplete) onComplete();
+                };
+                utteranceRef.current = utterance;
+            }
         };
-        initUtterance();
+        initTTS();
 
         // Used by 3D Setup
         if (!containerRef.current) return;
@@ -211,6 +239,11 @@ export function AdvancedProfessorPlayer({
             renderer.dispose();
             if (containerRef.current) containerRef.current.innerHTML = '';
             synth.cancel();
+            if (auraAudioRef.current) {
+                auraAudioRef.current.pause();
+                auraAudioRef.current = null;
+            }
+            if (auraUrl) URL.revokeObjectURL(auraUrl);
         };
     }, [isVideoMode, transcript, onComplete]);
 
@@ -233,15 +266,25 @@ export function AdvancedProfessorPlayer({
             return;
         }
 
-        // TTS Mode
-        const synth = window.speechSynthesis;
-        if (isPlaying) {
-            synth.pause();
-            setIsPlaying(false);
+        // TTS Mode (Aura or Fallback)
+        if (auraAudioRef.current) {
+            if (isPlaying) {
+                auraAudioRef.current.pause();
+            } else {
+                auraAudioRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
         } else {
-            if (synth.paused && synth.speaking) synth.resume();
-            else if (utteranceRef.current) synth.speak(utteranceRef.current);
-            setIsPlaying(true);
+            // Fallback Web Speech
+            const synth = window.speechSynthesis;
+            if (isPlaying) {
+                synth.pause();
+                setIsPlaying(false);
+            } else {
+                if (synth.paused && synth.speaking) synth.resume();
+                else if (utteranceRef.current) synth.speak(utteranceRef.current);
+                setIsPlaying(true);
+            }
         }
     };
 
@@ -256,6 +299,10 @@ export function AdvancedProfessorPlayer({
                 setProgress(0);
             }
         } else {
+            if (auraAudioRef.current) {
+                auraAudioRef.current.currentTime = 0;
+                auraAudioRef.current.pause();
+            }
             window.speechSynthesis.cancel();
             setIsPlaying(false);
             setProgress(0);
@@ -339,7 +386,7 @@ export function AdvancedProfessorPlayer({
                             <div className="flex items-center gap-2">
                                 <Box className="w-4 h-4 text-cyan-500" />
                                 <span className="text-[10px] font-mono text-cyan-500/70 uppercase tracking-widest">
-                                    {isVideoMode ? "MP4 SOURCE" : "SPLAT DENSITY: OPTIMAL"}
+                                    {isVideoMode ? "MP4 SOURCE" : auraAudioRef.current ? "NEURAL LINK: ENHANCED (AURA)" : "NEURAL LINK: FALLBACK"}
                                 </span>
                             </div>
                             <span className="text-emerald-400 font-mono text-sm">{Math.round(progress)}%</span>

@@ -40,7 +40,7 @@ export function CreditUTV({
                             <div className="w-2 h-2 rounded-full bg-slate-700"></div>
                         </div>
                         <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">
-                            Credit U // Transmission v3.0
+                            Credit U // Transmission v3.1 // AURA
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-[8px] font-mono text-indigo-400">ENCRYPTED</span>
