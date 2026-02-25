@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ExternalLink,
     BookOpen,
@@ -12,7 +12,9 @@ import {
     Instagram,
     Twitter,
     Github,
-    Youtube
+    Youtube,
+    Copy,
+    Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -62,6 +64,18 @@ const GlassLink = ({ href, icon: Icon, label, subtext, premium }: { href: string
 );
 
 export default function LinkView() {
+    const [copied, setCopied] = useState(false);
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#020617] text-slate-200 relative overflow-x-hidden font-sans">
             {/* Background Elements */}
@@ -76,8 +90,54 @@ export default function LinkView() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-12"
+                    className="text-center mb-12 relative"
                 >
+                    {/* Share Button */}
+                    <div className="absolute -top-10 right-0 md:-right-12">
+                        <motion.button
+                            onClick={copyToClipboard}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors group relative"
+                        >
+                            <AnimatePresence mode="wait">
+                                {copied ? (
+                                    <motion.div
+                                        key="check"
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.5 }}
+                                    >
+                                        <Check className="h-4 w-4 text-green-400" />
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="copy"
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.5 }}
+                                    >
+                                        <Copy className="h-4 w-4 text-slate-400 group-hover:text-white" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* Tooltip */}
+                            <AnimatePresence>
+                                {copied && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10 }}
+                                        className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-bold text-green-400"
+                                    >
+                                        Copied!
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.button>
+                    </div>
+
                     <div className="relative mb-6 inline-block">
                         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full blur-xl opacity-50 animate-pulse"></div>
                         <div className="w-24 h-24 rounded-full border-2 border-white/20 p-1 relative z-10 bg-[#0a0f2c]/80 overflow-hidden">
