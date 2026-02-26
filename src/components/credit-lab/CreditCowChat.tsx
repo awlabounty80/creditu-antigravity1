@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Send, ExternalLink, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
+import { supabase } from '@/lib/supabase'
 
 interface Message {
     id: string
@@ -27,46 +28,45 @@ export function CreditCowChat() {
     const handleSend = async () => {
         if (!input.trim()) return
 
-        const apiKey = localStorage.getItem('openai_key')
-        if (!apiKey) {
-            toast.error("Missing Intelligence Key", { description: "Please add your OpenAI Key in Settings > Integrations." })
-            setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: "⚠️ ERROR: I need an OpenAI API Key to think! Please go to Settings > Integrations to add one." }])
-            return
-        }
-
         const userMsg: Message = { id: Date.now().toString(), role: 'user', content: input }
         setMessages(prev => [...prev, userMsg])
         setInput('')
         setLoading(true)
 
         try {
-            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            const { data: { session } } = await supabase.auth.getSession()
+            const token = session?.access_token
+
+            // Fallback for guest mode or if auth fails (the backend might reject or handle it)
+            const headers: Record<string, string> = {
+                'Content-Type': 'application/json'
+            }
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`
+            }
+
+            const res = await fetch('/api/chat', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
+                headers,
                 body: JSON.stringify({
-                    model: 'gpt-3.5-turbo', // Downgraded for compatibility
-                    messages: [
-                        { role: 'system', content: 'You are Credit Cow, the AI mascot of Credit University. You are helpful, encouraging, and knowledgeable about FICO scores, credit repair (FCRA/FDCPA), and financial literacy. You use cow puns occasionally but keep it professional.' },
-                        ...messages.map(m => ({ role: m.role, content: m.content })),
-                        { role: 'user', content: input }
-                    ],
-                    temperature: 0.7
+                    userId: session?.user?.id,
+                    message: input
                 })
             })
 
             const data = await res.json()
-            if (data.error) throw new Error(data.error.message)
 
-            const aiMsg: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: data.choices[0].message.content }
+            if (!res.ok) {
+                throw new Error(data.error || 'Connection refused')
+            }
+
+            const aiMsg: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: data.message }
             setMessages(prev => [...prev, aiMsg])
 
         } catch (e: any) {
             console.error(e)
             toast.error("Brain Freeze!", { description: e.message })
-            setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: `⚠️ Brain Freeze: ${e.message}. Check your API Key.` }])
+            setMessages(prev => [...prev, { id: Date.now().toString(), role: 'assistant', content: `⚠️ Connection Error: ${e.message}. Ensure backend is linked.` }])
         } finally {
             setLoading(false)
         }
