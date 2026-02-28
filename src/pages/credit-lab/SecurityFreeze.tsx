@@ -2,10 +2,8 @@
 import { useNavigate } from 'react-router-dom';
 import {
     Lock,
-    Unlock,
     ShieldCheck,
     ExternalLink,
-    Info,
     AlertTriangle,
     Globe,
     Phone,

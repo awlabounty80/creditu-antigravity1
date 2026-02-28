@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ShieldCheck, Activity, Zap, Brain, Database, Wifi, Lock, Terminal, Cpu, Network, Server, Globe, Radio, Signal } from "lucide-react"
+import { Activity, Zap, Database, Wifi, Radio, Signal } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { BureauConnectModal } from "./BureauConnectModal"
 import { Button } from "@/components/ui/button"
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 export function SystemGaugeGrid() {
     const [scanning, setScanning] = useState(true)
     const [systemHealth, setSystemHealth] = useState(65)
-    const [tick, setTick] = useState(0)
+    const [, setTick] = useState(0)
     const [isConnected, setIsConnected] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -121,7 +121,7 @@ export function SystemGaugeGrid() {
 
             {/* TRI-BUREAU MATRIX */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {bureaus.map((b, i) => (
+                {bureaus.map((b) => (
                     <div key={b.name} className={cn("relative bg-[#0A0F1E] border rounded-xl overflow-hidden transition-all group", isConnected ? "border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]" : "border-white/5 hover:border-white/20")}>
                         {/* Header */}
                         <div className="bg-white/5 p-3 flex justify-between items-center border-b border-white/5">

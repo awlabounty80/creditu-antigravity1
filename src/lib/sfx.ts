@@ -1,7 +1,6 @@
 // Minimal Base64 SFX for immediate feedback
 // These are short, synthesized blips.
 
-const CLICK_SFX = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="; // Placeholder - I will use a real one below
 // Actually, creating real base64 sounds is tricky without a tool. 
 // I will use a very simple oscillator approach or just rely on file paths and ask you to add them later for "Cinematic" quality.
 // But for "High Tech", I can use a tiny Web Audio API synthesizer!

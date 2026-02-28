@@ -74,8 +74,8 @@ export default function VoiceTrainingLab() {
                                 key={drill.id}
                                 onClick={() => setActiveDrill(drill.id)}
                                 className={`p-6 rounded-2xl border cursor-pointer transition-all group relative overflow-hidden ${activeDrill === drill.id
-                                        ? 'bg-indigo-950/40 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.1)]'
-                                        : 'bg-white/5 border-white/5 hover:border-white/10 hover:bg-white/10'
+                                    ? 'bg-indigo-950/40 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.1)]'
+                                    : 'bg-white/5 border-white/5 hover:border-white/10 hover:bg-white/10'
                                     }`}
                             >
                                 <div className="flex items-start justify-between relative z-10">
@@ -88,8 +88,8 @@ export default function VoiceTrainingLab() {
                                                 {drill.title}
                                             </h3>
                                             <span className={`text-xs px-2 py-0.5 rounded border border-white/10 bg-black/20 ${drill.difficulty === 'Basic' ? 'text-emerald-400' :
-                                                    drill.difficulty === 'Intermediate' ? 'text-amber-400' :
-                                                        'text-purple-400'
+                                                drill.difficulty === 'Intermediate' ? 'text-amber-400' :
+                                                    'text-purple-400'
                                                 }`}>
                                                 {drill.difficulty}
                                             </span>
@@ -110,7 +110,6 @@ export default function VoiceTrainingLab() {
                                 {drills.filter(d => d.id === activeDrill).map(drill => (
                                     <VoiceDrill
                                         key={drill.id}
-                                        id={drill.id}
                                         title={drill.title}
                                         targetPhrase={drill.phrase}
                                         difficulty={drill.difficulty as any}

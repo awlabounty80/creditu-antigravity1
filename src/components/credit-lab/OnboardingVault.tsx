@@ -8,7 +8,7 @@ interface OnboardingVaultProps {
     onUploadComplete: (data: CreditReportData) => void
 }
 
-export function OnboardingVault({ onUploadComplete }: OnboardingVaultProps) {
+export default function OnboardingVault({ onUploadComplete }: OnboardingVaultProps) {
     const [isDragging, setIsDragging] = useState(false)
     const [uploading, setUploading] = useState(false)
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, FileText, MessageCircle, Zap } from 'lucide-react'
+import { Plus, FileText, MessageCircle, Zap, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ export function QuickActionsFAB() {
     const navigate = useNavigate()
 
     const actions = [
+        { label: 'Share Profile', icon: ExternalLink, color: 'bg-indigo-600', onClick: () => navigate('/links') },
         { label: 'New Dispute', icon: Zap, color: 'bg-amber-500', onClick: () => navigate('/dashboard/credit-lab') },
         { label: 'Transcript', icon: FileText, color: 'bg-indigo-500', onClick: () => navigate('/dashboard/profile') },
         { label: 'Support', icon: MessageCircle, color: 'bg-emerald-500', onClick: () => navigate('/dashboard/community') },

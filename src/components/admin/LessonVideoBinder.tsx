@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Search, Link as LinkIcon, Save, CheckCircle, Video } from 'lucide-react';
+import { Search, Link as LinkIcon, Save, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';

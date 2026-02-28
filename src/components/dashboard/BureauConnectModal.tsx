@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Shield, Lock, AlertCircle, CheckCircle, Database, Server, Loader2, X } from "lucide-react"
+import { Lock, AlertCircle, CheckCircle, Database, Server, Loader2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
 
 interface BureauConnectModalProps {
     isOpen: boolean

@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Mic, Square, Play, RefreshCw, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Mic, Square, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -7,14 +7,13 @@ import { transcribeAudio } from '@/lib/deepgram';
 import { toast } from 'sonner';
 
 interface VoiceDrillProps {
-    id: string;
     title: string;
     targetPhrase: string;
     difficulty: 'Basic' | 'Intermediate' | 'Advanced';
     onComplete?: (score: number) => void;
 }
 
-export const VoiceDrill = ({ id, title, targetPhrase, difficulty, onComplete }: VoiceDrillProps) => {
+export const VoiceDrill = ({ title, targetPhrase, difficulty, onComplete }: VoiceDrillProps) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [transcript, setTranscript] = useState<string | null>(null);

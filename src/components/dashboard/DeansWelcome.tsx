@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 
 export function DeansWelcome() {
     const [isOpen, setIsOpen] = useState(false)
-    const transcript = "Greetings, Architect. You are now entering the inner sanctum of financial intelligence. Most are taught to fear debt; you will learn to master it. Your transmission has been authorized. Let's begin.";
 
     const togglePlay = () => {
         setIsOpen(!isOpen)

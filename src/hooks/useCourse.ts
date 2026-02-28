@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useProfile } from './useProfile'
 import { getClientCourse } from '@/lib/client-curriculum'
-import { FRESHMAN_FOUNDATIONS_COURSE } from '@/data/static-course'
 
 export interface Lesson {
     id: string

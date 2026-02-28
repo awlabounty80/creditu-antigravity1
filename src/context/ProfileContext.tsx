@@ -67,16 +67,25 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         let mounted = true
 
+        // Safety Timeout: Prevent infinite "Verifying Network" if Supabase fails to respond
+        const timeoutId = setTimeout(() => {
+            if (mounted && loading) {
+                console.warn("ProfileContext: Loading timeout reached. Forcing loading to false.")
+                setLoading(false)
+                isInitialLoadRef.current = false
+            }
+        }, 5000)
+
         // Single Listener Strategy
         // onAuthStateChange handles both initial session and subsequent changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             if (!mounted) return
 
+            // Clear timeout if we get a response
+            clearTimeout(timeoutId)
+
             const newUser = session?.user ?? null
             const newId = newUser?.id ?? null
-
-            // Log event for debugging if needed (remove in production)
-            // console.log("Auth Event:", event, "User:", newId)
 
             // Only act if the identity actually changed
             if (newId !== currentUserIdRef.current) {
@@ -84,7 +93,6 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
                 setUser(newUser)
 
                 if (newId) {
-                    // Start loading only for new users
                     setLoading(true)
                     await fetchProfile(newId)
                 } else {
@@ -93,7 +101,6 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
                     isInitialLoadRef.current = false
                 }
             } else {
-                // Same user, but maybe we were still in initial loading state
                 if (isInitialLoadRef.current) {
                     if (newId) await fetchProfile(newId)
                     else {
@@ -107,6 +114,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         return () => {
             mounted = false
             subscription.unsubscribe()
+            clearTimeout(timeoutId)
         }
     }, [])
 

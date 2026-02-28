@@ -1,17 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Cpu, Activity } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Play, Pause, Cpu } from 'lucide-react';
 import { synthesizeSpeech } from '@/lib/deepgram';
 
 interface ProfessorGenerativeProps {
     transcript?: string;
-    guidance?: any;
     professorImage?: string;
     onComplete?: () => void;
 }
 
 export function ProfessorGenerative({
     transcript,
-    guidance,
     professorImage = '/assets/dr-leverage-transmission.png',
     onComplete
 }: ProfessorGenerativeProps) {

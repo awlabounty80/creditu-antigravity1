@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Crown, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,10 +42,10 @@ export function LevelUpOverlay({ newLevel, onDismiss }: LevelUpOverlayProps) {
 
         let iteration = 0;
         const interval = setInterval(() => {
-            setDisplayText(prev =>
+            setDisplayText(() =>
                 newLevel
                     .split("")
-                    .map((letter, index) => {
+                    .map((_, index) => {
                         if (index < iteration) {
                             return newLevel[index];
                         }

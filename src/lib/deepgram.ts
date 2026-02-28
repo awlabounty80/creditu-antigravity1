@@ -6,12 +6,21 @@ if (!deepgramApiKey) {
     console.warn('Missing VITE_DEEPGRAM_API_KEY in environment variables. Voice features may not work.');
 }
 
-export const deepgram = createClient(deepgramApiKey || '');
+// Initialize lazily to prevent top-level crash
+let client: any = null;
+const getDeepgramClient = () => {
+    if (!deepgramApiKey) return null;
+    if (!client) client = createClient(deepgramApiKey);
+    return client;
+};
+
+export const deepgram = getDeepgramClient();
 
 export const transcribeAudio = async (audioBlob: Blob) => {
-    if (!deepgramApiKey) throw new Error('Deepgram API Key is missing');
+    const dgClient = getDeepgramClient();
+    if (!dgClient) throw new Error('Deepgram API Key is missing');
 
-    const { result, error } = await (deepgram.listen.prerecorded as any).transcribeFile(
+    const { result, error } = await (dgClient.listen.prerecorded as any).transcribeFile(
         audioBlob as any,
         {
             model: 'nova-2',

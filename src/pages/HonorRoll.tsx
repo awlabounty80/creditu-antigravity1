@@ -1,7 +1,7 @@
 import { DashboardLayout } from "../components/layout/DashboardLayout";
 import { LeaderboardTable } from "../components/community/LeaderboardTable";
 
-export const HonorRoll = () => {
+const HonorRoll = () => {
     return (
         <DashboardLayout>
             <div className="bg-[#050505] min-h-screen p-8 text-white space-y-8">
@@ -19,3 +19,5 @@ export const HonorRoll = () => {
         </DashboardLayout>
     );
 };
+
+export default HonorRoll;

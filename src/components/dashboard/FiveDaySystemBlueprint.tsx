@@ -1,5 +1,4 @@
-import { motion } from "framer-motion"
-import { CheckCircle, Lock, Monitor, FileText, TrendingUp, Zap, Flag, Target, Shield, Search } from "lucide-react"
+import { Lock, FileText, TrendingUp, Zap, Target, Shield, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function FiveDaySystemBlueprint() {

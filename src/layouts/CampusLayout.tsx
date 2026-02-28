@@ -147,7 +147,7 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
                     </button>
 
                     <div className="mt-6 text-center text-[10px] text-slate-700 font-mono">
-                        v2.0.4 • HIGH TABLE
+                        v2.0.6 • STABILIZED
                     </div>
 
                     {profile?.role === 'admin' && (

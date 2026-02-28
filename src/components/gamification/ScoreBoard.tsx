@@ -1,14 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { motion, useSpring, useTransform, animate } from 'framer-motion'
+import { motion, useSpring, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { Trophy, TrendingUp, Activity, Star, Zap, Crown } from 'lucide-react'
+import { Activity, Star, Zap, Crown } from 'lucide-react'
 
 interface ScoreBoardProps {
     creditScore: number
     xp: number
     streak: number
     rank?: string
-    maxScore?: number
 }
 
 function Counter({ value, className }: { value: number, className?: string }) {
@@ -23,7 +22,7 @@ function Counter({ value, className }: { value: number, className?: string }) {
     return <motion.span ref={ref} className={className}>{display}</motion.span>
 }
 
-export function ScoreBoard({ creditScore, xp, streak, rank = "Cadet", maxScore = 850 }: ScoreBoardProps) {
+export function ScoreBoard({ creditScore, xp, streak, rank = "Cadet" }: ScoreBoardProps) {
     const progress = Math.min(100, Math.max(0, ((creditScore - 300) / (850 - 300)) * 100))
 
     return (

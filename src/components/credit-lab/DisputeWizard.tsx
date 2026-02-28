@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
-    AlertCircle, ChevronRight, FileText, ArrowLeft, ShieldAlert, Check, Shield, Clock, Upload, Loader2,
-    Scale, Zap, Brain, Scroll, CheckCircle2, Lock, Gavel, Layers
+    ChevronRight, FileText, ArrowLeft, ShieldAlert, Check, Shield, Clock, Upload, Loader2,
+    Scale, Zap, Brain
 } from 'lucide-react'
 import { CreditReportData, ParsedAccount, parseCreditReport } from '@/lib/credit-parser'
 import { validateDisputeContent, generateAuditFooter, ValidationResult } from '@/lib/governance'
 import { useProfile } from '@/hooks/useProfile'
 import { useGamification } from '@/hooks/useGamification'
-import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import html2pdf from 'html2pdf.js'
 
@@ -52,7 +50,7 @@ interface DisputeWizardProps {
 type WizardStep = 'select' | 'reason' | 'review'
 
 export function DisputeWizard({ reportData, onCancel }: DisputeWizardProps) {
-    const { profile } = useProfile()
+    useProfile()
     // @ts-ignore
     const { awardPoints } = useGamification()
     const [step, setStep] = useState<WizardStep>('select')
@@ -61,7 +59,7 @@ export function DisputeWizard({ reportData, onCancel }: DisputeWizardProps) {
     // MULTI-SELECT STATE
     const [selectedAccountIds, setSelectedAccountIds] = useState<Set<string>>(new Set())
 
-    const [disputeType, setDisputeType] = useState<string>('')
+    const [, setDisputeType] = useState<string>('')
     const [letterContent, setLetterContent] = useState<string>('')
     const [isAnalyzing, setIsAnalyzing] = useState(false)
 
@@ -74,8 +72,6 @@ export function DisputeWizard({ reportData, onCancel }: DisputeWizardProps) {
     const [customNotes, setCustomNotes] = useState('')
     const [validation, setValidation] = useState<ValidationResult>({ isValid: true })
     const [downloading, setDownloading] = useState(false)
-    const [saving, setSaving] = useState(false)
-    const [saveSuccess, setSaveSuccess] = useState(false)
 
     // Strategy HUD State
     const [strategyLaw, setStrategyLaw] = useState<string>('FCRA 611')

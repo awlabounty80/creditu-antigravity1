@@ -4,18 +4,11 @@ import {
     Book,
     Search,
     Gavel,
-    ShieldAlert,
-    FileText,
-    ChevronRight,
-    Landmark,
-    Scroll,
-    AlertTriangle,
-    CheckCircle2
+    ShieldAlert
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
 
 // ------------------------------------------------------------------
 // CONSUMER LAW DATABASE (INFINITE KNOWLEDGE)
@@ -132,7 +125,6 @@ A debt collector may not use any false, deceptive, or misleading representation 
 ];
 
 export default function ConsumerLaw() {
-    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [activeAct, setActiveAct] = useState<'ALL' | 'FCRA' | 'FDCPA'>('ALL');
 
@@ -227,8 +219,8 @@ export default function ConsumerLaw() {
                             <CardHeader className="relative z-10 pb-2">
                                 <div className="flex items-center gap-3 mb-2">
                                     <span className={`text-[10px] font-bold px-2 py-1 rounded border uppercase tracking-widest ${law.act === 'FCRA'
-                                            ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-                                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                        ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                        : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                                         }`}>
                                         {law.act}
                                     </span>

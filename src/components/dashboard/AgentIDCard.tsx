@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { Shield, Target, QrCode } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export function AgentIDCard() {
     const { profile } = useProfile();

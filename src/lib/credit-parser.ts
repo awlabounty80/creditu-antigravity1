@@ -50,7 +50,6 @@ export async function parseCreditReport(file: File): Promise<CreditReportData> {
 
         // 2. Parser State Machine
         let currentAccount: Partial<ParsedAccount> | null = null;
-        let bufferCount = 0; // To detect end of account block
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];

@@ -1,14 +1,6 @@
 import {
     Scale,
-    CreditCard,
-    Shield,
-    TrendingDown,
-    FileText,
-    Gavel,
-    Landmark,
-    Calculator,
-    AlertTriangle,
-    CheckCircle2
+    FileText
 } from 'lucide-react';
 
 export interface ArticleData {
