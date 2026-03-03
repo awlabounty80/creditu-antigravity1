@@ -151,7 +151,7 @@ export default function LinkView() {
                             />
                         </div>
                     </div>
-                    <h1 className="text-3xl font-black text-white tracking-tight mb-2 italic">CREDIT UNIVERSITY™</h1>
+                    <h1 className="text-3xl font-black text-white tracking-tight mb-2 italic">thecredituniversityai.com</h1>
                     <p className="text-slate-400 text-sm max-w-xs mx-auto">Master the systems of financial leverage and asset protection.</p>
                 </motion.div>
 
@@ -247,7 +247,7 @@ export default function LinkView() {
                     className="mt-20 text-center"
                 >
                     <div className="text-[10px] uppercase tracking-widest text-slate-600 font-bold">
-                        © 2026 Credit University • All Protocols Active
+                        © 2026 thecredituniversityai.com • All Protocols Active
                     </div>
                 </motion.div>
             </div>

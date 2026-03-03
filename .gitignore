@@ -6,3 +6,4 @@ dist
 .gemini
 coverage
 build
+.vercel

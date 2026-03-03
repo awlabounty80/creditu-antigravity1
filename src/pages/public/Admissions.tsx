@@ -80,7 +80,7 @@ export default function Admissions() {
                         <CreditULogo className="w-10 h-10" variant="gold" showShield={false} iconClassName="w-6 h-6" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-heading font-black tracking-tighter text-xl text-white group-hover:text-indigo-400 transition-colors uppercase italic leading-none">CREDIT U</span>
+                        <span className="font-heading font-black tracking-tighter text-xl text-white group-hover:text-indigo-400 transition-colors uppercase italic leading-none">thecredituniversityai.com</span>
                         <span className="text-[8px] font-mono text-slate-500 tracking-[0.4em] uppercase">Admissions Office</span>
                     </div>
                 </Link>
@@ -273,7 +273,7 @@ export default function Admissions() {
             {/* Subtle Footer */}
             <footer className="relative z-10 p-12 text-center">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 border-t border-white/5 pt-12">
-                    <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">© 2026 Credit University // Innovation District</p>
+                    <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">© 2026 thecredituniversityai.com // Innovation District</p>
                     <div className="flex gap-8">
                         {['Academy Terms', 'Privacy Protocol', 'Honesty Code'].map((item) => (
                             <a key={item} href="#" className="text-[10px] font-mono text-slate-500 uppercase tracking-widest hover:text-white transition-colors">{item}</a>

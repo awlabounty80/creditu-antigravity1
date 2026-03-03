@@ -16,7 +16,8 @@ export function StudentIdCard() {
                     </div>
                     <div>
                         <div className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-0.5">Freshman Admission</div>
-                        <div className="text-xl font-bold text-white tracking-wide font-heading">CREDIT UNIVERSITY</div>
+                        <div className="text-xl font-bold text-white tracking-wide font-heading mb-0.5">CREDIT UNIVERSITY</div>
+                        <div className="text-[8px] font-bold text-amber-500/80 uppercase tracking-[0.15em]">thecredituniversityai.com</div>
                     </div>
                 </div>
                 <div className="text-right relative z-10">

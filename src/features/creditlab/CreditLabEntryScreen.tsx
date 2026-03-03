@@ -54,7 +54,7 @@ export const CreditLabEntryScreen = () => {
                 >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-900/10 text-amber-500 text-xs font-bold tracking-widest uppercase">
                         <ShieldCheck className="w-3 h-3" />
-                        The Credit University AI™
+                        thecredituniversityai.com
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight">
@@ -106,7 +106,7 @@ export const CreditLabEntryScreen = () => {
                         {/* Jacket Embroidery Spec (Visual Only) */}
                         <div className="absolute bottom-20 right-6 text-right">
                             <div className="text-[10px] text-amber-500/80 font-serif tracking-widest uppercase opacity-60">
-                                The Credit University AI™
+                                thecredituniversityai.com
                             </div>
                         </div>
                     </div>

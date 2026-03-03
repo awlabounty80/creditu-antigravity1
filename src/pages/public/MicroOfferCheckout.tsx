@@ -17,6 +17,11 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import { loadStripe } from '@stripe/stripe-js'
+
+// --- INITIALIZE STRIPE ---
+const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
 
 const ICONS: Record<string, any> = {
     RefreshCw,
@@ -34,41 +39,146 @@ export default function MicroOfferCheckout() {
 
     useEffect(() => {
         const fetchOffer = async () => {
-            const { data, error } = await supabase
-                .from('micro_offers')
-                .select('*')
-                .eq('slug', slug)
-                .single()
+            console.log('[MicroOfferCheckout] Fetching offer for slug:', slug)
 
-            if (error || !data) {
-                toast.error("Offer protocol not found.")
-                navigate('/pre-reg')
-                return
+            // Safety timeout
+            const timeout = setTimeout(() => {
+                if (loading) {
+                    console.error('[MicroOfferCheckout] Fetch timeout reached')
+                    toast.error("Network synchronization timeout.")
+                    setLoading(false)
+                }
+            }, 10000)
+
+            try {
+                const { data, error } = await supabase
+                    .from('micro_offers')
+                    .select('*')
+                    .eq('slug', slug)
+                    .single()
+
+                clearTimeout(timeout)
+
+                if (error) {
+                    console.error('[MicroOfferCheckout] Supabase error:', error)
+                    toast.error("Offer protocol not found.")
+                    navigate('/pre-reg')
+                    return
+                }
+
+                if (!data) {
+                    console.error('[MicroOfferCheckout] No data returned for slug:', slug)
+                    toast.error("Offer data missing.")
+                    navigate('/pre-reg')
+                    return
+                }
+
+                console.log('[MicroOfferCheckout] Offer loaded:', data.title)
+                setOffer(data)
+                setLoading(false)
+            } catch (err) {
+                console.error('[MicroOfferCheckout] Unexpected error:', err)
+                setLoading(false)
             }
-
-            setOffer(data)
-            setLoading(false)
         }
         fetchOffer()
     }, [slug, navigate])
 
     const handlePurchase = async () => {
+        if (!offer) {
+            console.error('[MicroOfferCheckout] Cannot purchase: No offer data.')
+            return
+        }
         setIsPurchasing(true)
+        console.log('[MicroOfferCheckout] Starting purchase sequence for:', offer.title)
+        console.log('[MicroOfferCheckout] Payload verification:', {
+            offerId: offer.id,
+            offerTitle: offer.title,
+            price: offer.price,
+            origin: window.location.origin
+        })
 
-        // SIMULATION: In a real app, this triggers Stripe
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        if (!supabase || !supabase.functions) {
+            console.error('[MicroOfferCheckout] Supabase client or functions module missing!', supabase)
+            toast.error("System configuration error. Please refresh.")
+            setIsPurchasing(false)
+            return
+        }
 
-        // On success, apply tag to current user profile if logged in
-        // For this pre-reg flow, we'd usually ask for email first if they aren't logged in
-        toast.success("Intelligence Secured. Check your inbox for access.")
-        setIsPurchasing(false)
-        navigate('/welcome')
+        try {
+            console.log('[MicroOfferCheckout] Calling Stripe Session Generator via direct fetch...')
+
+            // 1. Call Supabase Edge Function to create Stripe Session
+            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+                    'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({
+                    offerId: offer.id,
+                    offerTitle: offer.title,
+                    price: offer.price,
+                    successUrl: `${window.location.origin}/welcome?success=true`,
+                    cancelUrl: window.location.href,
+                })
+            })
+
+            console.log('[MicroOfferCheckout] Fetch status:', response.status)
+            const data = await response.json()
+            console.log('[MicroOfferCheckout] Fetch response data:', data)
+
+            if (!response.ok) {
+                console.error('[MicroOfferCheckout] Fetch failed:', data)
+                throw new Error(data.error || `Server responded with ${response.status}`)
+            }
+
+            // 2. Redirect to Stripe Checkout URL
+            if (data?.url) {
+                console.log('[MicroOfferCheckout] Redirecting to Stripe:', data.url)
+                window.location.href = data.url
+            } else {
+                console.error('[MicroOfferCheckout] No URL in response data:', data)
+                throw new Error("Stripe session creation failed - No URL returned.")
+            }
+
+        } catch (error: any) {
+            console.error('[MicroOfferCheckout] Critical Purchase Error:', error)
+            // Log the full error object for deep debugging
+            console.dir(error)
+
+            const errorMessage = error.message || (typeof error === 'string' ? error : "Financial synchronization failed.")
+            toast.error(errorMessage)
+            setIsPurchasing(false)
+        }
     }
 
     if (loading) {
         return (
             <div className="min-h-screen bg-[#020412] flex items-center justify-center">
                 <Loader2 className="w-12 h-12 text-amber-500 animate-spin" />
+            </div>
+        )
+    }
+
+    if (!offer) {
+        return (
+            <div className="min-h-screen bg-[#020412] flex flex-col items-center justify-center space-y-6">
+                <ShieldCheck className="w-16 h-16 text-slate-700" />
+                <div className="text-center">
+                    <h2 className="text-xl font-bold text-white mb-2">Synchronization Failed</h2>
+                    <p className="text-slate-500 mb-6">We couldn't retrieve the offer protocol from the server.</p>
+                </div>
+                <Button
+                    onClick={() => window.location.reload()}
+                    className="bg-amber-500 hover:bg-amber-600 text-black font-bold px-8 py-2 rounded-lg"
+                >
+                    Retry Connection
+                </Button>
+                <Link to="/pre-reg" className="text-xs text-slate-500 hover:text-white uppercase tracking-widest font-bold">
+                    Back to Orientation
+                </Link>
             </div>
         )
     }
@@ -116,14 +226,16 @@ export default function MicroOfferCheckout() {
 
                         <div className="space-y-4">
                             <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] mb-6">What You Get:</h3>
-                            {offer.description.map((item: string, i: number) => (
+                            {Array.isArray(offer.description) ? offer.description.map((item: string, i: number) => (
                                 <div key={i} className="flex items-start gap-4 group">
                                     <div className="mt-1 p-1 rounded-full bg-emerald-500/20 text-emerald-400 flex-shrink-0 group-hover:scale-110 transition-transform">
                                         <Check size={12} strokeWidth={3} />
                                     </div>
                                     <span className="text-slate-200 font-medium group-hover:text-white transition-colors tracking-tight">{item}</span>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-slate-500 text-xs italic">Protocol details encrypted.</p>
+                            )}
                         </div>
 
                         <div className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl">
@@ -168,10 +280,28 @@ export default function MicroOfferCheckout() {
                                     </div>
                                 </div>
 
-                                <Button
-                                    onClick={handlePurchase}
+                                <button
+                                    onClick={(e) => {
+                                        console.log('[MicroOfferCheckout] NATIVE BUTTON CLICKED', e)
+                                        handlePurchase()
+                                    }}
                                     disabled={isPurchasing}
-                                    className="w-full h-16 bg-white hover:bg-slate-200 text-black font-black text-lg uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.02] transition-all relative overflow-hidden group"
+                                    style={{
+                                        width: '100%',
+                                        height: '4rem',
+                                        backgroundColor: 'white',
+                                        color: 'black',
+                                        fontWeight: 900,
+                                        fontSize: '1.125rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.1em',
+                                        borderRadius: '0.75rem',
+                                        border: 'none',
+                                        cursor: isPurchasing ? 'not-allowed' : 'pointer',
+                                        position: 'relative',
+                                        zIndex: 100,
+                                        opacity: isPurchasing ? 0.5 : 1
+                                    }}
                                 >
                                     <AnimatePresence mode="wait">
                                         {isPurchasing ? (
@@ -196,7 +326,7 @@ export default function MicroOfferCheckout() {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </Button>
+                                </button>
 
                                 <div className="mt-8 flex flex-col items-center gap-4">
                                     <div className="flex items-center gap-2 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">

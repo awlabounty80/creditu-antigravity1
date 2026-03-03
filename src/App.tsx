@@ -3,6 +3,10 @@ import { AdmissionsProvider } from './context/AdmissionsContext'
 import { ProfileProvider } from './context/ProfileContext'
 import { RequireAuth } from './components/auth/RequireAuth'
 import { Suspense, lazy } from 'react'
+import MicroOfferCheckout from './pages/public/MicroOfferCheckout'
+import { ErrorBoundary } from './components/debug/ErrorBoundary'
+import { NodeRoutes, AdminNodeRoutes } from './nodes/NodeRouter'
+import StudentDashboard from './pages/StudentDashboard'
 
 // --- Public Pages ---
 const CreditUniversityLanding = lazy(() => import('./pages/public/CreditUniversityLanding'))
@@ -16,7 +20,6 @@ const OnboardingVault = lazy(() => import('./components/credit-lab/OnboardingVau
 const LinkView = lazy(() => import('./pages/public/LinkView'))
 
 // --- Campus Pages ---
-import StudentDashboard from './pages/StudentDashboard'
 const Curriculum = lazy(() => import('./pages/Curriculum'))
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'))
 const KnowledgeCenter = lazy(() => import('./pages/KnowledgeCenter'))
@@ -60,12 +63,11 @@ import PublicLayout from './layouts/PublicLayout'
 import CampusLayout from './layouts/CampusLayout'
 import AdminLayout from './layouts/AdminLayout'
 
-// --- Auth Bypass Component ---
-import { NodeRoutes, AdminNodeRoutes } from './nodes/NodeRouter'
 
 function App() {
     return (
         <ProfileProvider>
+            <div className="fixed top-0 left-0 bg-red-600 text-white p-1 z-[9999] text-[8px] font-mono">APP_RELOAD_FORCE_V1</div>
             <AdmissionsProvider>
                 <Router>
                     <Routes>
@@ -81,6 +83,7 @@ function App() {
 
                         {/* Pre-Registration Node (Public) */}
                         <Route path="/pre-reg" element={<Suspense fallback={null}><Outlet /></Suspense>}>
+                            <Route path="offer/:slug" element={<MicroOfferCheckout />} />
                             {NodeRoutes()}
                         </Route>
 
@@ -156,8 +159,9 @@ function App() {
                         {/* Fallback to Dashboard */}
                         <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
-                    <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono">
-                        v2.0.6 - STABILIZED
+                    <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono flex flex-col gap-0">
+                        <div>v2.0.7 - STABILIZED // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
+                        <div className="text-amber-500/50 text-[8px]">STRIPE TEST MODE ACTIVE</div>
                     </div>
                 </Router>
             </AdmissionsProvider>

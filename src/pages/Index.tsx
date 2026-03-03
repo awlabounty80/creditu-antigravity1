@@ -43,17 +43,16 @@ export default function Index() {
 
                     {/* Badge/Logo Placeholder */}
                     <div className="mb-8 animate-in fade-in zoom-in duration-700 hover:scale-105 transition-transform cursor-pointer">
-                        <img 
-                            src="/assets/credit-u-seal.png" 
-                            alt="Credit University Seal" 
+                        <img
+                            src="/assets/credit-u-seal.png"
+                            alt="Credit University Seal"
                             className="w-48 h-48 md:w-64 md:h-64 rounded-full shadow-[0_0_50px_rgba(250,204,21,0.3)] filter drop-shadow-2xl"
                         />
                     </div>
 
                     {/* Headlines */}
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-4 drop-shadow-xl">
-                        Welcome to The Credit<br />
-                        University AI&trade;
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-4 drop-shadow-xl italic">
+                        thecredituniversityai.com
                     </h1>
 
                     <h2 className="text-xl md:text-2xl font-bold text-blue-100 mb-6 max-w-2xl">
