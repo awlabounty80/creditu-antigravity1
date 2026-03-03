@@ -67,7 +67,6 @@ import AdminLayout from './layouts/AdminLayout'
 function App() {
     return (
         <ProfileProvider>
-            <div className="fixed top-0 left-0 bg-red-600 text-white p-1 z-[9999] text-[8px] font-mono">APP_RELOAD_FORCE_V1</div>
             <AdmissionsProvider>
                 <Router>
                     <Routes>
