@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Users, GraduationCap, PlayCircle, Star, Quote, ArrowRight } from 'lucide-react'
+import { Users, GraduationCap, PlayCircle, Star, Quote, ArrowRight, Shield, Activity } from 'lucide-react'
 import { CreditULogo } from '@/components/common/CreditULogo'
 import { motion } from 'framer-motion'
 
@@ -105,6 +105,7 @@ export default function CreditUniversityLanding() {
                         <TrustBadge label="50K+ Students" icon={Users} delay={0.1} />
                         <TrustBadge label="HBCU Excellence" icon={GraduationCap} delay={0.2} />
                         <TrustBadge label="AI Powered" icon={Star} delay={0.3} />
+                        <TrustBadge label="AI Approved" icon={Shield} delay={0.4} />
                     </div>
 
                     <motion.div
@@ -130,7 +131,7 @@ export default function CreditUniversityLanding() {
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="flex flex-col md:flex-row items-center justify-center gap-6 pt-16"
                     >
-                        <Link to="/apply" className="group">
+                        <Link to="/dorm-week" className="group">
                             <div className="relative">
                                 <div className="absolute inset-0 bg-amber-500 rounded-full blur-lg opacity-40 group-hover:opacity-60 transition-opacity animate-pulse"></div>
                                 <Button size="lg" className="relative h-20 px-12 text-xl bg-white text-indigo-950 hover:bg-amber-50 hover:text-black font-bold rounded-full transition-all border-4 border-white/10 group-hover:scale-105">
@@ -152,6 +153,59 @@ export default function CreditUniversityLanding() {
                 {/* Video/Preview Scroller (Mock) */}
                 <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#020412] to-transparent z-20"></div>
             </header>
+
+            {/* --- MISSION BRIEFING SECTION (RESTORED) --- */}
+            <section className="relative py-24 bg-black overflow-hidden">
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="h-px flex-1 bg-amber-500/20"></div>
+                            <div className="flex items-center gap-2 px-4 py-1 rounded-full border border-amber-500/50 bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-[0.3em]">
+                                <Activity size={12} /> Strategic Intent
+                            </div>
+                            <div className="h-px flex-1 bg-amber-500/20"></div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h2 className="text-4xl md:text-5xl font-black text-white italic uppercase leading-none mb-6">
+                                    THE MISSION <br /><span className="text-amber-500">BRIEFING</span>
+                                </h2>
+                                <p className="text-slate-400 text-lg leading-relaxed mb-6 font-light">
+                                    Credit U™ is not just educational software. It is a tactical deployment system designed to repair the financial nervous system of our community.
+                                </p>
+                                <div className="space-y-4">
+                                    {[
+                                        "Phase 1: Identity Reframe & Protocol Acceptance",
+                                        "Phase 2: Credit Architecture & Bureau Neutralization",
+                                        "Phase 3: High-Limit Funding & Capital Deployment"
+                                    ].map((text, i) => (
+                                        <div key={i} className="flex items-center gap-3 text-sm font-bold text-slate-200 uppercase tracking-widest">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                                            {text}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-blue-600 blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                                <div className="relative p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+                                    <div className="text-[10px] font-mono text-indigo-400 mb-4 uppercase tracking-widest">System Status: OPTIMIZED</div>
+                                    <div className="h-40 flex items-center justify-center">
+                                        <div className="relative">
+                                            <div className="absolute inset-0 animate-ping bg-amber-500/20 rounded-full"></div>
+                                            <Shield size={64} className="text-amber-500 relative z-10" />
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 text-center text-xs text-slate-500 uppercase tracking-widest font-bold">
+                                        AI SECURITY LAYER: <span className="text-emerald-500">ENFORCED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* --- IMMERSIVE VIDEO SECTION --- */}
             <section className="relative py-20 -mt-20 z-20">

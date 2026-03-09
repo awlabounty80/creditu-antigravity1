@@ -116,7 +116,7 @@ export default function TheGate() {
                 {/* ACCESS GRID */}
                 {/* HERO ACTION - STEP 1 */}
                 <div className="w-full max-w-2xl mb-8">
-                    <Link to="/onboarding" className="group relative w-full block">
+                    <Link to="/dorm-week" className="group relative w-full block">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

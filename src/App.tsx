@@ -18,10 +18,10 @@ const CampusTour = lazy(() => import('./pages/public/CampusTour'))
 const Login = lazy(() => import('./pages/Login'))
 const OnboardingVault = lazy(() => import('./components/credit-lab/OnboardingVault'))
 const LinkView = lazy(() => import('./pages/public/LinkView'))
+const DormWeek = lazy(() => import('./pages/public/DormWeek'))
 
 // --- Campus Pages ---
 const Curriculum = lazy(() => import('./pages/Curriculum'))
-const CoursePlayer = lazy(() => import('./pages/CoursePlayer'))
 const KnowledgeCenter = lazy(() => import('./pages/KnowledgeCenter'))
 const CreditQuest = lazy(() => import('./pages/CreditQuest'))
 const CreditTools = lazy(() => import('./pages/CreditTools'))
@@ -51,17 +51,26 @@ const ToolsHub = lazy(() => import('./pages/ToolsHub'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const StudentManifest = lazy(() => import('./pages/admin/UserManager'))
 const ReferralLog = lazy(() => import('./pages/admin/AdminReferralLog'))
+const VideoModeration = lazy(() => import('./pages/admin/VideoModeration'))
+const AdminLeaderboard = lazy(() => import('./pages/admin/Leaderboard'))
 
 // --- New Labs & Nodes ---
 const VisibilityStrategyLab = lazy(() => import('./pages/campus/VisibilityStrategyLab'))
 const FreshmanClassroom = lazy(() => import('./pages/classroom/FreshmanClassroom'))
 const VoiceTrainingLab = lazy(() => import('./pages/campus/VoiceTrainingLab'))
 const ConsumerLaw = lazy(() => import('./pages/library/ConsumerLaw'))
+const DormWeekPreReg = lazy(() => import('./nodes/DormWeekPreReg/DormWeekPreReg'))
+const StudentLocker = lazy(() => import('./pages/campus/StudentLocker'))
+const LearnHub = lazy(() => import('./pages/learn/LearnHub'))
+const TrackView = lazy(() => import('./pages/learn/TrackView'))
+const CoursePlayer = lazy(() => import('./pages/learn/CoursePlayer'))
 
 // --- Layouts ---
 import PublicLayout from './layouts/PublicLayout'
 import CampusLayout from './layouts/CampusLayout'
 import AdminLayout from './layouts/AdminLayout'
+import { DormWeekGuard } from './components/auth/DormWeekGuard'
+const AdminDormWeek = lazy(() => import('./pages/admin/AdminDormWeek'))
 
 
 function App() {
@@ -70,15 +79,22 @@ function App() {
             <AdmissionsProvider>
                 <Router>
                     <Routes>
-                        {/* Public Front Door */}
-                        <Route path="/" element={<Suspense fallback={null}><CreditUniversityLanding /></Suspense>} />
-                        <Route path="/gate" element={<Suspense fallback={null}><TheGate /></Suspense>} />
-                        <Route path="/gate-a" element={<Suspense fallback={null}><TheGateVariantA /></Suspense>} />
-                        <Route path="/gate-b" element={<Suspense fallback={null}><TheGateVariantB /></Suspense>} />
-                        <Route path="/tour" element={<Suspense fallback={null}><CampusTour /></Suspense>} />
-                        <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
+                        {/* Public Front Door (Redirected to admissions for build review) */}
+                        <Route path="/" element={<Navigate to="/admissions" replace />} />
+                        <Route path="/login" element={<Navigate to="/admissions" replace />} />
                         <Route path="/links" element={<Suspense fallback={null}><LinkView /></Suspense>} />
-                        <Route path="/admissions" element={<Suspense fallback={null}><Admissions /></Suspense>} />
+                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
+                        <Route path="/learn" element={<Suspense fallback={null}><LearnHub /></Suspense>} />
+                        <Route path="/learn/:trackSlug" element={<Suspense fallback={null}><TrackView /></Suspense>} />
+                        <Route path="/learn/:trackSlug/:lessonSlug" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
+                        <Route path="/locker" element={<Suspense fallback={null}><StudentLocker /></Suspense>} />
+                        <Route path="/apply" element={<Navigate to="/admissions" replace />} />
+                        <Route path="/accepted" element={<Navigate to="/admissions" replace />} />
+                        <Route path="/gate" element={<Navigate to="/admissions" replace />} />
+
+                        {/* Gated Dorm Week routes */}
+                        <Route path="/dorm-week" element={<DormWeekGuard><Suspense fallback={null}><DormWeek /></Suspense></DormWeekGuard>} />
+                        <Route path="/dorm-week/protocol" element={<DormWeekGuard><Suspense fallback={null}><Orientation /></Suspense></DormWeekGuard>} />
 
                         {/* Pre-Registration Node (Public) */}
                         <Route path="/pre-reg" element={<Suspense fallback={null}><Outlet /></Suspense>}>
@@ -96,7 +112,6 @@ function App() {
                         } />
 
                         {/* Admissions & Course Overrides */}
-                        <Route path="/apply" element={<Navigate to="/gate" replace />} />
                         <Route path="/curriculum" element={<Navigate to="/dashboard/curriculum" replace />} />
 
                         <Route path="/dashboard" element={
@@ -150,17 +165,20 @@ function App() {
                             </RequireAuth>
                         }>
                             <Route index element={<Suspense fallback={null}><AdminDashboard /></Suspense>} />
-                            <Route path="students" element={<Suspense fallback={null}><StudentManifest /></Suspense>} />
+                            <Route path="users" element={<Suspense fallback={null}><StudentManifest /></Suspense>} />
+                            <Route path="dormweek" element={<Suspense fallback={null}><AdminDormWeek /></Suspense>} />
                             <Route path="referrals" element={<Suspense fallback={null}><ReferralLog /></Suspense>} />
+                            <Route path="moderation" element={<Suspense fallback={null}><VideoModeration /></Suspense>} />
+                            <Route path="leaderboard" element={<Suspense fallback={null}><AdminLeaderboard /></Suspense>} />
                             {AdminNodeRoutes()}
                         </Route>
 
-                        {/* Fallback to Dashboard */}
-                        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                        {/* Fallback to Admissions (Public) instead of Dashboard (Protected) to avoid login loops */}
+                        <Route path="*" element={<Navigate to="/admissions" replace />} />
                     </Routes>
                     <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono flex flex-col gap-0">
-                        <div>v2.0.7 - STABILIZED // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
-                        <div className="text-amber-500/50 text-[8px]">STRIPE TEST MODE ACTIVE</div>
+                        <div>v2.1.0 - SLOT_RESTORED // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
+                        <div className="text-amber-500/50 text-[8px]">STRIPE {import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_') ? 'TEST MODE ACTIVE' : 'LIVE MODE ACTIVE'}</div>
                     </div>
                 </Router>
             </AdmissionsProvider>

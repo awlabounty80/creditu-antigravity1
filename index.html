@@ -13,6 +13,26 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
     rel="stylesheet">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    // NUCLEAR CACHE BUSTER v2.0.9
+    const APP_VERSION = '2.0.9-OVERRIDE';
+    const lastVersion = localStorage.getItem('app_version');
+    if (lastVersion !== APP_VERSION) {
+      console.log('New Version Detected. Clearing cache and reloading...');
+      localStorage.setItem('app_version', APP_VERSION);
+      // Clear all potential caches
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          for (let name of names) caches.delete(name);
+        });
+      }
+      // Force hard reload
+      window.location.reload(true);
+    }
+  </script>
 </head>
 
 <body>

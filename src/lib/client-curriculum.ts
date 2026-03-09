@@ -118,7 +118,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 2) {
             finalId = 'the-5-pillars';
             finalTitle = 'The 5 Pillars of Power';
-            videoUrl = 'https://www.youtube.com/embed/fG0SST-o-yE';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/fG0SST-o-yE';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.myfico.com/credit-education/whats-in-your-credit-score';
@@ -126,7 +126,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 3) {
             finalId = 'debt-vs-leverage';
             finalTitle = 'Debt vs. Leverage';
-            videoUrl = 'https://www.youtube.com/embed/ViLXWX9reN8?start=127';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/ViLXWX9reN8?start=127';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://youtu.be/ViLXWX9reN8?t=127';
@@ -134,7 +134,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 4) {
             finalId = 'fcra-rights';
             finalTitle = 'The Rules of Engagement (FCRA Rights)';
-            videoUrl = 'https://www.youtube.com/embed/nL7PzIm_DRE';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/nL7PzIm_DRE';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.consumer.ftc.gov/articles/pdf-0096-fair-credit-reporting-act.pdf';
@@ -142,7 +142,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 5) {
             finalId = 'financial-avatar';
             finalTitle = 'Your Financial Avatar';
-            videoUrl = 'https://www.youtube.com/embed/v9E492G-bIs';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/v9E492G-bIs';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.experian.com/blogs/ask-experian/credit-education/report-basics/how-to-read-your-credit-report/';
@@ -150,7 +150,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 6) {
             finalId = 'mission-800';
             finalTitle = 'Mission 800 (Setting the Target)';
-            videoUrl = 'https://www.youtube.com/embed/d-7hY37k6_Q';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/d-7hY37k6_Q';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.myfico.com/credit-education/credit-scores/payment-history';
@@ -158,7 +158,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 7) {
             finalId = 'reading-the-scoreboard';
             finalTitle = 'Reading the Scoreboard';
-            videoUrl = 'https://www.youtube.com/embed/3E_v36N26l8';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/3E_v36N26l8';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.myfico.com/credit-education/credit-scores/amount-of-debt';
@@ -166,7 +166,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 8) {
             finalId = 'the-35-percent-rule';
             finalTitle = 'The 35% Rule (Perfect Payment)';
-            videoUrl = 'https://www.youtube.com/embed/-FATtQLu_-M';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/-FATtQLu_-M';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.myfico.com/credit-education/credit-scores/length-of-credit-history';
@@ -174,7 +174,7 @@ ${lesson.structurePoints.reinforcementSummary}
         } else if (index === 9) {
             finalId = 'utilization-magic';
             finalTitle = 'Utilization Magic (The 30/10/0 Rule)';
-            videoUrl = 'https://www.youtube.com/embed/zPnBG_6M99o';
+            videoUrl = 'https://www.youtube-nocookie.com/embed/zPnBG_6M99o';
             videoType = 'ai_professor';
             videoTitle = finalTitle;
             externalResourceUrl = 'https://www.myfico.com/credit-education/credit-scores/credit-mix';

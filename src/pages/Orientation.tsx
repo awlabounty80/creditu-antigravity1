@@ -48,6 +48,7 @@ interface UserState {
     dailyLoginTime?: number;
     dailyTrialUsed?: boolean;
     mooPoints?: number;
+    onboardingComplete?: boolean;
 }
 
 // --- Specialized Components ---
@@ -396,7 +397,7 @@ const IdentityStep = ({ setStep, saveState, userState }: { setStep: (s: Onboardi
                 <Button
                     disabled={!isComplete}
                     onClick={() => {
-                        saveState(form);
+                        saveState({ ...form, onboardingComplete: true });
                         setStep('map');
                     }}
                     className={cn(
@@ -1062,7 +1063,10 @@ export default function Orientation() {
         if (typeof window === 'undefined') return 'arrival';
         const saved = localStorage.getItem('credit_u_reset_state');
         if (saved) {
-            try { if (JSON.parse(saved).hasConsented) return 'close'; } catch (e) { }
+            try {
+                const data = JSON.parse(saved);
+                if (data.onboardingComplete) return 'close';
+            } catch (e) { }
         }
         return 'arrival';
     });

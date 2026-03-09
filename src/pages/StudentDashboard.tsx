@@ -14,6 +14,9 @@ import { QuickActionsFAB } from '@/components/dashboard/QuickActionsFAB'
 import { StudentIdCard } from '@/components/dashboard/StudentIdCard'
 import { FoundationCoreClass } from '@/components/dashboard/FoundationCoreClass'
 import { CreditUTV } from '@/components/dashboard/CreditUTV'
+import { MooPointWallet } from '@/components/learn/MooPointWallet'
+import { getClientCourse } from '@/lib/client-curriculum'
+import { AchievementGallery } from '@/components/learn/AchievementGallery'
 // import { ProfessorGenerative } from '@/components/dashboard/ProfessorGenerative'
 
 import { JulesTerminal } from '@/components/dashboard/JulesTerminal'
@@ -49,6 +52,12 @@ export default function StudentDashboard() {
 
     const [enrollments, setEnrollments] = useState<EnrolledCourse[]>([])
     const [creditsEarned, setCreditsEarned] = useState(0)
+    const [stats, setStats] = useState({
+        lessonsCompleted: 0,
+        modulesCompleted: 0,
+        phaseProgress: 0,
+        totalLessons: 100 // Default for Credit 101
+    });
 
     const resourceOfTheWeek = useMemo(() => {
         if (!EXTERNAL_RESOURCES || EXTERNAL_RESOURCES.length === 0) {
@@ -80,7 +89,41 @@ export default function StudentDashboard() {
                 setCreditsEarned(earned)
             }
         }
-        fetchEnrollments()
+
+        async function fetchUniversityStats() {
+            // 1. Fetch Lessons Completed
+            const { data: progressData } = await supabase
+                .from('student_progress')
+                .select('lesson_id, module_id, phase_id')
+                .eq('user_id', profile.id)
+                .eq('completed', true);
+
+            if (progressData) {
+                const completedCount = progressData.length;
+
+                // 2. Calculate Modules Completed (Assuming 10 lessons per module)
+                const modules = new Set(progressData.map(p => p.module_id));
+                // A module is completed if all its lessons are done. Simple count for now:
+                const moduleCompletionMap: Record<string, number> = {};
+                progressData.forEach(p => {
+                    if (p.module_id) moduleCompletionMap[p.module_id] = (moduleCompletionMap[p.module_id] || 0) + 1;
+                });
+                const completedModulesCount = Object.values(moduleCompletionMap).filter(count => count >= 10).length;
+
+                // 3. Phase Progress (Overall for Credit 101)
+                const overallProgress = Math.min(100, (completedCount / 100) * 100);
+
+                setStats({
+                    lessonsCompleted: completedCount,
+                    modulesCompleted: completedModulesCount,
+                    phaseProgress: Math.round(overallProgress),
+                    totalLessons: 100
+                });
+            }
+        }
+
+        fetchEnrollments();
+        fetchUniversityStats();
     }, [profile])
 
 
@@ -173,7 +216,7 @@ export default function StudentDashboard() {
                             <div className="flex flex-col gap-4 w-full md:w-auto">
                                 <Button
                                     className="bg-white text-black hover:bg-indigo-500 hover:text-white font-black h-16 px-10 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 text-lg uppercase tracking-tighter"
-                                    onClick={() => { playClick(); navigate('/dashboard/curriculum'); }}
+                                    onClick={() => { playClick(); navigate('/learn'); }}
                                     onMouseEnter={() => playHover()}
                                 >
                                     Resume Mission <ArrowRight className="ml-2 w-6 h-6" />
@@ -218,76 +261,62 @@ export default function StudentDashboard() {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card
-                        onClick={() => { playClick(); navigate('/dashboard/curriculum'); }}
-                        onMouseEnter={() => playHover()}
-                        className="bg-[#0A0F1E] border-white/5 relative overflow-hidden group hover:border-indigo-500/30 transition-colors cursor-pointer"
-                    >
-                        <div className="absolute top-0 right-0 p-16 bg-indigo-500/5 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-indigo-500/10 transition-colors"></div>
-                        <CardContent className="p-6 relative z-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Academic GPA</h3>
-                                <Trophy className="w-5 h-5 text-amber-400" />
-                            </div>
-                            <div className="text-5xl font-heading font-bold text-white mb-1 blur-md group-hover:blur-0 transition-all duration-300 select-none">{gpa}</div>
-                            <div className="flex items-center gap-2 text-xs font-medium">
-                                <span className="text-emerald-400 flex items-center gap-1"><TrendingUp size={10} /> Top 10%</span>
-                                <span className="text-slate-500">Based on performance</span>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    {/* Moo Point Wallet */}
+                    <MooPointWallet userId={profile?.id || ""} />
 
                     <Card
-                        onClick={() => { playClick(); navigate('/dashboard/curriculum'); }}
+                        onClick={() => { playClick(); navigate('/learn'); }}
                         onMouseEnter={() => playHover()}
                         className="bg-[#0A0F1E] border-white/5 relative overflow-hidden group hover:border-emerald-500/30 transition-colors cursor-pointer"
                     >
                         <div className="absolute top-0 right-0 p-16 bg-emerald-500/5 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-emerald-500/10 transition-colors"></div>
-                        <CardContent className="p-6 relative z-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Credits</h3>
+                        <CardContent className="p-8 relative z-10">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">Lesson Mastery</h3>
                                 <BookOpen className="w-5 h-5 text-emerald-400" />
                             </div>
-                            <div className="text-5xl font-heading font-bold text-white mb-1">{creditsEarned}</div>
-                            <div className="w-full bg-white/5 h-1.5 rounded-full mt-2 overflow-hidden">
-                                <div className="bg-emerald-500 h-full w-[15%]"></div>
+                            <div className="flex items-baseline gap-2">
+                                <div className="text-5xl font-black text-white leading-none">{stats.lessonsCompleted}</div>
+                                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">/ {stats.totalLessons}</div>
                             </div>
-                            <p className="text-[10px] text-slate-500 mt-2 text-right">120 Required for Graduation</p>
+                            <div className="w-full bg-white/5 h-1.5 rounded-full mt-6 overflow-hidden border border-white/5">
+                                <div
+                                    className="bg-emerald-500 h-full transition-all duration-1000 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                                    style={{ width: `${(stats.lessonsCompleted / stats.totalLessons) * 100}%` }}
+                                />
+                            </div>
+                            <p className="text-[10px] text-slate-500 mt-4 font-bold uppercase tracking-tight">University Foundation Progress</p>
                         </CardContent>
                     </Card>
 
                     <Card
-                        onClick={() => { playClick(); navigate('/dashboard/tools/score-simulator'); }}
+                        onClick={() => { playClick(); navigate('/learn'); }}
                         onMouseEnter={() => playHover()}
-                        className="bg-[#0A0F1E] border-white/5 relative overflow-hidden group hover:border-blue-500/30 transition-colors cursor-pointer"
+                        className="bg-[#0A0F1E] border-white/5 relative overflow-hidden group hover:border-indigo-500/30 transition-colors cursor-pointer shadow-2xl"
                     >
-                        <div className="absolute top-0 right-0 p-16 bg-blue-500/5 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-blue-500/10 transition-colors"></div>
-                        <CardContent className="p-6 relative z-10">
-                            <div className="flex items-center justify-between mb-2">
-                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Simulation</h3>
-                                <Zap className="w-5 h-5 text-blue-400" />
+                        <div className="absolute top-0 right-0 p-16 bg-indigo-500/5 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-indigo-500/10 transition-colors"></div>
+                        <CardContent className="p-8 relative z-10">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">Phase Progress</h3>
+                                <Trophy className="w-5 h-5 text-indigo-400" />
+                            </div>
+                            <div className="flex items-baseline gap-2">
+                                <div className="text-5xl font-black text-white leading-none tracking-tighter">{stats.phaseProgress}</div>
+                                <div className="text-2xl font-black text-indigo-400/50 uppercase">%</div>
                             </div>
 
-                            {/* Gauge Visual */}
-                            <div className="relative h-24 w-full flex items-end justify-center mb-1">
-                                <div className="absolute bottom-0 w-32 h-16 bg-slate-800 rounded-t-full overflow-hidden">
-                                    <div className="w-full h-full bg-[conic-gradient(from_180deg,transparent_0deg,transparent_50deg,#ef4444_50deg,#ef4444_90deg,#eab308_90deg,#eab308_130deg,#22c55e_130deg,#22c55e_180deg,transparent_180deg)] opacity-20"></div>
+                            <div className="flex items-center gap-2 mt-6">
+                                <div className="flex -space-x-1">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div
+                                            key={i}
+                                            className={`w-4 h-4 rounded-full border border-[#0A0F1E] ${i <= stats.modulesCompleted ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'bg-white/5'}`}
+                                        />
+                                    ))}
                                 </div>
-                                <div className="absolute bottom-0 w-32 h-16 rounded-t-full overflow-hidden">
-                                    {/* Dynamic Needle Rotation based on 720 (range 300-850) */}
-                                    <div
-                                        className="w-full h-full origin-bottom transition-transform duration-1000 ease-out"
-                                        style={{ transform: 'rotate(120deg)' }}
-                                    >
-                                        <div className="w-1 h-full bg-white mx-auto mt-2"></div>
-                                    </div>
-                                </div>
-                                <div className="text-4xl font-heading font-black text-white relative z-10 mb-[-5px] blur-md group-hover:blur-0 transition-all duration-300 select-none">720</div>
-                            </div>
-
-                            <div className="flex items-center justify-center gap-2 text-xs font-medium border-t border-white/5 pt-3 mt-2">
-                                <span className="text-blue-400">+42 Pts</span>
-                                <span className="text-slate-500">Since last check</span>
+                                <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">
+                                    {stats.modulesCompleted} / 10 Modules Graduated
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
@@ -380,6 +409,9 @@ export default function StudentDashboard() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Achievements Section */}
+                        <AchievementGallery userId={profile?.id || ""} />
                     </div>
 
                     {/* Sidebar Column */}

@@ -128,35 +128,44 @@ export default function MooStore() {
         try {
             // 1. Fetch Rewards Catalog
             const { data: rewardsData } = await supabase
-                .from('rewards')
+                .from('moo_store_items')
                 .select('*')
                 .order('cost', { ascending: true })
 
             if (rewardsData && rewardsData.length > 0) {
-
-                setRewards(rewardsData)
+                // Map to internal Reward interface
+                const mappedRewards = rewardsData.map(r => ({
+                    id: r.id,
+                    section: r.section,
+                    title: r.title,
+                    description: r.description,
+                    cost: r.cost,
+                    icon_key: r.icon_slug,
+                    unlock_threshold: 0
+                }))
+                setRewards(mappedRewards)
             } else {
-                // Fallback for Demo/Unseeded State
                 setRewards(FALLBACK_REWARDS)
             }
 
-            // 2. Fetch User Profile & Inventory
+            // 2. Fetch User Points & Inventory
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('moo_points')
-                    .eq('id', user.id)
+                const { data: wallet } = await supabase
+                    .from('student_moo_points')
+                    .select('total_points')
+                    .eq('user_id', user.id)
                     .single()
-                if (profile) setUserPoints(profile.moo_points || 0)
+
+                if (wallet) setUserPoints(wallet.total_points || 0)
 
                 const { data: inv } = await supabase
-                    .from('user_rewards')
-                    .select('reward_id')
+                    .from('student_inventory')
+                    .select('item_id')
                     .eq('user_id', user.id)
 
                 if (inv) {
-                    setInventory(new Set(inv.map(i => i.reward_id)))
+                    setInventory(new Set(inv.map(i => i.item_id)))
                 }
             }
         } catch (error) {
@@ -168,19 +177,7 @@ export default function MooStore() {
     // --- ACTIONS ---
 
     async function logAccess(rewardId: string) {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
-
-        // Log access optimistically
-        const { error } = await supabase.rpc('increment_access', { r_id: rewardId, u_id: user.id })
-
-        if (error) {
-            // Fallback if RPC doesn't exist (manual update)
-            await supabase.from('user_rewards')
-                .update({ last_accessed_at: new Date().toISOString() })
-                .eq('user_id', user.id)
-                .eq('reward_id', rewardId)
-        }
+        // Optional: Implement access logging if needed for analytics
     }
 
     async function handlePurchase(reward: Reward) {
@@ -195,8 +192,8 @@ export default function MooStore() {
         setProcessingId(reward.id)
 
         try {
-            const { data, error } = await supabase.rpc('purchase_reward_v2', {
-                reward_uuid: reward.id
+            const { data, error } = await supabase.rpc('purchase_moo_item', {
+                p_item_id: reward.id
             })
 
             if (error) throw error
@@ -218,13 +215,24 @@ export default function MooStore() {
     }
 
     async function handleAccess(rewardId: string) {
-        const item = CONTENT_MAP[rewardId]
+        // Fallback IDs mapping for CONTENT_MAP if they are UUIDs
+        // In a real system, CONTENT_MAP would be keyed by a slug or the UUID would be in the DB
+        // For this implementation, we'll try to find a title match in CONTENT_MAP if ID fails
+        let item = CONTENT_MAP[rewardId]
+
         if (!item) {
-            alert("Access denied: Item content not found.")
-            return
+            const rewardObj = rewards.find(r => r.id === rewardId)
+            if (rewardObj) {
+                // Try to find by slug-ified title
+                const slugTitle = rewardObj.title.toLowerCase().replace(/ /g, '_').replace(/®/g, '').replace(/-/g, '_')
+                item = CONTENT_MAP[slugTitle]
+            }
         }
 
-        logAccess(rewardId)
+        if (!item) {
+            alert("Access denied: Item content not declassified yet.")
+            return
+        }
 
         if (item.type === 'link' && item.url) {
             navigate(item.url)
@@ -232,7 +240,7 @@ export default function MooStore() {
             const element = document.createElement('div')
             element.innerHTML = `
                 <div style="font-family: 'Times New Roman', serif; padding: 40px; white-space: pre-wrap; line-height: 1.5; color: black;">
-                    <h1 style="font-size: 18pt; text-align: center; margin-bottom: 30px; font-weight: bold; text-transform: uppercase;">${rewardId.replace(/_/g, ' ').toUpperCase()}</h1>
+                    <h1 style="font-size: 18pt; text-align: center; margin-bottom: 30px; font-weight: bold; text-transform: uppercase;">${item.filename?.replace('.pdf', '').replace(/_/g, ' ')}</h1>
                     ${item.content.replace(/\n/g, '<br/>')}
                 </div>
                 <div style="margin-top: 50px; font-size: 10px; color: #666; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-family: sans-serif;">

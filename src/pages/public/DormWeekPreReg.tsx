@@ -1,14 +1,13 @@
-
-import React, { useState } from 'react';
+// CACHE_BUST_OMEGA_2026_0306_0305
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ChevronRight, CheckCircle2, Star, Zap, Brain, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Toaster, toast } from 'sonner';
-import { supabase } from '@/lib/supabase';
 import { Link, useNavigate } from 'react-router-dom';
 import { CreditULogo } from '@/components/common/CreditULogo';
+import { supabase } from '@/lib/supabase';
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
     <motion.div
@@ -31,6 +30,10 @@ export default function DormWeekPreReg() {
         scoreRange: '500-600'
     });
 
+    useEffect(() => {
+        console.log("DormWeekPreReg (Public Page): STABILIZED. Version 2.1 (No Shadcn Button)");
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -48,9 +51,7 @@ export default function DormWeekPreReg() {
             if (error) throw error;
 
             toast.success("Intelligence Secured. You are on the list.");
-
-            // Redirect to the main dorm week page for full registration or onboarding
-            setTimeout(() => navigate('/dorm-week'), 2000);
+            setTimeout(() => navigate('/admissions'), 2000); // Redirect to the NEW flow
         } catch (err: any) {
             console.error(err);
             toast.error("Protocol error. Please try again.");
@@ -63,7 +64,6 @@ export default function DormWeekPreReg() {
         <div className="min-h-screen bg-[#020412] text-white font-sans selection:bg-amber-500/30 overflow-x-hidden relative">
             <Toaster position="top-center" theme="dark" />
 
-            {/* Ambient Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
                 <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-amber-500/10 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
@@ -78,12 +78,11 @@ export default function DormWeekPreReg() {
                     <span className="font-heading font-bold tracking-tight">CREDIT U</span>
                 </Link>
                 <Link to="/gate">
-                    <Button variant="ghost" className="text-slate-400 hover:text-white">Back to Gate</Button>
+                    <button className="px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-medium">Back to Gate</button>
                 </Link>
             </nav>
 
             <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-6 lg:p-24 items-center">
-                {/* Left side: Value Prop */}
                 <div className="space-y-8">
                     <FadeIn delay={0.1}>
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-black uppercase tracking-widest">
@@ -125,7 +124,6 @@ export default function DormWeekPreReg() {
                     </FadeIn>
                 </div>
 
-                {/* Right side: Form */}
                 <FadeIn delay={0.5}>
                     <div className="relative">
                         <div className="absolute -inset-4 bg-gradient-to-r from-amber-500/20 to-indigo-500/20 rounded-[2.5rem] blur-2xl opacity-50"></div>
@@ -191,13 +189,13 @@ export default function DormWeekPreReg() {
                                     </select>
                                 </div>
 
-                                <Button
+                                <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full h-16 bg-white text-black hover:bg-amber-500 font-black uppercase tracking-[0.2em] rounded-xl shadow-xl transition-all hover:scale-[1.02]"
+                                    className="w-full h-16 bg-white text-black hover:bg-amber-500 font-black uppercase tracking-[0.2em] rounded-xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
                                 >
                                     {isLoading ? "Synchronizing..." : "Initialize High-Priority Enrollment"}
-                                </Button>
+                                </button>
 
                                 <p className="text-[10px] text-center text-slate-600 font-medium">
                                     By submitting, you agree to receive institutional briefings and protocol updates via email and SMS.
@@ -210,4 +208,3 @@ export default function DormWeekPreReg() {
         </div>
     );
 }
-

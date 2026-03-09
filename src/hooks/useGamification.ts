@@ -7,6 +7,20 @@ export function useGamification() {
     const { profile, loading, refreshProfile } = useProfile()
     const { isDevMode } = useDeveloperMode()
     const [awarding, setAwarding] = useState(false)
+    const [points, setPoints] = useState(0);
+
+    useEffect(() => {
+        if (!profile) return;
+        async function fetchPoints() {
+            const { data } = await supabase
+                .from('student_moo_points')
+                .select('total_points')
+                .eq('user_id', profile.id)
+                .single();
+            if (data) setPoints(data.total_points);
+        }
+        fetchPoints();
+    }, [profile]);
 
     // Calculate level based on points
     // 0-1000: Freshman
@@ -32,18 +46,21 @@ export function useGamification() {
 
         setAwarding(true)
         try {
-            const newPoints = (profile.moo_points || 0) + amount
-            const { error } = await supabase
-                .from('profiles')
-                .update({ moo_points: newPoints })
-                .eq('id', profile.id)
+            const { data, error } = await supabase
+                .from('student_moo_points')
+                .upsert({
+                    user_id: profile.id,
+                    total_points: points + amount
+                }, { onConflict: 'user_id' })
+                .select('total_points')
+                .single();
 
             if (error) throw error
+            if (data) setPoints(data.total_points);
 
-            // Trigger a refresh of the profile to update UI
+            // Trigger a refresh of the profile to update UI if needed
             refreshProfile()
 
-            // Optional: You could implement a toast notification here
             console.log(`Awarded ${amount} points for: ${reason}`)
         } catch (err) {
             console.error('Error awarding points:', err)

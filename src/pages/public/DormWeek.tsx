@@ -695,7 +695,7 @@ export default function DormWeek() {
                                     {/* Action Grid */}
                                     <div className="flex flex-col gap-4 w-full max-w-xs">
                                         <Button
-                                            onClick={() => navigate('/dashboard/orientation')}
+                                            onClick={() => navigate('/dorm-week/protocol')}
                                             className="h-20 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase text-xl tracking-widest rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:scale-105 transition-all text-shadow border-2 border-emerald-300/50"
                                         >
                                             ENTER THE PORTAL

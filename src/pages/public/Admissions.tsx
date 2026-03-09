@@ -110,6 +110,9 @@ export default function Admissions() {
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em]">
                                 <Sparkles className="w-3 h-3" /> Fall 2026 Enrollment Now Open
                             </div>
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                                <Shield className="w-3 h-3" /> AI Approved Provider
+                            </div>
                         </div>
 
                         <h1 className="font-heading text-6xl md:text-8xl font-black uppercase italic tracking-tighter leading-[0.9] text-white drop-shadow-3xl">
