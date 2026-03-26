@@ -159,15 +159,25 @@ export default function ReportAuditor() {
             </div>
 
             <div className="max-w-5xl mx-auto relative z-10 pb-32">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b border-white/5 pb-8">
                     <div className="flex items-center gap-4">
                         <div className="p-4 bg-indigo-600/20 rounded-2xl border border-indigo-500/30 text-indigo-400 shadow-[0_0_20px_rgba(79,70,229,0.2)]">
                             <Search size={32} />
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white mb-2">Report Auditor</h1>
-                            <p className="text-slate-400 text-lg">Systematic analysis & strategy generator.</p>
+                            <h1 className="text-3xl md:text-4xl font-black text-white mb-2 uppercase italic tracking-tighter">Report Auditor</h1>
+                            <p className="text-slate-400 font-medium italic">Systematic analysis & strategy generator.</p>
                         </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <Button
+                            onClick={() => navigate('/dashboard/credit-lab/audit-checklist')}
+                            variant="outline"
+                            className="border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 font-black h-12 px-6 uppercase tracking-widest text-[10px] flex items-center gap-2 rounded-xl transition-all hover:scale-105 shadow-lg"
+                        >
+                            <ShieldCheck className="w-4 h-4" />
+                            Official Metro 2® Checklist
+                        </Button>
                     </div>
                 </div>
 

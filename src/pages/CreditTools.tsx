@@ -113,59 +113,106 @@ export default function CreditTools({ defaultTab }: { defaultTab?: string }) {
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
-            <div>
-                <h1 className="text-4xl font-heading font-bold text-white mb-2">Credit Lab</h1>
-                <p className="text-slate-400 text-lg">Advanced tools for credit repair and score optimization.</p>
+            {/* Header / Hero Section */}
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 p-10 md:p-14 group shadow-2xl">
+                {/* Background Visual */}
+                <div className="absolute inset-0 z-0">
+                    <img 
+                        src="/assets/cinematic/hbcu_matrix.png" 
+                        alt="Matrix" 
+                        className="w-full h-full object-cover opacity-15 group-hover:scale-105 transition-transform duration-[3000ms]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#020412] via-[#020412]/60 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#020412] via-transparent to-transparent"></div>
+                </div>
+
+                <div className="relative z-10 space-y-6">
+                    <div className="flex items-center gap-4 mb-2">
+                        <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-mono tracking-widest uppercase">
+                            Operational Excellence
+                        </span>
+                    </div>
+                    <h1 className="text-5xl md:text-6xl font-heading font-black tracking-tight bg-gradient-to-r from-white via-white to-amber-400 bg-clip-text text-transparent italic">
+                        The Credit Lab
+                    </h1>
+                    <p className="text-slate-300 text-xl max-w-2xl font-light leading-relaxed">
+                        Institution-grade financial engineering tools. 
+                        <span className="block text-slate-500 text-lg mt-2 italic">Execute advanced repair strategies with surgical precision.</span>
+                    </p>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {TOOLS.map((tool) => (
                     <Card
                         key={tool.id}
-                        className={`bg-[#0A0F1E] border-white/5 hover:border-indigo-500/30 transition-all cursor-pointer group relative overflow-hidden`}
+                        className={`bg-slate-900/40 border-white/5 hover:border-amber-500/30 transition-all duration-500 cursor-pointer group relative overflow-hidden shadow-2xl hover:-translate-y-2`}
                         onClick={() => handleToolClick(tool)}
                     >
                         {tool.locked && (
-                            <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
-                                <div className="px-3 py-1 bg-black/50 border border-white/10 rounded-full text-xs font-mono text-slate-400 flex items-center gap-2">
+                            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px] z-20 flex items-center justify-center">
+                                <div className="px-4 py-1.5 bg-slate-900 border border-white/10 rounded-full text-[10px] font-black tracking-widest text-slate-400 flex items-center gap-2 shadow-2xl">
                                     <Ban size={12} /> RESTRICTED
                                 </div>
                             </div>
                         )}
 
-                        <div className={`absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity ${tool.color}`}>
-                            <tool.icon size={80} strokeWidth={1} />
+                        <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-all duration-700 transform group-hover:scale-125 group-hover:rotate-6 ${tool.color}`}>
+                            <tool.icon size={120} strokeWidth={1} />
                         </div>
 
-                        <CardHeader>
-                            <div className={`w-12 h-12 rounded-xl ${tool.bg} ${tool.border} border flex items-center justify-center mb-4 text-white`}>
-                                <tool.icon size={24} className={tool.color} />
+                        <CardHeader className="relative z-10">
+                            <div className={`w-14 h-14 rounded-2xl ${tool.bg} ${tool.border} border flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform duration-500`}>
+                                <tool.icon size={28} className={tool.color} />
                             </div>
-                            <CardTitle className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                            <CardTitle className="text-2xl font-heading font-black text-white group-hover:text-amber-400 transition-colors italic tracking-tight">
                                 {tool.title}
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <CardDescription className="text-slate-400 h-10">
+                        <CardContent className="relative z-10">
+                            <CardDescription className="text-slate-400 text-base leading-relaxed h-14">
                                 {tool.description}
                             </CardDescription>
+                            
+                            <div className="mt-6 flex items-center gap-2 text-xs font-bold text-slate-500 group-hover:text-amber-400/70 transition-colors">
+                                <span className="uppercase tracking-[0.2em]">Enter Lab</span>
+                                <div className="h-px flex-1 bg-white/5 group-hover:bg-amber-500/20 transition-colors"></div>
+                            </div>
                         </CardContent>
                     </Card>
                 ))}
             </div>
 
-            {/* Ingestion Note: This mirrors the 'Credit Studio' tab from Lovable */}
-            <div className="p-1 rounded-2xl bg-gradient-to-r from-amber-500/20 via-indigo-500/20 to-emerald-500/20">
-                <div className="bg-[#0A0F1E] rounded-xl p-8 text-center relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h3 className="text-2xl font-bold text-white mb-2">Need the Heavy Artillery?</h3>
-                        <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
-                            Unlock the Full Credit Repair Suite, including letter generation,
-                            certified mail tracking, and direct bureau API integration.
-                        </p>
-                        <Button size="lg" className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white border-none shadow-lg shadow-amber-900/20">
-                            Upgrade to Founder's Tier
-                        </Button>
+            {/* Founder's Tier / Endowment Section */}
+            <div className="p-1 rounded-[2.5rem] bg-gradient-to-r from-amber-500/20 via-indigo-500/20 to-purple-500/20 shadow-2xl">
+                <div className="bg-slate-900/60 backdrop-blur-xl rounded-[2.2rem] p-12 text-center relative overflow-hidden group">
+                    <div className="absolute inset-0 z-0">
+                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.1),transparent_70%)]"></div>
+                    </div>
+                    
+                    <div className="relative z-10 space-y-8">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-black tracking-widest uppercase">
+                            Premium Institutional Access
+                        </div>
+                        
+                        <div className="max-w-3xl mx-auto space-y-4">
+                            <h3 className="text-4xl md:text-5xl font-heading font-black text-white italic tracking-tighter">
+                                Unlock the Full <span className="text-amber-400">Tactical Hub</span>
+                            </h3>
+                            <p className="text-slate-400 text-xl font-light leading-relaxed">
+                                Graduate to the Founder's Tier and deploy the full credit repair arsenal, 
+                                featuring direct bureau API integration and automated certified mail tracking.
+                            </p>
+                        </div>
+                        
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-4">
+                            <Button size="lg" className="h-16 px-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white border-none shadow-2xl shadow-amber-900/40 text-lg font-black italic transform transition-all hover:scale-105 active:scale-95">
+                                Secure Founder's Seat
+                            </Button>
+                            <p className="text-slate-500 text-sm font-mono tracking-tighter uppercase">
+                                Only 12 Academy Seats Remaining
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

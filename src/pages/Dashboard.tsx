@@ -60,15 +60,11 @@ export default function Dashboard() {
             {/* LOCKED: DASHBOARD HERO HEADER (Classmates Video) */}
             {/* Welcome Hero - Classmates Transmission */}
             <div className="relative rounded-3xl overflow-hidden bg-black border border-white/5 shadow-2xl group">
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-100"
-                >
-                    <source src="/assets/hero-background.mp4" type="video/mp4" />
-                </video>
+                <img
+                    src="/assets/cinematic/hbcu_homecoming.png"
+                    alt="HBCU Homecoming"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020412] via-transparent to-transparent"></div>
 
                 <div className="relative z-10 p-8 md:p-12">

@@ -3,6 +3,7 @@ import { useGamification } from '@/hooks/useGamification';
 import { toast } from 'sonner';
 import { useSound } from '@/hooks/useSound';
 import confetti from 'canvas-confetti';
+import { transcribeAudio, synthesizeSpeech } from '@/lib/deepgram';
 
 import {
     BookOpen,
@@ -28,7 +29,12 @@ import {
     Clock,
     XCircle,
     Trophy,
-    ArrowRight
+    ArrowRight,
+    Mic,
+    MicOff,
+    Volume2,
+    Square,
+    Pause
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 // Removed legacy FULL_ARTICLES import
@@ -313,10 +319,51 @@ const QuizView = ({ article, onClose, onComplete }: { article: any, onClose: () 
 const ArticleReader = ({ articleId, onClose }: { articleId: string, onClose: () => void }) => {
     const article = Object.values(KNOWLEDGE_BASE_ARTICLES).find(a => a.id === articleId);
     const [viewMode, setViewMode] = useState<'content' | 'quiz'>('content');
+    const [isSynthesizing, setIsSynthesizing] = useState(false);
+    const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
     const { awardPoints } = useGamification();
-    const { playSuccess } = useSound();
+    const { playSuccess, playClick } = useSound();
+
+    useEffect(() => {
+        return () => {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.src = "";
+            }
+        };
+    }, [currentAudio]);
 
     if (!article) return null;
+
+    const handleListen = async () => {
+        if (currentAudio) {
+            currentAudio.pause();
+            setCurrentAudio(null);
+            return;
+        }
+
+        try {
+            setIsSynthesizing(true);
+            playClick();
+            toast.info("Preparing Audio Guide...", { description: "Using Deepgram Aura AI." });
+            
+            // Clean markdown for better speech synthesis
+            const textToSpeak = article.content?.replace(/[#*`_\[\]]/g, '') || "";
+            const audio = await synthesizeSpeech(textToSpeak);
+            
+            setCurrentAudio(audio);
+            audio.play();
+            
+            audio.onended = () => {
+                setCurrentAudio(null);
+                toast.success("Audio Guide Finished");
+            };
+        } catch (err: any) {
+            toast.error("Speech Synthesis Failed", { description: err.message });
+        } finally {
+            setIsSynthesizing(false);
+        }
+    };
 
     const handleMarkComplete = () => {
         playSuccess();
@@ -342,6 +389,22 @@ const ArticleReader = ({ articleId, onClose }: { articleId: string, onClose: () 
                     )}
                 </div>
                 <div className="flex gap-2">
+                    <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={handleListen}
+                        disabled={isSynthesizing}
+                        className={`gap-2 ${currentAudio ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        {isSynthesizing ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : currentAudio ? (
+                            <Pause className="w-4 h-4" />
+                        ) : (
+                            <Volume2 className="w-4 h-4" />
+                        )}
+                        <span className="hidden sm:inline">{currentAudio ? "Stop Guide" : "Listen"}</span>
+                    </Button>
                     <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white"><Bookmark className="w-4 h-4" /></Button>
                     <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white"><Share2 className="w-4 h-4" /></Button>
                 </div>
@@ -450,7 +513,49 @@ export default function KnowledgeCenter() {
     const [activeTab, setActiveTab] = useState<'articles' | 'glossary'>('articles');
     const [selectedCategory, setSelectedCategory] = useState<typeof RESOURCE_CATEGORIES[number] | 'All'>('All');
     const [readingArticle, setReadingArticle] = useState<string | null>(null);
+    const [isRecording, setIsRecording] = useState(false);
+    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const { playHover, playClick } = useSound();
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const recorder = new MediaRecorder(stream);
+            const chunks: Blob[] = [];
+
+            recorder.ondataavailable = (e) => chunks.push(e.data);
+            recorder.onstop = async () => {
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                try {
+                    toast.info("Transcribing...", { description: "Processing your request." });
+                    const result = await transcribeAudio(blob);
+                    const text = result.results.channels[0].alternatives[0].transcript;
+                    if (text) {
+                        setSearchQuery(text);
+                        toast.success("Voice Search Complete", { description: `Searching for: "${text}"` });
+                    }
+                } catch (err: any) {
+                    toast.error("Transcription Failed", { description: err.message });
+                }
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            recorder.start();
+            setMediaRecorder(recorder);
+            setIsRecording(true);
+            playClick();
+        } catch (err: any) {
+            toast.error("Microphone Access Denied", { description: "Please enable microphone permissions." });
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorder && isRecording) {
+            mediaRecorder.stop();
+            setIsRecording(false);
+            playClick();
+        }
+    };
     // const { awardPoints } = useGamification();
 
     const filteredResources = useMemo(() => {
@@ -539,16 +644,29 @@ export default function KnowledgeCenter() {
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/10 pb-8">
-                    <div>
-                        <h1 className="text-4xl md:text-5xl font-heading font-black mb-4 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
-                            <Book className="w-12 h-12 text-indigo-400" />
-                            Knowledge Center
-                        </h1>
-                        <p className="text-slate-400 text-lg max-w-2xl">
-                            Institution-grade financial education. Source-verified. Compliance-safe.
-                            Access over 100+ resources to master your financial life.
-                        </p>
+                <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/20 mb-12 group">
+                    {/* Background Visual */}
+                    <div className="absolute inset-0 z-0">
+                        <img 
+                            src="/assets/cinematic/hbcu_mentor.png" 
+                            alt="HBCU Mentor" 
+                            className="w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-1000"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#020412] via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#020412] via-transparent to-transparent"></div>
+                    </div>
+
+                    <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10">
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-heading font-black mb-4 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
+                                <Book className="w-12 h-12 text-indigo-400" />
+                                Knowledge Center
+                            </h1>
+                            <p className="text-slate-400 text-lg max-w-2xl">
+                                Institution-grade financial education. Source-verified. Compliance-safe.
+                                Access over 100+ resources to master your financial life.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -561,8 +679,18 @@ export default function KnowledgeCenter() {
                             placeholder="Search glossary terms & articles..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-12 bg-white/5 border-white/10 text-white placeholder:text-slate-500 h-14 rounded-xl text-lg focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                            className="pl-12 pr-12 bg-white/5 border-white/10 text-white placeholder:text-slate-500 h-14 rounded-xl text-lg focus:ring-2 focus:ring-indigo-500/50 transition-all"
                         />
+                        <button
+                            onClick={isRecording ? stopRecording : startRecording}
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all ${
+                                isRecording 
+                                ? 'bg-red-500/20 text-red-500 animate-pulse' 
+                                : 'text-indigo-400 hover:bg-white/5'
+                            }`}
+                        >
+                            {isRecording ? <Square className="w-5 h-5 fill-current" /> : <Mic className="w-5 h-5" />}
+                        </button>
                     </div>
 
                     {/* Navigation Tabs */}

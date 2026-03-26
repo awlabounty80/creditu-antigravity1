@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Lock, Activity, CreditCard, ChevronLeft, FileText, Award, CheckCircle2, ChevronRight, RefreshCw } from 'lucide-react';
@@ -15,6 +15,7 @@ import { DigitalIDCard } from '@/components/referral/DigitalIDCard';
 import { DORM_WEEK_CURRICULUM } from '@/data/dorm-week-curriculum';
 import confetti from 'canvas-confetti';
 import { ProfessorGenerative } from '@/components/dashboard/ProfessorGenerative';
+import { CinematicBriefing, VoiceEngine } from '@/components/cinematic/CinematicBriefing';
 
 // --- Types ---
 type OnboardingStep =
@@ -170,13 +171,22 @@ const ArrivalStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => {
                 </div>
             </FadeIn>
 
-            <FadeIn delay={0.4} className="text-center relative z-20">
+            <FadeIn delay={0.4} className="text-center relative z-20 w-full flex flex-col items-center">
                 <GraffitiText className="text-6xl md:text-8xl text-pink-500 mb-4 rotate-[-6deg] animate-pulse">
                     WELCOME
                 </GraffitiText>
                 <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-white drop-shadow-[0_10px_0px_rgba(0,0,0,0.5)] uppercase leading-[0.85] mb-8">
                     HOME<span className="text-amber-500">.</span>
                 </h1>
+
+                <div className="w-full max-w-xl mb-12">
+                    <VoiceEngine 
+                        id="arrival_narration"
+                        text="Welcome Home, Architect. You have arrived at the junction of your financial re-architecture. Enter the party to begin your initiation protocol."
+                        accentColor="pink"
+                        compact={true}
+                    />
+                </div>
 
                 <div className="mt-8">
                     <Button
@@ -214,6 +224,16 @@ const WelcomeStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => (
                 </ul>
             </div>
         </div>
+
+        <div className="w-full max-w-2xl mb-12">
+            <VoiceEngine 
+                id="welcome_narration"
+                text="Dorm Week is your mandatory 5-day initiation. We are here to repair your financial nervous system. You will move through identity reframing, bureau mastery, and funding positioning. Accept the challenge to continue."
+                accentColor="amber"
+                compact={true}
+            />
+        </div>
+
         <FadeIn delay={0.8}><Button onClick={() => setStep('reframe')} className="bg-white text-black hover:bg-slate-200 px-12 py-6 text-lg font-bold rounded-full">Accept Challenge</Button></FadeIn>
     </div>
 );
@@ -224,6 +244,16 @@ const ReframeStep = ({ setStep }: { setStep: (s: OnboardingStep) => void }) => (
             <div className="w-64 h-64 mx-auto mb-8"><CreditULogo className="w-full h-full" variant="gold" showShield={false} iconClassName="w-36 h-36" /></div>
             <h1 className="text-6xl md:text-8xl font-black text-white uppercase leading-[0.9]">WELCOME TO <br /><span className="text-amber-400">THE YARD</span></h1>
         </FadeIn>
+
+        <div className="w-full max-w-2xl mb-12">
+            <VoiceEngine 
+                id="reframe_narration"
+                text="Welcome to The Yard. This is where the conversion from consumer to architect happens. Initiate your profile to synchronize with the campus core."
+                accentColor="amber"
+                compact={true}
+            />
+        </div>
+
         <FadeIn delay={0.6}>
             <Button onClick={() => setStep('consent')} className="bg-amber-500 hover:bg-amber-400 text-black px-12 py-6 text-lg font-black tracking-widest uppercase rounded-full shadow-[0_0_30px_rgba(245,158,11,0.5)] transform hover:scale-110">Initiate Profile</Button>
         </FadeIn>
@@ -241,6 +271,16 @@ const ConsentStep = ({ setStep, saveState }: { setStep: (s: OnboardingStep) => v
                 <div className="bg-[#0F1629]/80 border border-white/10 p-8 rounded-xl shadow-2xl backdrop-blur-md mb-8">
                     <p className="text-slate-300 text-lg leading-relaxed">I reclaim my authority as the Architect of my own life. I understand that precision and discipline are required for this sequence.</p>
                 </div>
+                
+                <div className="w-full mb-12">
+                    <VoiceEngine 
+                        id="consent_narration"
+                        text="The Reset Protocol requires your full commitment. Type your legal signature to authorize the conversion of your financial nervous system."
+                        accentColor="indigo"
+                        compact={true}
+                    />
+                </div>
+
                 <Input
                     value={signature}
                     onChange={(e) => setSignature(e.target.value)}
@@ -315,6 +355,15 @@ const IdentityStep = ({ setStep, saveState, userState }: { setStep: (s: Onboardi
                         <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter">Biometric Uplink</h1>
                         <p className="text-slate-500 text-[10px] font-mono uppercase tracking-[0.3em]">Neural Interface Calibration Active</p>
                     </div>
+                </div>
+
+                <div className="w-full max-w-2xl mx-auto mb-12">
+                    <VoiceEngine 
+                        id="identity_narration"
+                        text="Neural Interface calibration active. Declare your primary objective. We are syncing your legacy profile with the high-limit funding engine. Precision is mandatory."
+                        accentColor="indigo"
+                        compact={true}
+                    />
                 </div>
             </FadeIn>
 
@@ -442,21 +491,21 @@ const ApprovalMeter = () => {
     );
 };
 
-const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [], videoUrl, requiresInput, worksheetPath, userState, saveState }: any) => {
+const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [], videoUrl, video_assets, requiresInput, worksheetPath, userState, saveState }: any) => {
     const navigate = useNavigate();
     const [checklist, setChecklist] = useState<boolean[]>(new Array(checklistItems.length).fill(false));
     const [inputValue, setInputValue] = useState(userState?.primaryMission || '');
-    const [videoEnded, setVideoEnded] = useState(false);
+    const [briefingComplete, setBriefingComplete] = useState(false);
 
     const toggleCheck = (index: number) => {
         const nc = [...checklist]; nc[index] = !nc[index]; setChecklist(nc);
     };
 
-    const isVideoRequired = !!videoUrl;
+    const isBriefingRequired = !!video_assets || !!videoUrl;
     const isInputRequired = !!requiresInput;
 
     const allChecked = (checklist.length === 0 || checklist.every(Boolean)) &&
-        (!isVideoRequired || videoEnded) &&
+        (!isBriefingRequired || briefingComplete) &&
         (!isInputRequired || inputValue.length > 5);
 
     return (
@@ -502,23 +551,31 @@ const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [],
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full h-full relative z-10">
                 {/* Left Column: Media & Script (7 Cols) */}
                 <div className="lg:col-span-7 space-y-8">
-                    {videoUrl && (
-                        <div className="relative group rounded-3xl overflow-hidden border border-white/20 bg-gray-900 shadow-2xl">
-                            {/* Cinematic Glow */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-20 blur-lg group-hover:opacity-40 transition-opacity duration-1000" />
-
-                            <div className="relative aspect-video bg-black">
+                    {(video_assets || videoUrl) && (
+                        <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/20 bg-black shadow-2xl group">
+                            {video_assets ? (
+                                <CinematicBriefing
+                                    assets={video_assets}
+                                    text={script.join('\n')}
+                                    id={`dorm_day_${dayId}`}
+                                    onStateChange={(isSpeaking) => {
+                                        if (!isSpeaking && briefingComplete) return;
+                                    }}
+                                    onProgress={(p) => {
+                                        if (p > 95) setBriefingComplete(true);
+                                    }}
+                                    accentColor={dayId % 2 === 0 ? "indigo" : "amber"}
+                                />
+                            ) : (
                                 <video
                                     src={videoUrl}
                                     controls
                                     className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                                    onEnded={() => setVideoEnded(true)}
+                                    onEnded={() => setBriefingComplete(true)}
                                 />
-                                {/* Overlay Gradient for Depth */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-                            </div>
-
-                            {!videoEnded && (
+                            )}
+                            
+                            {!briefingComplete && (
                                 <div className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
                                     <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
                                     <span className="text-[10px] font-bold text-white uppercase tracking-widest">Intel Required</span>
@@ -565,7 +622,7 @@ const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [],
                                 </p>
                             </div>
                             <div className="text-[10px] bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full text-emerald-400 font-bold font-mono">
-                                {checklist.filter(Boolean).length}/{checklist.length + (isVideoRequired ? 1 : 0)} COMPLETE
+                                {checklist.filter(Boolean).length}/{checklist.length + (isBriefingRequired ? 1 : 0)} COMPLETE
                             </div>
                         </div>
 
@@ -595,22 +652,22 @@ const DayScript = ({ dayId, theme, script, onClose, onBack, checklistItems = [],
                                 </div>
                             ))}
 
-                            {isVideoRequired && (
+                            {isBriefingRequired && (
                                 <div className={cn(
                                     "flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300",
-                                    videoEnded
+                                    briefingComplete
                                         ? "bg-amber-500/10 border-amber-500/30"
                                         : "bg-white/5 border-white/5 opacity-80"
                                 )}>
                                     <div className={cn(
                                         "w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0",
-                                        videoEnded ? "bg-amber-500 border-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]" : "border-slate-600"
+                                        briefingComplete ? "bg-amber-500 border-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]" : "border-slate-600"
                                     )}>
-                                        {videoEnded && <Check className="w-3.5 h-3.5 stroke-[4]" />}
+                                        {briefingComplete && <Check className="w-3.5 h-3.5 stroke-[4]" />}
                                     </div>
                                     <div>
-                                        <div className={cn("text-sm font-medium leading-snug", videoEnded ? "text-white" : "text-slate-400")}>
-                                            Watch Full Initiation Video
+                                        <div className={cn("text-sm font-medium leading-snug", briefingComplete ? "text-white" : "text-slate-400")}>
+                                            Authorize {video_assets ? "Cinematic" : "Protocol"} Briefing
                                         </div>
                                     </div>
                                 </div>

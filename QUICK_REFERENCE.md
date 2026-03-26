@@ -3,22 +3,27 @@
 ## 🚀 Getting Started
 
 ### Development Server
+
 ```bash
 npm run dev
 # Access at http://localhost:5173
 ```
 
+
 ### Build for Production
+
 ```bash
 npm run build
 npm run preview
 ```
+
 
 ---
 
 ## 📍 Navigation Map
 
 ### Public Routes
+
 - `/` - Landing page
 - `/gate` - Admissions portal (Variant A)
 - `/gate-b` - Admissions portal (Variant B)
@@ -26,7 +31,9 @@ npm run preview
 - `/tour` - Campus tour
 - `/login` - Authentication
 
+
 ### Student Dashboard Routes
+
 - `/dashboard` - Command Center (main dashboard)
 - `/dashboard/curriculum` - Course catalog
 - `/dashboard/course/:id` - Video lesson player
@@ -41,6 +48,7 @@ npm run preview
 - `/dashboard/store` - Moo Store (rewards)
 - `/dashboard/community` - Global campus
 - `/dashboard/settings` - User settings
+
 
 ---
 

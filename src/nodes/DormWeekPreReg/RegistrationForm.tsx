@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface RegistrationFormProps {
-    onSubmit: (data: { name: string; email: string; phone?: string }) => void;
+    onSubmit: (data: { name: string; email: string; password?: string; phone?: string; dob?: string; city?: string; state?: string }) => void;
     isLoading: boolean;
     error: string | null;
 }
@@ -15,7 +15,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit, is
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        phone: ''
+        password: '',
+        phone: '',
+        dob: '',
+        city: '',
+        state: ''
     });
 
     useEffect(() => {
@@ -63,7 +67,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit, is
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-6">
                         <Sparkles className="w-3 h-3 animate-pulse" />
-                        Admissions Node Operational
+                        DORM WEEK RUSH PROTOCOL // IDENTITY RECONSTRUCTION
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-4">Enter The Yard</h2>
                     <p className="text-slate-400 text-base max-w-sm mx-auto">Identify yourself to initialize the admissions sequence and unlock the machine.</p>
@@ -100,6 +104,21 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit, is
                     </div>
 
                     <div className="space-y-2 text-left">
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Create Password (Returning Access)</Label>
+                        <div className="relative">
+                            <Zap className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                            <Input
+                                required
+                                type="password"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                placeholder="••••••••"
+                                className="bg-black/40 border-white/10 pl-12 h-16 rounded-2xl focus:border-indigo-500 transition-all text-white font-bold text-lg"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2 text-left">
                         <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Phone (Optional)</Label>
                         <div className="relative">
                             <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -111,6 +130,40 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit, is
                                 className="bg-black/40 border-white/10 pl-12 h-16 rounded-2xl focus:border-indigo-500 transition-all text-white font-bold text-lg"
                             />
                         </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2 text-left">
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">DOB</Label>
+                            <Input
+                                required
+                                type="date"
+                                value={formData.dob}
+                                onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                                className="bg-black/40 border-white/10 h-16 rounded-2xl focus:border-indigo-500 transition-all text-white font-bold [color-scheme:dark]"
+                            />
+                        </div>
+                        <div className="space-y-2 text-left">
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">City</Label>
+                            <Input
+                                required
+                                value={formData.city}
+                                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                placeholder="City"
+                                className="bg-black/40 border-white/10 h-16 rounded-2xl focus:border-indigo-500 transition-all text-white font-bold"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2 text-left">
+                        <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">State</Label>
+                        <Input
+                            required
+                            value={formData.state}
+                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                            placeholder="State (e.g. CA)"
+                            className="bg-black/40 border-white/10 h-16 rounded-2xl focus:border-indigo-500 transition-all text-white font-bold"
+                        />
                     </div>
 
                     {error && (

@@ -289,10 +289,20 @@ export default function MooStore() {
         <div className="min-h-screen bg-[#020412] text-white p-6 md:p-8 relative overflow-hidden font-sans">
 
             {/* Header / Stats */}
-            <div className="max-w-7xl mx-auto space-y-8 relative z-10">
-                <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 gap-6">
+            <div className="max-w-7xl mx-auto space-y-8 relative z-10 p-8 rounded-3xl overflow-hidden border border-white/5 bg-slate-900/20 mb-8 group">
+                {/* Background Image Hook */}
+                <div className="absolute inset-0 z-0">
+                    <img 
+                        src="/assets/cinematic/hbcu_matrix.png" 
+                        alt="HBCU Matrix" 
+                        className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-1000"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#020412] via-[#020412]/50 to-transparent"></div>
+                </div>
+
+                <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 gap-6 relative z-10">
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-md">
                             <CreditULogo className="h-4 w-4" variant="gold" showShield={false} iconClassName="h-4 w-4" /> Sovereign Emporium
                         </div>
                         <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-2 flex items-center gap-3">

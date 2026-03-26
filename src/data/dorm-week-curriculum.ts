@@ -5,6 +5,7 @@ export interface DormDay {
     theme: string;
     script: string[];
     videoUrl?: string;
+    video_assets?: string[]; // High-fidelity cinematic images
     requiresInput?: boolean;
     task: string;
     checklistItems: string[];
@@ -23,6 +24,10 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
             "Today we delete the 'Consumer' identity and install the 'Architect' protocol."
         ],
         videoUrl: "/assets/dean-welcome-v2.mp4",
+        video_assets: [
+            "/assets/cinematic/hbcu_homecoming.png",
+            "/assets/less_1_1_cinematic.png"
+        ],
         requiresInput: true,
         task: "System Reality Scan",
         checklistItems: [
@@ -43,6 +48,10 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
             "Learn to read the matrix of your report and identify the structural flaws holding you back."
         ],
         videoUrl: "/assets/dr-leverage-matrix.mp4",
+        video_assets: [
+            "/assets/cinematic/junior_bureau_vault.png",
+            "/assets/less_1_2_cinematic.png"
+        ],
         task: "Bureau Review",
         checklistItems: [
             "Download & Scan Bureau Files",
@@ -62,6 +71,10 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
             "Banks do not lend to people; they lend to positions. Let's build yours."
         ],
         videoUrl: "/assets/dean-part-2.mp4",
+        video_assets: [
+            "/assets/cinematic/junior_cfpb_command_center.png",
+            "/assets/less_1_3_cinematic.png"
+        ],
         task: "Optimization Setup",
         checklistItems: [
             "Perform Psychological Burn Ritual",
@@ -79,6 +92,10 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
             "Strategy without execution is hallucination.",
             "Generating your custom 90-day attack sequence.",
             "This is your automated path to the 700 Club and beyond."
+        ],
+        video_assets: [
+            "/assets/cinematic/junior_dispute_engine.png",
+            "/assets/less_1_4_cinematic.png"
         ],
         task: "Sequence Generation",
         checklistItems: [
@@ -99,6 +116,10 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
             "Take the Oath. Claim your new status. Enter the game."
         ],
         videoUrl: "/assets/celebration-loop.mp4",
+        video_assets: [
+            "/assets/cinematic/hbcu_homecoming.png",
+            "/assets/less_1_5_cinematic.png"
+        ],
         task: "Oath of Excellence",
         checklistItems: [
             "Sign the Architect Oath of Excellence",
@@ -109,3 +130,4 @@ export const DORM_WEEK_CURRICULUM: DormDay[] = [
         rewardPoints: 1000
     }
 ];
+

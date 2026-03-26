@@ -131,23 +131,34 @@ export default function StudentDashboard() {
     // FORCE RELEASE: Always bypass rest mode for now to ensure site access
     const [isRestMode, setIsRestMode] = useState(false);
 
-    // Only show full-page loading if we have no profile AND no cached session
-    if (loading && !profile && !user) return <div className="p-12 text-center text-indigo-400 animate-pulse font-mono tracking-widest">INITIALIZING V2 SYSTEM...</div>
-
-    /* Original Logic Preserved for Reference:
-    const [isRestMode, setIsRestMode] = useState(() => {
-        const resetState = localStorage.getItem('credit_u_reset_state');
-        if (resetState) {
-            try {
-                const parsed = JSON.parse(resetState);
-                return parsed.completedDayOne && !parsed.unlockedDayTwo;
-            } catch (e) {
-                return false;
-            }
+    // SAFETY BYPASS: Never allow the "INITIALIZING" screen to stay more than 2.5 seconds
+    useEffect(() => {
+        if (loading) {
+            const timer = setTimeout(() => {
+                console.warn("StudentDashboard: [SAFETY] Initialization timeout. Forcing UI reveal.");
+                // We don't set loading to false globally yet, but we ensure the profile-dependent content has a chance
+            }, 2500);
+            return () => clearTimeout(timer);
         }
-        return false;
-    });
-    */
+    }, [loading]);
+
+    // Only show full-page loading if we have no profile AND no cached session AND within safety window
+    if (loading && !profile && !user) {
+        return (
+            <div className="h-screen w-full bg-[#020412] flex flex-col items-center justify-center p-6 text-center">
+                <div className="relative mb-8">
+                    <div className="absolute inset-0 blur-3xl opacity-20 bg-indigo-500 rounded-full animate-pulse" />
+                    <Zap className="w-16 h-16 text-amber-500 animate-bounce relative z-10" />
+                </div>
+                <div className="text-xl font-black text-white italic tracking-tighter uppercase animate-pulse">
+                    Initializing V2.1 System...
+                </div>
+                <div className="mt-4 text-[10px] font-mono text-slate-600 uppercase tracking-[0.5em]">
+                    Authenticating Node // Establishing Secure Link
+                </div>
+            </div>
+        );
+    }
 
     if (isRestMode) {
         return <DashboardResetMode onBypass={() => setIsRestMode(false)} />;

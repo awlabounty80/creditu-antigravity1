@@ -44,7 +44,7 @@ export default function Index() {
                     {/* Badge/Logo Placeholder */}
                     <div className="mb-8 animate-in fade-in zoom-in duration-700 hover:scale-105 transition-transform cursor-pointer">
                         <img
-                            src="/assets/credit-u-seal.png"
+                            src="/assets/official-logo.png"
                             alt="Credit University Seal"
                             className="w-48 h-48 md:w-64 md:h-64 rounded-full shadow-[0_0_50px_rgba(250,204,21,0.3)] filter drop-shadow-2xl"
                         />
@@ -60,7 +60,7 @@ export default function Index() {
                     </h2>
 
                     <p className="text-lg text-blue-200 mb-10 max-w-3xl font-light leading-relaxed">
-                        The first HBCU-inspired financial literacy campus powered by AI. Graduate into financial freedom with our proven curriculum.
+                        Step onto the digital campus of **Credit U™**. The first elite, AI-driven university designed to help you master credit, eliminate debt, and build a generational legacy.
                     </p>
 
                     {/* CTA Buttons */}

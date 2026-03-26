@@ -1,0 +1,10 @@
+{
+  "lesson_id": "freshman-module-1",
+  "total_duration": 60,
+  "beats": [
+    { "time": 0, "asset": "fico_cube.png", "caption": "Welcome to the Wealth Game." },
+    { "time": 12, "asset": "sovereign_student.png", "caption": "Your financial avatar is your digital footprint." },
+    { "time": 24, "asset": "800_gauge.png", "caption": "The 800-Club is the elite tier of leverage." },
+    { "time": 45, "asset": "success_pillar.png", "caption": "Master these pillars to unlock sovereign status." }
+  ]
+}

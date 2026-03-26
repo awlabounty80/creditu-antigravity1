@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "sync": "node scripts/git-sync.js",
-    "autosync": "node scripts/auto-backup.js"
+    "autosync": "node scripts/auto-backup.js",
+    "cuai:approve-orientation": "node scripts/approve-orientation.js",
+    "cuai:global-launch": "node scripts/global-launch.js"
   },
   "dependencies": {
     "@deepgram/sdk": "4.11.3",

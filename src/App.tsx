@@ -19,6 +19,10 @@ const Login = lazy(() => import('./pages/Login'))
 const OnboardingVault = lazy(() => import('./components/credit-lab/OnboardingVault'))
 const LinkView = lazy(() => import('./pages/public/LinkView'))
 const DormWeek = lazy(() => import('./pages/public/DormWeek'))
+const StudentIdPage = lazy(() => import('./pages/public/StudentIdPage'))
+
+// --- Mandatory Initiation Sequence ---
+const DormWeekFlowA = lazy(() => import('./components/credit-lab/DormWeekFlowA'))
 
 // --- Campus Pages ---
 const Curriculum = lazy(() => import('./pages/Curriculum'))
@@ -59,11 +63,13 @@ const VisibilityStrategyLab = lazy(() => import('./pages/campus/VisibilityStrate
 const FreshmanClassroom = lazy(() => import('./pages/classroom/FreshmanClassroom'))
 const VoiceTrainingLab = lazy(() => import('./pages/campus/VoiceTrainingLab'))
 const ConsumerLaw = lazy(() => import('./pages/library/ConsumerLaw'))
+const DormWeekVideoGate = lazy(() => import('./nodes/DormWeekPreReg/DormWeekVideoGate'))
 const DormWeekPreReg = lazy(() => import('./nodes/DormWeekPreReg/DormWeekPreReg'))
 const StudentLocker = lazy(() => import('./pages/campus/StudentLocker'))
 const LearnHub = lazy(() => import('./pages/learn/LearnHub'))
 const TrackView = lazy(() => import('./pages/learn/TrackView'))
 const CoursePlayer = lazy(() => import('./pages/learn/CoursePlayer'))
+const Metro2AuditChecklist = lazy(() => import('./pages/credit-lab/Metro2AuditChecklist'))
 
 // --- Layouts ---
 import PublicLayout from './layouts/PublicLayout'
@@ -79,11 +85,14 @@ function App() {
             <AdmissionsProvider>
                 <Router>
                     <Routes>
-                        {/* Public Front Door (Redirected to admissions for build review) */}
-                        <Route path="/" element={<Navigate to="/admissions" replace />} />
-                        <Route path="/login" element={<Navigate to="/admissions" replace />} />
+                        {/* Public Front Door */}
+                        <Route path="/" element={<Suspense fallback={null}><CreditUniversityLanding /></Suspense>} />
+                        <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                         <Route path="/links" element={<Suspense fallback={null}><LinkView /></Suspense>} />
-                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
+                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekVideoGate /></Suspense>} />
+                        {/* 2026 Dorm Week Rush: Replaces legacy DormWeekPreReg white form */}
+                        <Route path="/admissions/register" element={<Suspense fallback={null}><DormWeekFlowA /></Suspense>} />
+                        <Route path="/admissions/summary" element={<Suspense fallback={null}><StudentIdPage /></Suspense>} />
                         <Route path="/learn" element={<Suspense fallback={null}><LearnHub /></Suspense>} />
                         <Route path="/learn/:trackSlug" element={<Suspense fallback={null}><TrackView /></Suspense>} />
                         <Route path="/learn/:trackSlug/:lessonSlug" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
@@ -134,6 +143,7 @@ function App() {
                             <Route path="credit-lab/dispute" element={<Suspense fallback={null}><DisputePage /></Suspense>} />
                             <Route path="credit-lab/simulator" element={<Suspense fallback={null}><SimulatorPage /></Suspense>} />
                             <Route path="credit-lab/audit" element={<Suspense fallback={null}><ReportAuditor /></Suspense>} />
+                            <Route path="credit-lab/audit-checklist" element={<Suspense fallback={null}><Metro2AuditChecklist /></Suspense>} />
                             <Route path="credit-lab/freeze" element={<Suspense fallback={null}><SecurityFreeze /></Suspense>} />
                             <Route path="credit-lab/identity-theft" element={<Suspense fallback={null}><IdentityTheftCenter /></Suspense>} />
                             <Route path="honor-roll" element={<Suspense fallback={null}><HonorRoll /></Suspense>} />
@@ -176,8 +186,8 @@ function App() {
                         {/* Fallback to Admissions (Public) instead of Dashboard (Protected) to avoid login loops */}
                         <Route path="*" element={<Navigate to="/admissions" replace />} />
                     </Routes>
-                    <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono flex flex-col gap-0">
-                        <div>v2.1.0 - SLOT_RESTORED // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
+                <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono flex flex-col gap-0 uppercase">
+                    <div>v2.1.0 - TAKEOVER // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
                         <div className="text-amber-500/50 text-[8px]">STRIPE {import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_') ? 'TEST MODE ACTIVE' : 'LIVE MODE ACTIVE'}</div>
                     </div>
                 </Router>

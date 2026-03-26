@@ -1,17 +1,21 @@
 # Manual Test Steps for React Migration
 
 ## 1. Public Pages
-1.  **Home (`/`)**: Verify "Credit University AI" header, Value Strip, and wider "Platform" layout (no box borders).
-2.  **Admissions (`/admissions`)**: Verify Path Cards and "Create Student ID" button.
-3.  **How It Works (`/how-it-works`)**: Verify steps grid.
-3.  **Pricing (`/pricing`)**: Verify cards.
-4.  **Navigation**: Check links between these pages.
+
+1. **Home (`/`)**: Verify "Credit University AI" header, Value Strip, and wider "Platform" layout (no box borders).
+2. **Admissions (`/admissions`)**: Verify Path Cards and "Create Student ID" button.
+3. **How It Works (`/how-it-works`)**: Verify steps grid.
+4. **Pricing (`/pricing`)**: Verify cards.
+5. **Navigation**: Check links between these pages.
+
 
 ## 2. Authentication
-1.  Click **Log In** -> Should go to `/auth?mode=login`.
-2.  Click **"DEV: Skip Login"**.
-3.  **Result**: Should redirect to `/campus` (Dashboard).
-    -   *Note*: If you are redirected to `/orientation`, the dev user might handle that correctly now as we set `is_orientation_complete: true`.
+
+1. Click **Log In** -> Should go to `/auth?mode=login`.
+2. Click **"DEV: Skip Login"**.
+3. **Result**: Should redirect to `/campus` (Dashboard).
+   - *Note*: If you are redirected to `/orientation`, the dev user might handle that correctly now as we set `is_orientation_complete: true`.
+
 
 ## 3. Dashboard (Campus)
 1.  **Overview (`/campus`)**: Check GPA Gauge and Semester Progress.

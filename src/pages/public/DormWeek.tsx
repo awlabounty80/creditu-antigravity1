@@ -136,7 +136,8 @@ export default function DormWeek() {
         state: '',
         level: 'Freshman',
         goal: 'Raise my score',
-        consent: false
+        consent: false,
+        signature: ''
     });
     const [studentID, setStudentID] = useState<StudentID | null>(null);
     const [enrollmentCount, setEnrollmentCount] = useState(1284);
@@ -272,7 +273,10 @@ export default function DormWeek() {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
-            signatureName: `${formData.firstName} ${formData.lastName} `,
+            dob: formData.dob,
+            city: formData.city,
+            state: formData.state,
+            signatureName: formData.signature || `${formData.firstName} ${formData.lastName}`,
             studentLevel: formData.level,
             primaryMission: formData.goal,
             studentIdCode: newID.code,
@@ -404,6 +408,17 @@ export default function DormWeek() {
                                         Stop trying to fix your credit. <span className="text-amber-400 font-bold italic">Rebuild your institutional identity.</span>
                                     </p>
                                 </div>
+                            </FadeIn>
+
+                            <FadeIn delay={0.7} className="w-full max-w-3xl mx-auto mt-8 bg-black/50 border border-white/20 rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(236,72,153,0.3)] relative group">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-pink-500/10 pointer-events-none z-10" />
+                                <video 
+                                    src="https://video-ord5-2.xx.fbcdn.net/o1/v/t2/f2/m412/AQPUwO8EBUSV0uznvnr-ctq0Dvfx--q-nEJ1erk-K_KoovYR-KUnE0Xnbomk9x8U6QZKxajPripfOXZgVsRs7DxhuQDhd-K07mR02yU.mp4?_nc_cat=105&_nc_sid=5e9851&_nc_ht=video-ord5-2.xx.fbcdn.net&_nc_ohc=Vc2LCVlUrWcQ7kNvwE_z_RH&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5WSV9VU0VDQVNFX1BST0RVQ1RfVFlQRS4uQzMuNjI0LmRhc2hfaDI2NC1iYXNpYy1nZW4yXzcyMHAiLCJ4cHZfYXNzZXRfaWQiOjEzMDc1ODY5NDgyMjI4NzgsImFzc2V0X2FnZV9kYXlzIjowLCJ2aV91c2VjYXNlX2lkIjoxMDk4MCwiZHVyYXRpb25fcyI6MTYsInVybGdlbl9zb3VyY2UiOiJ3d3cifQ%3D%3D&ccb=17-1&_nc_gid=lhf15VVqRHhz-VsolxEhIw&_nc_ss=8&_nc_zt=28&vs=3dd6741d88e2e33f&_nc_vs=HBksFQIYQGZiX3Blcm1hbmVudC9DNTQ0MTlFMTYwNzVCQUMyREM2MkJDOUI0QTA5M0M4Ql92aWRlb19kYXNoaW5pdC5tcDQVAALIARIAFQIYQGZiX3Blcm1hbmVudC9CQzQ3RTUyRjI2QTJFRjBBMkE5NEIzN0UxNDQ5M0U5N19hdWRpb19kYXNoaW5pdC5tcDQVAgLIARIAKAAYABsCiAd1c2Vfb2lsATEScHJvZ3Jlc3NpdmVfcmVjaXBlATEVAAAmvL7--MnP0gQVAigCQzMsF0AwtT987ZFoGBlkYXNoX2gyNjQtYmFzaWMtZ2VuMl83MjBwEQB1AGXIqwEA&oh=00_Afxs_SUbzsbeMc0ypg4OIp8VieCzYtr0figt4h14n9KyVQ&oe=69BC414E"
+                                    controls
+                                    autoPlay
+                                    muted={false}
+                                    className="w-full aspect-video object-cover relative z-20"
+                                />
                             </FadeIn>
 
                             <FadeIn delay={0.8} className="pt-8">
@@ -547,6 +562,40 @@ export default function DormWeek() {
                                         />
                                     </div>
 
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label className="text-xs font-bold uppercase text-slate-500 pl-1">Date of Birth</Label>
+                                            <Input
+                                                required
+                                                type="date"
+                                                value={formData.dob}
+                                                onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                                                className="bg-black/50 border-white/10 focus:border-pink-500 h-14 rounded-xl text-white font-bold [color-scheme:dark]"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label className="text-xs font-bold uppercase text-slate-500 pl-1">City</Label>
+                                            <Input
+                                                required
+                                                value={formData.city}
+                                                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                                className="bg-black/50 border-white/10 focus:border-pink-500 h-14 rounded-xl text-white font-bold"
+                                                placeholder="City"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-xs font-bold uppercase text-slate-500 pl-1">State</Label>
+                                        <Input
+                                            required
+                                            value={formData.state}
+                                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                            className="bg-black/50 border-white/10 focus:border-pink-500 h-14 rounded-xl text-white font-bold"
+                                            placeholder="State (e.g. TX)"
+                                        />
+                                    </div>
+
                                     <div className="space-y-2">
                                         <Label className="text-xs font-bold uppercase text-slate-500 pl-1">Current Academic Status</Label>
                                         <select
@@ -575,6 +624,22 @@ export default function DormWeek() {
                                             <option value="Get credit cards">Get high-limit funding</option>
                                             <option value="Build business credit">Build business credit</option>
                                         </select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-xs font-bold uppercase text-slate-500 pl-1">Official Student Signature</Label>
+                                        <div className="relative">
+                                            <Input
+                                                required
+                                                value={formData.signature}
+                                                onChange={(e) => setFormData({ ...formData, signature: e.target.value })}
+                                                className="bg-black/50 border-white/10 focus:border-pink-500 h-20 rounded-xl text-white font-bold text-2xl italic pl-6"
+                                                placeholder="Type full legal name"
+                                                style={{ fontFamily: "'Dancing Script', 'StyleScript', cursive" }}
+                                            />
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-600 font-mono">DIGITAL_VERIFIED</div>
+                                        </div>
+                                        <p className="text-[10px] text-slate-500 italic pl-1">By signing, you attest that all information provided is accurate under penalty of institutional dismissal.</p>
                                     </div>
 
                                     <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">

@@ -25,15 +25,18 @@ The Batch Generation System is a stateless, institutional-grade media manufactur
 Every lesson MUST follow this structure:
 
 ### 1. Opening Context (30-45 seconds)
+
 - Define the topic
 - State the learning objective
 
 ### 2. Core Instruction (2-8 minutes)
+
 - Explain concepts clearly
 - Use only provided teaching points
 - No improvisation or curriculum invention
 
 ### 3. Reinforcement Summary (30-60 seconds)
+
 - Key takeaway
 - Transition statement
 
@@ -100,21 +103,21 @@ Before finalizing each lesson:
 ## Approved Output Types
 
 1. **LESSON_VIDEO** (3-12 minutes)
-   - Standard educational lesson
-   - Talking-head professor format
-   - Institutional pacing
+    - Standard educational lesson
+    - Talking-head professor format
+    - Institutional pacing
 
 2. **SHORT_EXPLAINER** (15-60 seconds)
-   - Single concept reinforcement
-   - No hype or trend language
+    - Single concept reinforcement
+    - No hype or trend language
 
 3. **CINEMATIC_EXPLAINER**
-   - System visualization
-   - Abstract concept mapping
+    - System visualization
+    - Abstract concept mapping
 
 4. **VISUAL_METAPHOR**
-   - 1:1 concept mapping
-   - Systems understanding
+    - 1:1 concept mapping
+    - Systems understanding
 
 ## Cultural & Representation Standards
 
@@ -169,6 +172,7 @@ await validateBatchSystem();
 ## Error Handling
 
 If generation fails:
+
 - Clear failure reason returned
 - Lesson ID preserved
 - No partial asset generation
@@ -179,6 +183,7 @@ Silent failure is unacceptable.
 ## Scaling Expectations
 
 The system is designed for:
+
 - Hundreds to thousands of lessons
 - Multiple professors and personas
 - Multiple tracks (adults, kids, business)
@@ -188,6 +193,7 @@ The system is designed for:
 ## Success Metrics
 
 The system is successful when:
+
 - Credit U™ can manufacture education without manual recording
 - Professors feel consistent, authoritative, and alive
 - Lessons feel institutional, not influencer-based
@@ -195,6 +201,6 @@ The system is successful when:
 
 ---
 
-**Institution**: Credit U™  
-**Protocol**: FX-Batch-v1  
+**Institution**: Credit U™
+**Protocol**: FX-Batch-v1
 **Status**: Operational
