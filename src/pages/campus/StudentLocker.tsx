@@ -487,18 +487,18 @@ export default function StudentLocker() {
 
     if (showOpening) {
         return (
-            <div className="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center p-6 text-center space-y-8 overflow-hidden">
+            <div className="fixed inset-0 bg-[#020617] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#020617] to-black z-[100] flex flex-col items-center justify-center p-6 text-center space-y-8 overflow-hidden text-white">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    className="p-12 bg-blue-600 rounded-[4rem] shadow-[0_0_100px_rgba(37,99,235,0.4)] relative"
+                    className="p-12 bg-blue-600 rounded-[4rem] shadow-[0_0_100px_rgba(37,99,235,0.4)] relative flex items-center justify-center"
                 >
-                    <Trophy className="w-32 h-32 text-white" />
                     <motion.div
-                        animate={{ opacity: [0, 1, 0], scale: [1, 1.5, 1] }}
+                        animate={{ opacity: [0, 0.5, 0], scale: [1, 1.3, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 bg-white rounded-[4rem]"
+                        className="absolute inset-0 bg-white rounded-[4rem] pointer-events-none"
                     />
+                    <Trophy className="w-32 h-32 text-white relative z-10 drop-shadow-2xl" />
                 </motion.div>
 
                 <div className="space-y-4 max-w-2xl px-6">
@@ -514,7 +514,7 @@ export default function StudentLocker() {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
-                        className="text-6xl font-black uppercase italic tracking-tighter"
+                        className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]"
                     >
                         Admission Bonus
                     </motion.h2>
