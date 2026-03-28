@@ -262,14 +262,14 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
                 await navigator.share({
                     title: 'Credit University Alpha Class',
                     text: 'I just got accepted into the Credit University Dorm Week Takeover. Join me on the inside.',
-                    url: 'https://creditu-antigravity-p4f2e6a47-awlabounty80s-projects.vercel.app'
+                    url: 'https://www.thecredituniversityai.com/admissions'
                 });
             } catch (err) {
                 console.log('Share dismissed');
             }
         } else {
             try {
-                navigator.clipboard.writeText('https://creditu-antigravity-p4f2e6a47-awlabounty80s-projects.vercel.app');
+                navigator.clipboard.writeText('https://www.thecredituniversityai.com/admissions');
                 alert('Access Link copied to clipboard! Paste it to a friend!');
             } catch(e) {}
         }
