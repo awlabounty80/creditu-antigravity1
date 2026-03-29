@@ -89,9 +89,8 @@ function App() {
                         <Route path="/" element={<Suspense fallback={null}><CreditUniversityLanding /></Suspense>} />
                         <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                         <Route path="/links" element={<Suspense fallback={null}><LinkView /></Suspense>} />
-                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekVideoGate /></Suspense>} />
-                        {/* 2026 Dorm Week Rush: Replaces legacy DormWeekPreReg white form */}
-                        <Route path="/admissions/register" element={<Suspense fallback={null}><DormWeekFlowA /></Suspense>} />
+                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
+                        <Route path="/admissions/register" element={<Navigate to="/admissions" replace />} />
                         <Route path="/admissions/summary" element={<Suspense fallback={null}><StudentIdPage /></Suspense>} />
                         <Route path="/learn" element={<Suspense fallback={null}><LearnHub /></Suspense>} />
                         <Route path="/learn/:trackSlug" element={<Suspense fallback={null}><TrackView /></Suspense>} />
@@ -101,8 +100,8 @@ function App() {
                         <Route path="/accepted" element={<Navigate to="/admissions" replace />} />
                         <Route path="/gate" element={<Navigate to="/admissions" replace />} />
 
-                        {/* Gated Dorm Week routes */}
-                        <Route path="/dorm-week" element={<DormWeekGuard><Suspense fallback={null}><DormWeek /></Suspense></DormWeekGuard>} />
+                        {/* Gated Dorm Week routes mapped to Antigravity Edition */}
+                        <Route path="/dorm-week" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
                         <Route path="/dorm-week/protocol" element={<DormWeekGuard><Suspense fallback={null}><Orientation /></Suspense></DormWeekGuard>} />
 
                         {/* Pre-Registration Node (Public) */}
