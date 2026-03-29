@@ -22,11 +22,11 @@ import { useDormWeek, Reward, AdmissionsSession } from '@/hooks/useDormWeek';
 import confetti from 'canvas-confetti';
 
 const SYMBOLS = [
-    { icon: ScrollText, color: 'text-blue-400', label: 'CREDIT U CREDIT TIPS' },
-    { icon: Award, color: 'text-amber-400', label: 'CREDIT U FOUNDERS PASS' },
-    { icon: ListChecks, color: 'text-emerald-400', label: 'CREDIT CHECKLIST' },
-    { icon: ShieldCheck, color: 'text-blue-400', label: 'APPROVED' },
-    { icon: CreditCard, color: 'text-amber-500', label: 'FUNDED' },
+    { icon: ScrollText, color: 'text-amber-400', label: 'CREDIT TIPS' },
+    { icon: ListChecks, color: 'text-amber-500', label: 'CHECKLIST' },
+    { icon: ShieldCheck, color: 'text-amber-400', label: 'DORM WEEK APPROVED' },
+    { icon: Award, color: 'text-blue-500', label: 'FOUNDERS PASS' },
+    { icon: CreditCard, color: 'text-amber-400', label: 'FUNDED' },
     { icon: Key, color: 'text-zinc-600', label: 'LOCKED' } // Index 5 for locked placeholder
 ];
 
@@ -135,6 +135,8 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
     const [showShareModule, setShowShareModule] = useState(false);
     const [bonusReelSpun, setBonusReelSpun] = useState(false);
 
+    // Hardcoded Reel Alignment from user
+    
     useEffect(() => {
         const init = async () => {
             await new Promise(r => setTimeout(r, 500));
@@ -185,22 +187,31 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
                 else if (res.spinCount >= 3) setReels([0, 1, 2]);
                 
                 setCurrentReward(res.reward);
-                setIsSpinning(false);
-                setLocalSpinCount(res.spinCount);
-                playSound('stop');
-
-                // Update session
-                setSession(prev => {
-                    const base = prev || { email, spin_count: 0, rewards_won: [], is_accepted: false, admissions_complete: false, current_step: 'spin' };
-                    return {
-                        ...base,
-                        spin_count: res.spinCount,
-                        rewards_won: [...base.rewards_won, res.reward.id],
-                        is_accepted: res.isAccepted
-                    } as AdmissionsSession;
+                
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    zIndex: 9999,
+                    origin: { y: 0.5, x: 0.5 },
+                    colors: ['#f59e0b', '#fbbf24', '#ffffff', '#eab308']
                 });
 
-                if (res.spinCount === 3) {
+                if (res.spinCount >= 3) {
+                    setIsSpinning(false);
+                    setLocalSpinCount(res.spinCount);
+                    playSound('stop');
+
+                    // Update session
+                    setSession(prev => {
+                        const base = prev || { email, spin_count: 0, rewards_won: [], is_accepted: false, admissions_complete: false, current_step: 'spin' };
+                        return {
+                            ...base,
+                            spin_count: res.spinCount,
+                            rewards_won: [...base.rewards_won, res.reward.id],
+                            is_accepted: res.isAccepted
+                        } as AdmissionsSession;
+                    });
+
                     speak("YOU DID IT! OFFICIAL ADMISSION! You are officially a Freshman at Credit University! Let's Go!");
                     
                     // Fire massive Stadium Horn & Crowd Roar from the video asset track at 100% volume
@@ -214,6 +225,21 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
                     setShowStamp(true);
                     setTimeout(() => setShowShareModule(true), 2500);
                 } else {
+                    setIsSpinning(false);
+                    setLocalSpinCount(res.spinCount);
+                    playSound('stop');
+
+                    // Update session
+                    setSession(prev => {
+                        const base = prev || { email, spin_count: 0, rewards_won: [], is_accepted: false, admissions_complete: false, current_step: 'spin' };
+                        return {
+                            ...base,
+                            spin_count: res.spinCount,
+                            rewards_won: [...base.rewards_won, res.reward.id],
+                            is_accepted: res.isAccepted
+                        } as AdmissionsSession;
+                    });
+
                     const remaining = 3 - res.spinCount;
                     speak(`NICE SHOT! ${remaining} TO GO! Keep that momentum moving!`);
                     playSound('win');
@@ -277,6 +303,7 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
 
     return (
         <div className="flex flex-col items-center justify-start gap-8 w-full relative pb-20">
+
             {/* Session Indicator */}
             <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex gap-4">
                 {[1, 2, 3].map(i => (
@@ -293,17 +320,17 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
             >
                 <div
                     className="absolute inset-0 bg-contain bg-center bg-no-repeat z-10 pointer-events-none drop-shadow-[0_40px_100px_rgba(0,0,0,0.8)]"
-                    style={{ backgroundImage: 'url("/creditu-machine-luxury.png")' }}
+                    style={{ backgroundImage: 'url("/creditu-slot-frame-antigravity.png")' }}
                 />
 
                 {/* THE REEL SYSTEM - VERTICAL SPINNING ROWS */}
-                {/* REELS PLACED AT Z-30 ON TOP OF IMAGE, BUT WITH MIX BLEND SCREEN & NO BACKGROUND TO MERGE WITH THE BLACK WINDOWS */}
                 <div
                     onClick={() => { if (!isSpinning) spin(); }}
-                    className="absolute top-[41.5%] left-1/2 -translate-x-1/2 w-[58%] h-[24.5%] z-30 flex gap-[2%] items-center px-[2%] cursor-pointer mix-blend-screen"
+                    className="absolute left-1/2 -translate-x-1/2 z-30 flex items-center px-[1%] cursor-pointer"
+                    style={{ top: '39%', width: '36.5%', height: '25.5%', gap: '2.5%' }}
                 >
                     {[0, 1, 2].map((reelIdx) => (
-                        <div key={reelIdx} className="flex-1 h-full bg-transparent relative overflow-hidden flex flex-col items-center">
+                        <div key={reelIdx} className="flex-1 h-full bg-[#f8fafc] rounded-md border-[3px] border-amber-600/60 relative overflow-hidden flex flex-col items-center shadow-[inset_0_10px_20px_rgba(0,0,0,0.3),_0_0_15px_rgba(255,255,255,0.1)]">
                             <motion.div
                                 animate={isSpinning ? { y: ["0%", "-500%"] } : { y: "0%" }}
                                 transition={isSpinning ? { duration: 0.15, repeat: Infinity, ease: "linear" } : { type: "spring", stiffness: 300, damping: 20 }}
@@ -312,16 +339,20 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
                                 {isSpinning ? (
                                     // High-Speed Blur Reels
                                     [...Array(6)].map((_, i) => (
-                                        <div key={i} className="flex flex-col items-center justify-center h-[16.666%] filter blur-[3px] opacity-40">
-                                            {React.createElement(SYMBOLS[i % SYMBOLS.length].icon, { className: `w-12 h-12 ${SYMBOLS[i % SYMBOLS.length].color}` })}
+                                        <div key={i} className="flex flex-col items-center justify-center h-[16.666%] filter blur-[1px] opacity-80 pt-2">
+                                            {React.createElement(SYMBOLS[i % SYMBOLS.length].icon, { className: `w-12 h-12 md:w-16 md:h-16 ${SYMBOLS[i % SYMBOLS.length].color}` })}
+                                            <span className="text-[8px] font-black text-slate-800 text-center uppercase px-1 mt-1 leading-none">{SYMBOLS[i % SYMBOLS.length].label}</span>
                                         </div>
                                     ))
                                 ) : (
                                     // Static Winning Result based on state logic (LOCKED or ACTUAL VALUE)
-                                    <div className={`flex flex-col items-center justify-center h-[16.666%] gap-1 ${reels[reelIdx] === 5 ? 'opacity-40' : 'opacity-100'} w-full p-2`}>
+                                    <div className={`flex flex-col items-center justify-center h-[16.666%] gap-2 ${reels[reelIdx] === 5 ? 'opacity-40' : 'opacity-100'} w-full px-1`}>
                                         {React.createElement(SYMBOLS[reels[reelIdx]].icon, {
-                                            className: `w-12 h-12 md:w-20 md:h-20 ${SYMBOLS[reels[reelIdx]].color} drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]`
+                                            className: `w-12 h-12 md:w-16 md:h-16 ${SYMBOLS[reels[reelIdx]].color} drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]`
                                         })}
+                                        <span className={`text-[8px] md:text-[10px] font-black text-center uppercase leading-tight tracking-[0.15em] ${SYMBOLS[reels[reelIdx]].color} drop-shadow-md px-1`}>
+                                            {SYMBOLS[reels[reelIdx]].label}
+                                        </span>
                                     </div>
                                 )}
                             </motion.div>
@@ -332,27 +363,27 @@ export const CreditUAdmissionsMachineV2: React.FC<CreditUAdmissionsMachineProps>
                     ))}
                 </div>
 
-                {/* THE "APPROVED" SMASH STAMP */}
+                {/* THE MASSIVE RESTORED "APPROVED" STAMP (Perfectly centered over reels at 51.75%) */}
                 <AnimatePresence>
                     {showStamp && (
                         <motion.div 
                             initial={{ scale: 5, opacity: 0, rotate: -20 }}
                             animate={{ scale: 1, opacity: 1, rotate: -5 }}
                             transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] z-[60] pointer-events-none flex flex-col items-center justify-center"
+                            className="absolute top-[51.75%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] pointer-events-none flex flex-col items-center justify-center w-full"
                         >
-                            <div className="border-[8px] border-[#E6911D] rounded-xl p-4 bg-blue-900/40 backdrop-blur-md shadow-[0_0_100px_rgba(230,145,29,1)] flex flex-col items-center text-center transform perspective-[1000px] rotateX-[10deg]">
-                                <Stamp className="w-20 h-20 text-[#E6911D] mb-2 drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]" />
-                                <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter text-[#E6911D] uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,1)] leading-none border-b-4 border-[#E6911D] pb-2 mb-2">APPROVED</h1>
-                                <p className="text-3xl font-black text-white tracking-[0.3em] uppercase">CREDIT U DORM WEEK</p>
-                                <p className="text-xl font-bold text-blue-300 tracking-[0.5em] uppercase mt-1">ALPHA CLASS</p>
+                            <div className="border-[8px] border-[#E6911D] rounded-[2rem] p-4 md:p-6 bg-blue-900/60 backdrop-blur-md shadow-[0_0_150px_rgba(230,145,29,1)] flex flex-col items-center text-center transform perspective-[1000px] rotateX-[10deg] scale-75 md:scale-100">
+                                <Stamp className="w-16 h-16 md:w-20 md:h-20 text-[#E6911D] mb-1 drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]" />
+                                <h1 className="text-5xl md:text-8xl font-black italic tracking-tighter text-[#E6911D] uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,1)] leading-none border-b-[6px] border-[#E6911D] pb-3 mb-3">APPROVED</h1>
+                                <p className="text-xl md:text-3xl font-black text-white tracking-[0.3em] uppercase drop-shadow-md">CREDIT U DORM WEEK</p>
+                                <p className="text-lg md:text-xl font-bold text-blue-300 tracking-[0.5em] uppercase mt-2 drop-shadow-md">ALPHA CLASS</p>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 {/* HIGH-ENERGY SPIN BUTTON */}
-                <div className="absolute bottom-[23%] left-1/2 -translate-x-1/2 w-[30%] h-[12%] z-40">
+                <div className="absolute bottom-[28%] left-[49.5%] -translate-x-1/2 w-[28%] h-[12%] z-40">
                     <button
                         onClick={(e) => { 
                             e.stopPropagation(); 
