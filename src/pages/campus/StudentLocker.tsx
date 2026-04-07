@@ -21,6 +21,7 @@ import { supabase } from '@/lib/supabase';
 import { useDormWeek, Reward } from '@/hooks/useDormWeek';
 // @ts-ignore - html2pdf provided via npm
 import html2pdf from 'html2pdf.js';
+import confetti from 'canvas-confetti';
 
 const LOCAL_REWARD_POOL: Reward[] = [
     // --- ALPHA INTEL ROTATION POOL (Slot 1 Spin) ---
@@ -56,81 +57,133 @@ const LOCAL_REWARD_POOL: Reward[] = [
     { id: 'RES-04', type: 'resource', title: 'Debt Validation Master Class', content: 'The step-by-step framework for forcing collectors to prove they have the legal right to collect.', icon: 'ShieldCheck', download_url: '/resources/debt-validation.pdf' }
 ];
 
+const DEEP_WISDOM_DETAILS: Record<string, string> = {
+    'INTEL-01': "The Statement Date Snipe: Your credit score is heavily dictated by utilization, but bureaus only see what is reported on your 'Statement Closing Date', NOT your 'Due Date'. If you wait until your Due Date to pay, the high balance has already been reported to Equifax, Experian, and TransUnion. By paying your balance down to 2% three days BEFORE the Statement Closing Date, you artificially manufacture a near-zero utilization rate, triggering massive, immediate score jumps month-over-month.",
+    'INTEL-02': "The LexisNexis Ghost Protocol: Major bureaus don't go to the courthouse to verify bankruptcies, tax liens, or judgments. They buy this data wholesale from secondary reporting agencies like LexisNexis, CoreLogic, and SageStream. By federally freezing these secondary bureaus BEFORE you dispute public records with the Big Three, you literally cut off their internet connection to the courthouse. When they try to verify, the system returns nothing, forcing a legal deletion.",
+    'INTEL-03': "The 2% Sweet Spot: A $0 balance is not optimal. If your cards report $0, the algorithm assumes you aren't using credit at all, which stalls your velocity. Leaving exactly 2% (e.g., $20 on a $1,000 limit) shows the FICO scoring algorithm that you are actively using credit but managing it with extreme discipline. This triggers the maximum possible 'Active Management' bonus in the FICO 8 model.",
+    'INTEL-04': "The Address Scrub Logic: Under the Fair Credit Reporting Act (FCRA), credit bureaus use automated software called e-OSCAR to verify disputes. This software matches the address tied to a negative account with the addresses on your profile. If you have 15 old addresses on your report, it acts as a permanent anchor for old debt. By deleting all prior addresses and leaving only your current residence, you sever the primary data link collectors use to verify negative accounts.",
+    'INTEL-05': "The \"No-Fly\" Inquiry Limit: The algorithm considers credit-seeking behavior highly risky. Having more than 2 hard inquiries in a 6-month window places you in the 'Desperation Zone'. Top-tier lenders (Chase, Amex) have hard-coded rules that automatically reject applications if they detect this velocity, regardless of your score. You must allow inquiries to age past 6 months before executing a new funding sequence.",
+    'INTEL-06': "The Bureau Sync Secret: Not all bureaus investigate disputes equally. TransUnion is often considered the 'weakest link' in the verification chain. By launching a highly technical Metro 2 dispute against TransUnion first and securing a deletion, you create a powerful precedent. You can then attach the TransUnion deletion confirmation to your subsequent disputes with Experian and Equifax, forcing a domino effect.",
+    'INTEL-07': "The Age Accelerator: Credit Age accounts for 15% of your FICO score. If you have a 'thin file' (less than 2 years of history), no amount of perfect payments will get you to an 800. You need 'seasoned tradelines'. By being added as an Authorized User to a family member's perfect, 10-year-old credit card with a low balance, their entire 10-year history is legally copied onto your blank profile overnight.",
+    'INTEL-08': "The Credit Mix Multiplier: The algorithm rewards diversity. Having 4 credit cards is good, but having 3 credit cards and 1 installment loan (like a small personal loan or auto loan) triggers the 'Credit Mix' multiplier. This shows lenders you can handle multiple types of debt instruments simultaneously. A $500 secured loan paid down to $10 remaining balance is the cheapest way to hack this multiplier.",
+    'INTEL-09': "The Hard Pull Buffer: Banks use internal 'Risk Clocks'. If you apply for a credit card, get approved, and then apply for another one 2 weeks later, the system flags you as a 'Bust-Out Risk' (someone maximizing credit to default). You must enforce a strict 91-day buffer (3 full statement cycles) between major applications to reset the bank's internal sensors and appear as a low-risk, methodical borrower.",
+    'INTEL-10': "The Moo Point Multiplier: The Credit U economy runs on Moo Points. While standard students grind slowly, architects leverage 'compound actions'. Sharing verified intel, linking resources, and completing advanced audits doesn't just earn points—it triggers multipliers. The fastest way to unlock top-tier assets isn't time; it's high-leverage participation in the Campus network."
+};
+
 // PDF WATERMARK TEMPLATE ENGINE
 const getResourceHTML = (reward: Reward, studentName: string) => {
     let contentHTML = '';
 
     if (reward.id === 'RES-01') {
         contentHTML = `
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
-                <h2 style="font-size: 24px; font-weight: 900; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; text-transform: uppercase;">A Message from the Campus</h2>
-                <div style="font-size: 14px; line-height: 1.8; color: #334155;">
-                    <p style="margin-bottom: 15px;">Welcome to Credit University, <b>${studentName}</b>.</p>
-                    <p style="margin-bottom: 15px;">You have successfully secured the <b>Credit Report Review Checklist</b>. This is not a generic summary; this is the exact framework our top architects use to locate critical Metro 2® compliance violations hidden deep within your bureau files.</p>
-                    <p style="margin-bottom: 15px;">Most consumers glance at their credit score and assume the data dictating it is accurate. The reality is that the credit reporting system is fraught with automated errors, mixed files, and illegal reporting practices by data furnishers. Under the Fair Credit Reporting Act (FCRA), you possess the absolute right to demand maximum possible accuracy.</p>
-                    <p style="margin-bottom: 15px;">We have divided this audit into <b>Three Crucial Phases</b> spanning the next few pages. Do not skip steps. Your profile must be scrubbed of conflicting personal identifiers before you challenge specific tradelines. Read the instructions carefully, verify your files across all three major bureaus, and prepare to hold the system accountable.</p>
-                    <p style="margin-top: 30px; font-weight: bold; font-style: italic;">"Money is a game. Credit is the cheat code. Learn the rules to win."</p>
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
+                <h2 style="font-size: 28px; font-weight: 900; color: #1e293b; border-bottom: 4px solid #f59e0b; padding-bottom: 10px; text-transform: uppercase; letter-spacing: -1px;">The Master Credit Report Audit [Metro 2 Protocol]</h2>
+                <div style="font-size: 14px; line-height: 1.8; color: #334155; display: flex; flex-direction: column; gap: 15px;">
+                    <p>Welcome to Credit University, <b>${studentName}</b>.</p>
+                    <p>You have successfully unlocked the <b>Master Credit Report Review Checklist</b>. This is not a generic summary; this is the aggressive framework our top architects use to locate critical Metro 2® compliance violations hidden deep within your bureau files.</p>
+                    <p>Under the Fair Credit Reporting Act (FCRA), data furnishers must report with <b>100% MAXIMUM POSSIBLE ACCURACY</b>. If a single data point is factually contradictory across Equifax, Experian, or TransUnion, the original creditor is legally bound to delete the entire tradeline. It is <i>that</i> strict.</p>
+                    <p>We are searching for factual, undeniable errors to rip the accounts out of the system. Do not skip steps. Your profile must be scrubbed of conflicting personal identifiers before you challenge specific tradelines. Read carefully.</p>
+                    <div style="background: #fef08a; border-left: 4px solid #ca8a04; padding: 15px; border-radius: 4px; color: #854d0e; font-weight: 700; font-style: italic;">"Money is a game. Credit is the cheat code. Finding the error is the checkmate."</div>
                 </div>
             </div>
 
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
-                <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Phase 1: Personal Profile Scrub (FCRA § 611)</h2>
-                <p style="font-size: 13px; color: #64748b; margin-top: -20px; margin-bottom: 10px;">Before attacking negative accounts, you must sever the data links tying those accounts to you. Bureau software (e-OSCAR) automatically verifies disputed debts if the address tied to the debt still matches an address on your profile.</p>
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px;">
+                <h2 style="font-size: 24px; font-weight: 900; color: #dc2626; text-transform: uppercase;">Phase 1: The Identity Scrub (FCRA § 611)</h2>
+                <p style="font-size: 13px; color: #64748b; margin-top: -20px; margin-bottom: 10px;">Before attacking negative accounts, sever the data links. Bureau software (e-OSCAR) verifies debts if the address tied to the debt still matches an address on your profile.</p>
                 
-                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                    <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px;">1. Name Normalization</h3>
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">You are legally required to only have ONE correct, properly spelled name on your credit file. If you see misspellings, maiden names, or completely incorrect names, these are often errors created by lenders merging files.</p>
-                    <ul style="font-size: 13px; color: #475569; padding-left: 20px;">
-                        <li>Identify everything that is not your exact, current legal name.</li>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #ef4444;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">1. Name & DOB Normalization</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">You are legally required to only have ONE correct name string and ONE Date of Birth.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>Identify misspellings, maiden names, middle initials, or completely incorrect names.</li>
                         <li>Demand deletion stating: "Never went by this name."</li>
                     </ul>
                 </div>
 
-                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                    <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px;">2. Address & Employment Freeze</h3>
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">Debt collectors use old addresses and past employers to locate you and verify old accounts. Having 15 past addresses makes you look unstable to auto lenders.</p>
-                    <ul style="font-size: 13px; color: #475569; padding-left: 20px;">
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #ef4444;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">2. The Acid Address Wash</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">Having 15 past addresses makes you look unstable and allows collectors to verify old debts.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
                         <li>Remove ALL addresses except your current physical residence.</li>
-                        <li>Remove ALL phone numbers except your current primary mobile.</li>
-                        <li>Delete ALL employment history—it has no bearing on your score and only serves debt collectors.</li>
+                        <li>Delete ALL employment history—it has no bearing on score and only helps collectors garnish checks.</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #ef4444;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">3. The Secondary Bureau Trap</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">The major bureaus do not go to the courthouse. They buy data from LexisNexis, CoreLogic, and SageStream.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>If you have public records/bankruptcies, you MUST freeze LexisNexis/CoreLogic before disputing.</li>
                     </ul>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
-                <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Phase 2 & 3: Negative Account Auditing</h2>
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px;">
+                <h2 style="font-size: 24px; font-weight: 900; color: #eab308; text-transform: uppercase;">Phase 2: Technical Metro 2 Auditing</h2>
+                <p style="font-size: 13px; color: #64748b; margin-top: -20px; margin-bottom: 10px;">Compare identical accounts across EQ, EXP, and TU. Any deviation across columns is an FCRA violation.</p>
                 
-                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                    <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px;">3. The DLA Sweep (Date of Last Activity)</h3>
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">The DLA is the most important date on a negative account because it dictates the 7-year reporting clock. Collection agencies often try to illegally change this date to keep the debt on your report longer (Re-aging).</p>
-                    <ul style="font-size: 13px; color: #475569; padding-left: 20px;">
-                        <li>Compare the exact DLA for the <b>same account</b> across Equifax, Experian, and TransUnion.</li>
-                        <li>If the dates do not match perfectly, the furnisher is violating Metro 2 standards.</li>
-                        <li>This is an actionable dispute for factual inaccuracy.</li>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #eab308;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">4. Date of Last Activity (DLA) Trap</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">This dictates the 7-year reporting clock. Collection agencies illegally change this to reset the clock (Re-aging).</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>Does the DLA match perfectly down to the month across all 3 bureaus? If not = DELETE.</li>
                     </ul>
                 </div>
 
-                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                    <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px;">4. High Balance vs. Reporting Limit</h3>
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">Look closely at charged-off credit cards. Once an account is charged off, the creditor cannot continue to report the balance exceeding the credit limit while also reporting it as closed.</p>
-                    <ul style="font-size: 13px; color: #475569; padding-left: 20px;">
-                        <li>Check if the reported balance is higher than the original high limit.</li>
-                        <li>Verify if late payments are being reported <b>after</b> the charge-off date.</li>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #eab308;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">5. Date Opened vs. Date Assigned</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">A collection agency cannot report a "Date Opened" that is prior to when they actually bought the debt.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>If "Date Opened" matches the original creditor's date, they are illegally assuming original creditor status.</li>
                     </ul>
                 </div>
 
-                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                    <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px;">5. The Secondary Bureau Trap</h3>
-                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">The major bureaus do not go to the courthouse to verify bankruptcies and tax liens. They buy this data from secondary companies like LexisNexis and CoreLogic.</p>
-                    <ul style="font-size: 13px; color: #475569; padding-left: 20px;">
-                        <li>If you have public records, you must request a security freeze on LexisNexis and CoreLogic <b>before</b> disputing the public record with the big three.</li>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #eab308;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">6. The "Past Due" Balance Fraud</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">If an account is a Charge-Off or Collection, it is CLOSED. A closed account cannot have a "Past Due" balance going up every month.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>Is a Charged-Off account showing a Past Due Balance? (Violation)</li>
+                        <li>Is the Collection Agency reporting 120 Days Late on a closed account? (Violation)</li>
                     </ul>
+                </div>
+
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #eab308;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">7. Account Type Contradictions</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">A collection string is NOT an installment loan or a revolving line of credit. It is an "Open" or "Collection" account.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>Is the collection agency reporting as an "Installment Account" or "Factoring Company Account"? If yes = DELETE.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <h2 style="font-size: 24px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Phase 3: The Fatal Blows & Executions</h2>
+                
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #3b82f6;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">8. The "No Double Jeopardy" Rule</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">You cannot have a balance reporting with the Original Creditor AND the Collection Agency. That is reporting double debt.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>If the Original Creditor sold the debt, their balance MUST report as $0. If it doesn't = DELETE.</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #3b82f6;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">9. Status Code Conflicts (Field 17)</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">If EQ reports Status Code 97 (Unpaid Charge-off), but EXP reports Code 93 (Collection), they are factually contradicting each other.</p>
+                    <ul style="font-size: 13px; color: #475569; margin-bottom:0; padding-left: 20px;">
+                        <li>Both cannot be true simultaneously. Identify the conflict and demand immediate deletion for inaccurate reporting.</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 6px solid #3b82f6;">
+                    <h3 style="font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">10. Consumer Dispute Verification (CDV) Lockout</h3>
+                    <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">Once you identify an error, write a highly technical dispute pointing out the <b>exact field</b> and <b>exact contradiction</b>. Do not say "not mine". Say: "The DLA on EQ is 04/22 but EXP is 06/22. This violates FCRA mandates for maximum accuracy. Delete completely."</p>
                 </div>
             </div>
         `;
     } else if (reward.id === 'RES-02') {
         contentHTML = `
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 24px; font-weight: 900; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; text-transform: uppercase;">A Message from the Campus</h2>
                 <div style="font-size: 14px; line-height: 1.8; color: #334155;">
                     <p style="margin-bottom: 15px;">Welcome to Credit University, <b>${studentName}</b>.</p>
@@ -141,7 +194,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Round 1: The Factual Dispute (Days 1-35)</h2>
                 
                 <div style="background: #f0fdf4; border-left: 6px solid #22c55e; padding: 25px; border-radius: 8px; margin-bottom: 20px;">
@@ -157,7 +210,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Round 2 & 3: Escalation Protocols</h2>
                 
                 <div style="background: #fefce8; border-left: 6px solid #eab308; padding: 25px; border-radius: 8px; margin-bottom: 20px;">
@@ -183,7 +236,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
         `;
     } else if (reward.id === 'RES-03') {
         contentHTML = `
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 24px; font-weight: 900; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; text-transform: uppercase;">A Message from the Campus</h2>
                 <div style="font-size: 14px; line-height: 1.8; color: #334155;">
                     <p style="margin-bottom: 15px;">Welcome to Credit University, <b>${studentName}</b>.</p>
@@ -194,7 +247,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Primary Targets: Account Status & History</h2>
                 
                 <div style="background: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 20px;">
@@ -215,7 +268,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #3b82f6; text-transform: uppercase;">Secondary Targets: Dates & Types</h2>
                 
                 <div style="background: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 20px;">
@@ -233,7 +286,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
         `;
     } else if (reward.id === 'RES-04') {
         contentHTML = `
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 24px; font-weight: 900; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; text-transform: uppercase;">A Message from the Campus</h2>
                 <div style="font-size: 14px; line-height: 1.8; color: #334155;">
                     <p style="margin-bottom: 15px;">Welcome to Credit University, <b>${studentName}</b>.</p>
@@ -244,7 +297,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="page-break-after: always; display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+            <div style="page-break-after: always; display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #dc2626; text-transform: uppercase;">Phase 1: The Initial Notice Demand</h2>
                 
                 <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 25px; border-radius: 8px; margin-bottom: 20px;">
@@ -268,7 +321,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <h2 style="font-size: 22px; font-weight: 900; color: #dc2626; text-transform: uppercase;">Phase 2: The Attack Requirements</h2>
                 
                 <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 25px; border-radius: 8px;">
@@ -288,7 +341,7 @@ const getResourceHTML = (reward: Reward, studentName: string) => {
         `;
     } else {
         contentHTML = `
-            <div style="display: grid; grid-template-columns: 1fr; gap: 40px;">
+            <div style="display: flex; flex-direction: column; gap: 40px;">
                 <div>
                     <h2 style="font-size: 18px; font-weight: 900; color: #3b82f6; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase;">Strategic Overview</h2>
                     <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -339,6 +392,7 @@ export default function StudentLocker() {
     const [userName, setUserName] = useState('Architect');
     const [showOpening, setShowOpening] = useState(false);
     const [mooPoints, setMooPoints] = useState(500);
+    const [wisdomItem, setWisdomItem] = useState<Reward | null>(null);
 
     const getRank = (pts: number) => {
         if (pts >= 10000) return 'GRADUATE';
@@ -451,6 +505,20 @@ export default function StudentLocker() {
                     return dbPool.find(r => r.id === id) || LOCAL_REWARD_POOL.find(r => r.id === id);
                 }).filter(Boolean) as Reward[];
 
+                // Ensure they always have at least 1 Tip, 1 Resource, and 1 Acceptance
+                if (!finalSet.some(r => r.type === 'tip')) {
+                    const tip = LOCAL_REWARD_POOL.find(r => r.id === 'INTEL-01');
+                    if (tip) finalSet.unshift(tip);
+                }
+                if (!finalSet.some(r => r.type === 'resource')) {
+                    const res = LOCAL_REWARD_POOL.find(r => r.id === 'RES-01');
+                    if (res) finalSet.push(res);
+                }
+                if (!finalSet.some(r => r.type === 'acceptance')) {
+                    const acc = LOCAL_REWARD_POOL.find(r => r.id === 'ACC-01');
+                    if (acc) finalSet.push(acc);
+                }
+
                 // Ultimate Failsafe: If resolution somehow yields 0 items, force injection.
                 if (finalSet.length === 0) {
                     console.warn("StudentLocker: [TELEMETRY] Final Set empty despite IDs! Forcing defaults.");
@@ -485,85 +553,110 @@ export default function StudentLocker() {
         selectedType === 'all' ? true : r.type === selectedType
     );
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
+                <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+                <p className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs">Synchronizing Vault Assets...</p>
+            </div>
+        );
+    }
+
     if (showOpening) {
         return (
-            <div className="fixed inset-0 bg-[#020617] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#020617] to-black z-[100] flex flex-col items-center justify-center p-6 text-center space-y-8 overflow-hidden text-white">
+            <div className="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center p-6 text-center space-y-8 overflow-hidden text-white selection:bg-amber-500/30">
+                {/* Antigravity Cinematic Background */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.2)_0%,black_70%)] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay" />
+                </div>
+
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    className="p-12 bg-blue-600 rounded-[4rem] shadow-[0_0_100px_rgba(37,99,235,0.4)] relative flex items-center justify-center"
+                    initial={{ opacity: 0, scale: 0.5, rotateX: 45 }}
+                    animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="relative z-10 p-12 bg-gradient-to-br from-[#0f172a]/90 to-black rounded-[4rem] border-2 border-amber-500/30 shadow-[0_0_100px_rgba(245,158,11,0.3),inset_0_0_40px_rgba(245,158,11,0.1)] flex items-center justify-center backdrop-blur-3xl group"
                 >
                     <motion.div
-                        animate={{ opacity: [0, 0.5, 0], scale: [1, 1.3, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 bg-white rounded-[4rem] pointer-events-none"
+                        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.2)_0%,transparent_100%)] rounded-[4rem] pointer-events-none"
                     />
-                    <Trophy className="w-32 h-32 text-white relative z-10 drop-shadow-2xl" />
+                    <Trophy className="w-40 h-40 text-amber-500 drop-shadow-[0_0_30px_#f59e0b] group-hover:scale-110 transition-transform duration-700" />
                 </motion.div>
 
-                <div className="space-y-4 max-w-2xl px-6">
+                <div className="space-y-4 max-w-3xl px-6 relative z-10 pt-4">
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: "spring", damping: 10 }}
-                        className="inline-flex px-6 py-2 rounded-full bg-amber-500 text-black font-black uppercase tracking-widest text-sm mb-4"
+                        transition={{ type: "spring", damping: 10, delay: 0.2 }}
+                        className="inline-flex px-8 py-3 rounded-full border border-amber-500/50 bg-amber-500/10 backdrop-blur-md text-amber-400 font-black uppercase tracking-[0.3em] text-xs mb-4 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
                     >
-                        +500 MOO POINTS AWARDED
+                        <Zap className="w-4 h-4 mr-2" /> +500 MOO POINTS AWARDED
                     </motion.div>
+                    
                     <motion.h2
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                        transition={{ delay: 0.4 }}
+                        className="text-6xl md:text-8xl lg:text-[7rem] font-black uppercase italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)] leading-none"
                     >
-                        Admission Bonus
+                        Admission <br/> Bonus
                     </motion.h2>
+                    
                     <motion.p
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-slate-400 text-xl font-bold uppercase italic"
+                        transition={{ delay: 0.5 }}
+                        className="text-slate-300 text-xl md:text-2xl font-bold uppercase tracking-widest pt-4 max-w-2xl mx-auto border-t border-amber-500/20"
                     >
-                        Welcome to the Campus. Your starting balance has been credited.
+                        Welcome to the Campus. Your starting vault balance has been officially credited.
                     </motion.p>
                 </div>
 
                 <motion.button
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: 0.7 }}
                     onClick={() => {
                         console.log("StudentLocker: Unlocking Vault...");
                         confetti({
-                            particleCount: 100,
-                            spread: 70,
-                            origin: { y: 0.6 }
+                            particleCount: 150,
+                            spread: 100,
+                            origin: { y: 0.6 },
+                            colors: ['#f59e0b', '#fbbf24', '#ffffff', '#eab308'],
+                            zIndex: 9999
                         });
                         setShowOpening(false);
                     }}
-                    className="px-12 h-20 bg-white text-black font-black uppercase tracking-widest rounded-3xl hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.2)]"
+                    className="relative z-10 px-12 h-20 bg-amber-500 text-black font-black uppercase tracking-[0.4em] rounded-full hover:scale-105 hover:bg-amber-400 transition-all shadow-[0_0_40px_rgba(245,158,11,0.4)] active:scale-95"
                 >
-                    Access Your Vault
+                    Unlock My Vault
                 </motion.button>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#020617] text-white p-6 md:p-12 pb-32">
-            <div className="fixed top-6 left-6 z-50">
+        <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
+            {/* Antigravity Premium Layering */}
+            <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.05)_0%,transparent_70%)] pointer-events-none z-0" />
+            <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay z-0" />
+            
+            <div className="fixed top-6 left-6 z-[60]">
                 <button
                     onClick={() => navigate('/learn')}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors backdrop-blur-md"
                 >
                     <ChevronRight className="w-4 h-4 rotate-180" />
                     Back to The Yard
                 </button>
             </div>
 
-            {/* Header Section */}
-            <div className="max-w-7xl mx-auto space-y-12">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-12">
+            {/* Main Content Scroll Area */}
+            <div className="relative z-10 max-w-7xl mx-auto space-y-12 mt-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-12 pt-8">
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-500">
                             <Lock className="w-3 h-3" />
@@ -686,50 +779,51 @@ export default function StudentLocker() {
                                         <div className="pt-6 border-t border-white/5 flex flex-col gap-3">
                                             {reward.type === 'resource' ? (
                                                 <div className="flex flex-col gap-2 w-full">
-                                                    {reward.id === 'RES-01' && (
-                                                        <button 
-                                                            onClick={() => navigate('/dashboard/credit-lab/audit-checklist')}
-                                                            className="w-full bg-blue-600 text-white h-14 rounded-2xl flex items-center justify-center gap-2 font-black uppercase tracking-widest text-xs hover:bg-blue-500 transition-colors shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
-                                                        >
-                                                            <ExternalLink className="w-4 h-4" />
-                                                            View Interactive Guide
-                                                        </button>
-                                                    )}
                                                     <button
                                                         onClick={async () => {
                                                             const btn = document.activeElement as HTMLButtonElement;
                                                             if (btn) btn.disabled = true;
 
                                                             try {
-                                                                console.log("StudentLocker: [PDF] Initializing Engine...");
+                                                                console.log("StudentLocker: [PDF] Module loading...");
+                                                                const html2pdfModule = await import('html2pdf.js');
+                                                                const generatePdf = html2pdfModule.default ? html2pdfModule.default : html2pdfModule;
+                                                                
+                                                                // Create a visible (but off-screen) container to force layout painting
+                                                                const element = document.createElement("div");
+                                                                element.innerHTML = getResourceHTML(reward, userName);
+                                                                element.style.position = 'fixed';
+                                                                element.style.left = '-2000px';
+                                                                element.style.top = '0';
+                                                                element.style.width = '800px';
+                                                                element.style.backgroundColor = '#ffffff';
+                                                                element.style.zIndex = '-9999';
+                                                                document.body.appendChild(element);
 
-                                                                // Get raw HTML String
-                                                                const htmlString = getResourceHTML(reward, userName);
+                                                                // Wait for layout and styles to calculate
+                                                                await new Promise(resolve => setTimeout(resolve, 500));
 
                                                                 const opt = {
-                                                                    margin: 10,
-                                                                    filename: `${reward.title}-${userName}.pdf`,
+                                                                    margin: 15,
+                                                                    filename: `${reward.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
                                                                     image: { type: 'jpeg', quality: 0.98 },
                                                                     html2canvas: {
                                                                         scale: 2,
                                                                         useCORS: true,
+                                                                        logging: true,
                                                                         letterRendering: true,
-                                                                        backgroundColor: '#ffffff'
+                                                                        windowWidth: 800
                                                                     },
                                                                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                                                                 };
 
-                                                                console.log("StudentLocker: [PDF] capturing...");
-
-                                                                // By passing the string directly, html2pdf manages its own hidden iframe
-                                                                // This completely eliminates the blank-page CSS rendering bug
-                                                                await html2pdf().from(htmlString).set(opt).save();
-
-                                                                console.log("StudentLocker: [PDF] Success.");
+                                                                await generatePdf().set(opt).from(element).save();
+                                                                document.body.removeChild(element);
+                                                                console.log("StudentLocker: [PDF] Generation Finalized.");
                                                             } catch (err) {
-                                                                console.error("StudentLocker: [PDF] Error:", err);
+                                                                console.error("StudentLocker: [PDF] Fatal Execution Error:", err);
                                                                 if (reward.download_url) window.open(reward.download_url, '_blank');
-                                                                else alert("PDF generation failed. Using secondary download link...");
+                                                                else alert("Engine failure. Please try direct download link.");
                                                             } finally {
                                                                 if (btn) btn.disabled = false;
                                                             }
@@ -742,7 +836,8 @@ export default function StudentLocker() {
                                                     {reward.download_url && (
                                                         <a 
                                                             href={reward.download_url} 
-                                                            download
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
                                                             className="text-[9px] text-slate-500 font-bold uppercase tracking-widest text-center hover:text-white transition-colors"
                                                         >
                                                             Trouble? Direct Download
@@ -759,7 +854,7 @@ export default function StudentLocker() {
                                                 </button>
                                             ) : (
                                                 <button
-                                                    onClick={() => alert(`Wisdom Insight: ${reward.content}`)}
+                                                    onClick={() => setWisdomItem(reward)}
                                                     className="flex-1 bg-blue-600 text-white h-14 rounded-2xl flex items-center justify-center gap-2 font-black uppercase tracking-widest text-xs hover:bg-blue-500 transition-colors"
                                                 >
                                                     <Sparkles className="w-4 h-4" />
@@ -797,6 +892,57 @@ export default function StudentLocker() {
                     </button>
                 </div>
             </div>
+
+            {/* Wisdom Modal */}
+            <AnimatePresence>
+                {wisdomItem && (
+                    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                            onClick={() => setWisdomItem(null)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-2xl bg-[#0a0f2d] border border-blue-500/30 rounded-3xl p-8 md:p-12 shadow-[0_0_100px_rgba(37,99,235,0.2)] overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-[50%] h-full bg-blue-600 opacity-[0.03] rotate-12 translate-x-12 translate-y-12 pointer-events-none" />
+                            
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="p-3 bg-blue-600/20 text-blue-500 rounded-xl">
+                                    <Sparkles className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-blue-500 font-bold uppercase tracking-widest text-xs mb-1">Deep Insight Protocol</p>
+                                    <h2 className="text-2xl md:text-3xl font-black italic uppercase text-white tracking-tighter leading-none">{wisdomItem.title}</h2>
+                                </div>
+                            </div>
+
+                            <div className="bg-black/60 border border-white/5 rounded-2xl p-6 mb-8 mt-6">
+                                <p className="text-blue-400 text-sm md:text-base leading-relaxed italic border-l-4 border-blue-500 pl-4 font-medium mb-6">
+                                    "{wisdomItem.content}"
+                                </p>
+                                <div className="text-slate-300 text-sm md:text-base leading-relaxed space-y-4">
+                                    {(DEEP_WISDOM_DETAILS[wisdomItem.id] || "This represents foundational financial architecture. Study its implications closely, as its precise application separates students from masters.").split('\n').map((para: string, idx: number) => (
+                                        <p key={idx}>{para}</p>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => setWisdomItem(null)}
+                                className="w-full bg-blue-600 text-white font-black uppercase tracking-[0.2em] h-14 rounded-xl hover:bg-blue-500 transition-colors"
+                            >
+                                Secure Insight
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
