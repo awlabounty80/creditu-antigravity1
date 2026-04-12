@@ -1,9 +1,48 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Environment variables
 .env
-.env.*
+.env.local
+.env.*.local
+
+# Logs and temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor & OS files
+.vscode/.env
 .DS_Store
-.gemini
-coverage
-build
-.vercel
+Thumbs.db
+*.swp
+*.swo
+
+# Build artifacts
+*.zip
+*.tar.gz
+
+# Project-specific clutter (this is what cleans the mess)
+archive/                  # we'll move old stuff here
+temp_*
+*_utf8*
+*_old*
+*_FIX*
+*_final*
+*_pre_takeover*
+dorm_week_log*
+dollar_search*
+tsc_errors*
+fresh_clone_test*
+credit-u-release.zip
+*.bak
+*.tmp
+
+# Supabase local (optional)
+supabase/.env
+
+# Coverage & tests (add later)
+coverage/
