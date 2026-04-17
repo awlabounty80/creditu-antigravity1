@@ -11,6 +11,7 @@ export interface Profile {
     avatar_url: string | null
     role: 'student' | 'professor' | 'admin' | 'dean'
     academic_level: 'foundation' | 'freshman' | 'sophomore' | 'junior' | 'senior' | 'graduate'
+    subscription_tier?: 'free' | 'premium'
     gpa: number
     credits_earned: number
     moo_points: number

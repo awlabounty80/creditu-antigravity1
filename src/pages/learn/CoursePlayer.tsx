@@ -24,6 +24,8 @@ import { GamificationService } from '../../lib/gamification';
 import { cn } from '../../lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useProfile } from '@/hooks/useProfile';
+import { hasAcademicAccess, AcademicLevel } from '@/lib/permissions';
 
 import { CinematicBriefing } from '../../components/cinematic/CinematicBriefing';
 
@@ -31,6 +33,7 @@ export default function CoursePlayer() {
 
     const { trackSlug, lessonSlug } = useParams();
     const navigate = useNavigate();
+    const { profile } = useProfile();
 
     const [lesson, setLesson] = useState<any | null>(null);
     const [notes, setNotes] = useState("");
@@ -250,6 +253,24 @@ export default function CoursePlayer() {
             <h1 className="text-2xl font-bold mb-4">Lesson Declassified</h1>
             <p className="text-slate-400 mb-6">This lesson is either restricted or does not exist in the current sector.</p>
             <Button onClick={() => navigate(`/learn/${trackSlug}`)}>Return to Track</Button>
+        </div>
+    );
+
+    const clientCourse = trackSlug ? getClientCourse(trackSlug) : null;
+    const isAuthorized = clientCourse && profile
+        ? hasAcademicAccess(profile.role, profile.academic_level, (clientCourse.level?.toLowerCase() || 'freshman') as AcademicLevel, true)
+        : true;
+
+
+    if (!isAuthorized) return (
+        <div className="flex flex-col items-center justify-center h-screen bg-[#020412] text-white p-8 text-center">
+            <Lock className="w-16 h-16 text-amber-500/50 mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Secure Clearance Required</h2>
+            <p className="text-slate-400 max-w-md mb-6">
+                This track requires <span className="text-amber-500 font-bold uppercase">{clientCourse?.level || 'FRESHMAN'}</span> clearance. 
+                Your current standing is <span className="text-indigo-400 font-bold uppercase">{profile?.academic_level || 'FOUNDATION'}</span>.
+            </p>
+            <Button onClick={() => navigate('/learn')}>Return to Campus</Button>
         </div>
     );
 
