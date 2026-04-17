@@ -1,12 +1,14 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, BookOpen, Trophy, TrendingUp, Sparkles, Zap, Clock, Play, Activity, Eye, Mic, Wrench, Beaker, ShoppingCart, Users, Image as ImageIcon, Lock, Library } from 'lucide-react'
+import { ArrowRight, BookOpen, Trophy, TrendingUp, Sparkles, Zap, Clock, Play, Activity, Eye, Mic, Wrench, Beaker, ShoppingCart, Users, Image as ImageIcon, Lock, Library, Brain, AlertTriangle, ShieldCheck, X } from 'lucide-react'
 import { CreditULogo } from '@/components/common/CreditULogo'
 import { useProfile } from '@/hooks/useProfile'
+import { hasAcademicAccess, hasPremiumAccess, hasToolAccess, AcademicLevel } from '@/lib/permissions'
 import { useGamification } from '@/hooks/useGamification'
 import { supabase } from '@/lib/supabase'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { FundingUnlock } from '@/components/dashboard/FundingUnlock'
 import { AnnouncementBanner } from '@/components/dashboard/AnnouncementBanner'
 import { StudentHeader } from '@/components/dashboard/StudentHeader'
@@ -28,7 +30,7 @@ import { MISSIONS } from '@/data/missions'
 import { useSound } from '@/hooks/useSound'
 
 // COMMAND CENTER CONFIGURATION
-type BadgeType = 'Active' | 'Continue' | 'Updated' | 'New' | 'Coming Soon';
+type BadgeType = 'Active' | 'Continue' | 'Updated' | 'New' | 'Coming Soon' | 'Locked' | string;
 
 interface CommandCenterCardData {
     title: string;
@@ -38,9 +40,12 @@ interface CommandCenterCardData {
     badge?: BadgeType;
     isDisabled?: boolean;
     colorClassName: string;
+    requiredLevel?: AcademicLevel;
+    requirePremium?: boolean;
+    requiredFlag?: string;
 }
 
-const COMMAND_CENTER_APPS: CommandCenterCardData[] = [
+const STATIC_COMMAND_CENTER_APPS: CommandCenterCardData[] = [
     {
         title: 'Curriculum',
         description: 'Course player & verified lessons',
@@ -99,21 +104,28 @@ const COMMAND_CENTER_APPS: CommandCenterCardData[] = [
         colorClassName: 'from-orange-500/20 to-orange-600/5 border-orange-500/30 text-orange-400 group-hover:border-orange-400/60',
     },
     {
-        title: 'Student Locker',
-        description: 'Secure document storage',
-        icon: Lock,
-        route: '#',
-        badge: 'Coming Soon',
-        isDisabled: true,
+        title: 'Dispute Wizard',
+        description: 'AI-powered dispute engine',
+        icon: ShieldCheck,
+        route: '/dashboard/tools/dispute-generator',
+        requirePremium: true,
+        requiredFlag: 'NODE_DISPUTE_LAB',
+        colorClassName: 'from-indigo-500/20 to-indigo-600/5 border-indigo-500/30 text-indigo-400 group-hover:border-indigo-400/60',
+    },
+    {
+        title: 'Neural Network',
+        description: 'Deep financial analysis',
+        icon: Brain,
+        route: '/dashboard/neural-network',
+        requiredLevel: 'junior',
         colorClassName: 'from-slate-500/10 to-slate-600/5 border-white/5 text-slate-500 group-hover:border-white/10',
     },
     {
         title: 'Dream Architect',
         description: 'AI blueprint generation',
         icon: Activity,
-        route: '#',
-        badge: 'Coming Soon',
-        isDisabled: true,
+        route: '/dashboard/dream-architect',
+        requiredLevel: 'senior',
         colorClassName: 'from-slate-500/10 to-slate-600/5 border-white/5 text-slate-500 group-hover:border-white/10',
     }
 ];
@@ -134,12 +146,68 @@ export default function StudentDashboard() {
     const { points } = useGamification()
     const { playHover, playClick } = useSound()
     const [searchParams] = useSearchParams()
+    
+    const location = useLocation()
     const navigate = useNavigate()
+    const [uiError, setUiError] = useState<string | null>(null)
+
+    // Handle incoming UI errors from RequireAuth redirects
+    useEffect(() => {
+        if (location.state?.uiError) {
+            setUiError(location.state.uiError)
+            // Clear the state so it doesn't persist on refresh
+            window.history.replaceState({}, document.title)
+            
+            // Auto-dismiss after 8 seconds
+            const timer = setTimeout(() => setUiError(null), 8000)
+            return () => clearTimeout(timer)
+        }
+    }, [location])
 
     // 🔬 DEVELOPMENT BYPASS HOOK
     if (searchParams.get('bypass') === 'true') {
         sessionStorage.setItem('auth_bypass', 'enabled');
     }
+
+    const commandCenterApps = useMemo(() => {
+        if (!profile) return STATIC_COMMAND_CENTER_APPS;
+
+        return STATIC_COMMAND_CENTER_APPS.map(app => {
+            let isDisabled = app.isDisabled;
+            let badge = app.badge;
+            let colorClassName = app.colorClassName;
+
+            // Flag/Tool Auth (Dispute Wizard etc)
+            if (app.requiredFlag) {
+                const flags = JSON.parse(localStorage.getItem('creditu_feature_flags') || '{}');
+                if (!hasToolAccess(profile.role, flags, app.requiredFlag)) {
+                    isDisabled = true;
+                    badge = 'Locked';
+                    colorClassName = 'from-slate-500/10 to-slate-600/5 border-white/5 text-slate-500';
+                }
+            }
+
+            // Academic Auth
+            if (app.requiredLevel) {
+                if (!hasAcademicAccess(profile.role, (profile as any).academic_level, app.requiredLevel)) {
+                    isDisabled = true;
+                    badge = `${app.requiredLevel.toUpperCase()} CLR REQ`;
+                    colorClassName = 'from-amber-500/10 to-amber-600/5 border-amber-500/20 text-amber-500/60';
+                }
+            }
+
+            // Premium Auth
+            if (app.requirePremium) {
+                if (!hasPremiumAccess(profile.role, (profile as any).subscription_tier)) {
+                    isDisabled = true;
+                    badge = 'PREMIUM ONLY';
+                    colorClassName = 'from-indigo-500/10 to-indigo-600/5 border-indigo-500/20 text-indigo-400/60';
+                }
+            }
+
+            return { ...app, isDisabled, badge, colorClassName };
+        });
+    }, [profile]);
 
     const [enrollments, setEnrollments] = useState<EnrolledCourse[]>([])
     const [creditsEarned, setCreditsEarned] = useState(0)
@@ -186,7 +254,7 @@ export default function StudentDashboard() {
             const { data: progressData } = await supabase
                 .from('student_progress')
                 .select('lesson_id, module_id, phase_id')
-                .eq('user_id', profile.id)
+                .eq('user_id', profile?.id)
                 .eq('completed', true);
 
             if (progressData) {
@@ -239,7 +307,7 @@ export default function StudentDashboard() {
             <div className="h-screen w-full bg-[#020412] flex flex-col items-center justify-center p-6 text-center">
                 <div className="relative mb-8">
                     <div className="absolute inset-0 blur-3xl opacity-20 bg-indigo-500 rounded-full animate-pulse" />
-                    <Zap className="w-16 h-16 text-amber-500 animate-bounce relative z-10" />
+                    <Zap className="w-16 h-16 text-amber-500 relative z-10" />
                 </div>
                 <div className="text-xl font-black text-white italic tracking-tighter uppercase animate-pulse">
                     Initializing V2.1 System...
@@ -278,6 +346,47 @@ export default function StudentDashboard() {
             {/* INGESTED COMPONENT: Header */}
             <StudentHeader userEmail={profile?.email} isAdmin={false} />
             <JulesTerminal />
+
+            {/* PERMISSION ALERTS (Unauthorized Redirect Feedback) */}
+            <AnimatePresence>
+                {(uiError || searchParams.get('uiError')) && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="mx-6 md:mx-8 mt-4 p-5 rounded-[2rem] bg-[#0A0F1E]/80 backdrop-blur-xl border border-rose-500/30 flex items-center justify-between gap-6 shadow-[0_0_50px_rgba(244,63,94,0.15)] relative overflow-hidden group"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 to-transparent pointer-events-none" />
+                        
+                        <div className="flex items-center gap-4 relative z-10">
+                            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20 shadow-inner">
+                                <AlertTriangle className="w-6 h-6 text-rose-500" />
+                            </div>
+                            <div>
+                                <h4 className="text-[10px] font-black text-rose-500 uppercase tracking-[0.3em]">Security Protocol Triggered</h4>
+                                <h3 className="text-white font-bold text-lg leading-tight mt-0.5">Clearance Refused</h3>
+                                <p className="text-rose-400/80 text-xs font-medium font-mono lowercase">::{uiError || searchParams.get('uiError')}</p>
+                            </div>
+                        </div>
+
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => {
+                                setUiError(null);
+                                if (searchParams.get('uiError')) {
+                                    const newParams = new URLSearchParams(searchParams);
+                                    newParams.delete('uiError');
+                                    navigate({ search: newParams.toString() }, { replace: true });
+                                }
+                            }}
+                            className="text-slate-500 hover:text-white hover:bg-white/5 rounded-full"
+                        >
+                            <X className="w-5 h-5" />
+                        </Button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
 
             <div className="p-6 md:p-8 space-y-10 animate-in fade-in duration-700">
@@ -437,7 +546,7 @@ export default function StudentDashboard() {
                     </div>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl">
-                        {COMMAND_CENTER_APPS.map((app, idx) => {
+                        {commandCenterApps.map((app, idx) => {
                             const Icon = app.icon;
                             return (
                                 <div 
@@ -492,54 +601,51 @@ export default function StudentDashboard() {
                         {/* INGESTED COMPONENT: Progression Logic */}
                         <FoundationCoreClass />
 
-                        {/* FRESHMAN CORE CLASSES */}
                         <div className="space-y-4">
                             <h3 className="font-heading text-xl font-bold text-white flex items-center gap-2">
                                 <Brain className="w-5 h-5 text-indigo-400" />
                                 Freshman Core Classes
                             </h3>
-                            <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-[#0F1629] to-[#0A0F1E] border border-indigo-500/20 group hover:border-indigo-500/40 transition-all cursor-pointer shadow-lg relative overflow-hidden" 
+                            <div className="p-6 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-[#020412] via-[#0F1629] to-[#0A0F1E] border border-indigo-500/30 group hover:border-indigo-500/60 transition-all cursor-pointer shadow-2xl relative overflow-hidden" 
                                  onClick={() => { playClick(); navigate('/dashboard/labs/financial-nervous-system'); }}
                                  onMouseEnter={() => playHover()}
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-colors group-hover:bg-indigo-500/20" />
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] -mr-32 -mt-32 transition-all group-hover:bg-indigo-500/20" />
                                 
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/50 text-indigo-300">
-                                                Freshman Core Class
+                                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 relative z-10">
+                                    <div className="flex-1 space-y-4">
+                                        <div className="flex flex-wrap items-center gap-3">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-full bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+                                                CORE REQUIREMENT
+                                            </span>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-400">
+                                                Freshman Transcript Impact: HIGH
                                             </span>
                                         </div>
-                                        <h4 className="text-2xl font-black text-white font-heading tracking-tight mb-1 group-hover:text-indigo-300 transition-colors">
-                                            Financial Nervous System™
-                                        </h4>
-                                        <h5 className="text-indigo-400 font-medium mb-3">
-                                            Calm your money mind. Reset your financial response.
-                                        </h5>
-                                        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
-                                            A guided experience designed to help students understand how stress, fear, survival mode, and emotional patterns impact financial decisions, credit behavior, and long-term growth.
+                                        <div>
+                                            <h4 className="text-3xl md:text-4xl font-black text-white font-heading tracking-tighter mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-cyan-300 transition-all duration-500">
+                                                Financial Nervous System™
+                                            </h4>
+                                            <p className="text-lg text-indigo-200/60 font-medium italic">
+                                                "Reset your response before you build your strategy."
+                                            </p>
+                                        </div>
+                                        <p className="text-base text-slate-400 leading-relaxed max-w-3xl">
+                                            A prerequisite diagnostic experience for all Freshman students. Calibrate your sensors, identify fear-based habits, and stabilize your decision-making engine before accessing advanced credit labs.
                                         </p>
                                         
-                                        {/* Hover Expanded Learning Outcomes */}
-                                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto overflow-hidden transition-all duration-500">
-                                            {[
-                                                "Understand your financial stress responses",
-                                                "Identify fear-based money habits",
-                                                "Reset emotional patterns around credit",
-                                                "Build calmer financial decision-making",
-                                                "Create stronger consistency for growth"
-                                            ].map((outcome, idx) => (
-                                                <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
-                                                    <div className="w-1 h-1 rounded-full bg-indigo-500 shrink-0" />
-                                                    {outcome}
-                                                </div>
-                                            ))}
+                                        <div className="flex flex-wrap gap-4 pt-4">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Required for Sophomore Standing
+                                            </div>
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> UNLOCKED
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="shrink-0 w-full md:w-auto mt-4 md:mt-0">
-                                        <Button className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-6 rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-                                            Enter Class <ArrowRight className="w-4 h-4 ml-2" />
+                                    <div className="shrink-0 w-full lg:w-auto">
+                                        <Button className="w-full lg:w-auto bg-white text-black hover:bg-indigo-500 hover:text-white font-black h-20 px-12 rounded-2xl shadow-2xl transition-all group-hover:scale-105 active:scale-95 text-xl uppercase tracking-tighter">
+                                            Initialize Protocol <ArrowRight className="w-6 h-6 ml-3" />
                                         </Button>
                                     </div>
                                 </div>
@@ -729,37 +835,65 @@ export default function StudentDashboard() {
                         </div>
 
                         <div
-                            className="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 cursor-pointer hover:border-emerald-500/40 transition-all group mt-6"
-                            onClick={() => { playClick(); navigate('/dashboard/lab'); }}
-                            onMouseEnter={() => playHover()}
+                            className={`p-6 rounded-2xl bg-gradient-to-br border cursor-pointer transition-all group mt-6 ${
+                                profile && !hasAcademicAccess(profile.role, profile.academic_level, 'junior')
+                                    ? 'from-slate-500/10 to-transparent border-white/5 opacity-60 grayscale'
+                                    : 'from-emerald-500/10 to-transparent border-emerald-500/20 hover:border-emerald-500/40 shadow-lg shadow-emerald-500/5'
+                            }`}
+                            onClick={() => { 
+                                if (profile && hasAcademicAccess(profile.role, profile.academic_level, 'junior')) {
+                                    playClick(); 
+                                    navigate('/dashboard/lab'); 
+                                }
+                            }}
+                            onMouseEnter={() => { if (profile && hasAcademicAccess(profile.role, profile.academic_level, 'junior')) playHover(); }}
                         >
-                            <div className="flex items-center gap-3 mb-4">
-                                <Eye className="text-emerald-400 group-hover:text-emerald-300 transition-colors" size={20} />
-                                <h4 className="font-bold text-emerald-100">Visibility Lab</h4>
+                            <div className="flex items-center justify-between gap-3 mb-4">
+                                <div className="flex items-center gap-3">
+                                    <Eye className="text-emerald-400 group-hover:text-emerald-300 transition-colors" size={20} />
+                                    <h4 className="font-bold text-emerald-100">Visibility Lab</h4>
+                                </div>
+                                {profile && !hasAcademicAccess(profile.role, profile.academic_level, 'junior') && (
+                                    <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-500">Junior Clearance Req</span>
+                                )}
                             </div>
                             <p className="text-sm text-emerald-200/70 mb-4">
                                 Learn to read your money clearly with guided interpretation.
                             </p>
                             <div className="flex items-center gap-2 text-xs font-medium text-emerald-300">
-                                <span>Enter Lab</span>
+                                <span>{profile && !hasAcademicAccess(profile.role, profile.academic_level, 'junior') ? 'LOCKED' : 'Enter Lab'}</span>
                                 <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                             </div>
                         </div>
 
                         <div
-                            className="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 cursor-pointer hover:border-indigo-500/40 transition-all group mt-6"
-                            onClick={() => { playClick(); navigate('/dashboard/voice-training'); }}
-                            onMouseEnter={() => playHover()}
+                            className={`p-6 rounded-2xl bg-gradient-to-br border cursor-pointer transition-all group mt-6 ${
+                                profile && !hasPremiumAccess(profile.role, profile.subscription_tier)
+                                    ? 'from-slate-500/10 to-transparent border-white/5 opacity-60 grayscale'
+                                    : 'from-indigo-500/10 to-transparent border-indigo-500/20 hover:border-indigo-500/40 shadow-lg shadow-indigo-500/5'
+                            }`}
+                            onClick={() => { 
+                                if (profile && hasPremiumAccess(profile.role, profile.subscription_tier)) {
+                                    playClick(); 
+                                    navigate('/dashboard/voice-training'); 
+                                }
+                            }}
+                            onMouseEnter={() => { if (profile && hasPremiumAccess(profile.role, profile.subscription_tier)) playHover(); }}
                         >
-                            <div className="flex items-center gap-3 mb-4">
-                                <Mic className="text-indigo-400 group-hover:text-indigo-300 transition-colors" size={20} />
-                                <h4 className="font-bold text-indigo-100">Voice Command Lab</h4>
+                            <div className="flex items-center justify-between gap-3 mb-4">
+                                <div className="flex items-center gap-3">
+                                    <Mic className="text-indigo-400 group-hover:text-indigo-300 transition-colors" size={20} />
+                                    <h4 className="font-bold text-indigo-100">Voice Command Lab</h4>
+                                </div>
+                                {profile && !hasPremiumAccess(profile.role, profile.subscription_tier) && (
+                                    <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">Premium Only</span>
+                                )}
                             </div>
                             <p className="text-sm text-indigo-200/70 mb-4">
                                 Train your articulation and intent with AI-powered speech analysis.
                             </p>
                             <div className="flex items-center gap-2 text-xs font-medium text-indigo-300">
-                                <span>Start Training</span>
+                                <span>{profile && !hasPremiumAccess(profile.role, profile.subscription_tier) ? 'LOCKED' : 'Start Training'}</span>
                                 <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                             </div>
                         </div>
