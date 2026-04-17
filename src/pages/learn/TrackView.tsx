@@ -6,9 +6,12 @@ import { Card, CardContent } from '../../components/ui/card';
 import { getClientCourse } from '../../lib/client-curriculum';
 import { supabase } from '../../lib/supabaseClient';
 import { cn } from '../../lib/utils';
+import { useProfile } from '@/hooks/useProfile';
+import { hasAcademicAccess, AcademicLevel } from '@/lib/permissions';
 
 export default function TrackView() {
     const { trackSlug } = useParams();
+    const { profile } = useProfile();
     const [track, setTrack] = useState<any | null>(null);
     const [modules, setModules] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -136,7 +139,30 @@ export default function TrackView() {
             <Lock className="w-16 h-16 text-red-500/50 mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
             <p className="text-slate-400 max-w-md mb-6">The requested curriculum track is either restricted or has not been declassified yet.</p>
-            <Link to="/learn/hub">
+            <Link to="/learn">
+                <Button variant="outline" className="border-white/10 text-white hover:bg-white/5">
+                    Return to Yard
+                </Button>
+            </Link>
+        </div>
+    );
+
+    const isAuthorized = hasAcademicAccess(
+        profile?.role || 'student',
+        profile?.academic_level || 'foundation',
+        (track.level?.toLowerCase() || 'freshman') as AcademicLevel,
+        true // isCurriculum
+    );
+
+    if (!isAuthorized) return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#020412] p-8 text-center">
+            <Lock className="w-16 h-16 text-amber-500/50 mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Secure Clearance Required</h2>
+            <p className="text-slate-400 max-w-md mb-6">
+                This track requires <span className="text-amber-500 font-bold uppercase">{track.level || 'FRESHMAN'}</span> clearance. 
+                Your current standing is <span className="text-indigo-400 font-bold uppercase">{profile?.academic_level || 'FOUNDATION'}</span>.
+            </p>
+            <Link to="/learn">
                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5">
                     Return to Yard
                 </Button>

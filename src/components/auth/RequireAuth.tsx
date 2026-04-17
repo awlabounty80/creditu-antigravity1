@@ -1,8 +1,23 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useProfile } from '@/hooks/useProfile'
 import { Loader2 } from 'lucide-react'
+import { hasAcademicAccess, hasPremiumAccess, hasToolAccess, AcademicLevel } from '@/lib/permissions'
 
-export function RequireAuth({ children, allowedRoles }: { children: JSX.Element, allowedRoles?: string[] }) {
+export function RequireAuth({ 
+    children, 
+    allowedRoles,
+    requiredLevels,
+    requirePremium,
+    requiredFlag,
+    isCurriculum
+}: { 
+    children: JSX.Element, 
+    allowedRoles?: string[],
+    requiredLevels?: AcademicLevel[],
+    requirePremium?: boolean,
+    requiredFlag?: string,
+    isCurriculum?: boolean
+}) {
     const { profile, user, loading } = useProfile()
     const location = useLocation()
 
@@ -18,8 +33,6 @@ export function RequireAuth({ children, allowedRoles }: { children: JSX.Element,
     }
 
     // 2. Loading State Persistence
-    // If we have a user but are just waiting on the profile, we can be more subtle.
-    // Only show full-screen loader if it's the VERY FIRST load.
     if (loading && !user) {
         return (
             <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-950 text-credit-royal-400">
@@ -33,9 +46,7 @@ export function RequireAuth({ children, allowedRoles }: { children: JSX.Element,
     }
 
     // 3. Authenticated but Profile Loading
-    // If we have the user but the profile is still fetching, we'll let the children render
-    // UNLESS a specific role is required.
-    if (allowedRoles) {
+    if (allowedRoles || requiredLevels || requirePremium || requiredFlag) {
         if (loading) {
             return (
                 <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-950">
@@ -45,9 +56,36 @@ export function RequireAuth({ children, allowedRoles }: { children: JSX.Element,
             )
         }
 
-        if (!profile || !allowedRoles.includes(profile.role)) {
-            // Redirect unauthorized users to orientation
+        if (!profile) {
             return <Navigate to="/dashboard/orientation" replace />
+        }
+
+        // Role Check
+        if (allowedRoles && !allowedRoles.includes(profile.role)) {
+            return <Navigate to="/dashboard/orientation" replace />
+        }
+
+        // Academic Level Guard (Centralized)
+        if (requiredLevels) {
+            const isAllowed = requiredLevels.some(level => 
+                hasAcademicAccess(profile.role, profile.academic_level, level, isCurriculum)
+            );
+            if (!isAllowed) {
+                return <Navigate to="/dashboard" replace state={{ uiError: 'Access Denied: You have not reached the required academic level.' }} />
+            }
+        }
+
+        // Premium Content Guard (Centralized)
+        if (requirePremium && !hasPremiumAccess(profile.role, profile.subscription_tier)) {
+            return <Navigate to="/dashboard" replace state={{ uiError: 'Access Denied: Active premium subscription required.' }} />
+        }
+
+        // Feature Flag / Tool Support Guard
+        if (requiredFlag) {
+            const flags = JSON.parse(localStorage.getItem('creditu_feature_flags') || '{}');
+            if (!hasToolAccess(profile.role, flags, requiredFlag)) {
+                return <Navigate to="/dashboard" replace state={{ uiError: 'Access Denied: This tool is not active on your profile.' }} />
+            }
         }
     }
 

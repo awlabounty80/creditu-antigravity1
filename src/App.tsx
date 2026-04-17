@@ -80,7 +80,22 @@ import PublicLayout from './layouts/PublicLayout'
 import CampusLayout from './layouts/CampusLayout'
 import AdminLayout from './layouts/AdminLayout'
 import { DormWeekGuard } from './components/auth/DormWeekGuard'
+import { useProfile } from './hooks/useProfile'
+
 const AdminDormWeek = lazy(() => import('./pages/admin/AdminDormWeek'))
+
+/**
+ * Auth-Aware Wildcard Redirect
+ * Public -> Dorm Week
+ * Auth -> Dashboard
+ */
+function AuthAwareNavigate() {
+    const { user, loading } = useProfile();
+    if (loading) return null; // Wait for profile
+    if (user) return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/orientation/dorm-week" replace />;
+}
+
 
 
 function App() {
@@ -96,10 +111,12 @@ function App() {
                         <Route path="/admissions" element={<Navigate to="/orientation/dorm-week" replace />} />
                         <Route path="/admissions/register" element={<Navigate to="/orientation/dorm-week" replace />} />
                         <Route path="/admissions/summary" element={<Suspense fallback={null}><StudentIdPage /></Suspense>} />
-                        <Route path="/learn" element={<Suspense fallback={null}><LearnHub /></Suspense>} />
-                        <Route path="/learn/:trackSlug" element={<Suspense fallback={null}><TrackView /></Suspense>} />
-                        <Route path="/learn/:trackSlug/:lessonSlug" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
-                        <Route path="/locker" element={<Suspense fallback={null}><StudentLocker /></Suspense>} />
+                        <Route path="/learn" element={<RequireAuth><Suspense fallback={null}><LearnHub /></Suspense></RequireAuth>} />
+                        <Route path="/learn/personal-credit" element={<RequireAuth requiredLevels={['foundation', 'freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><TrackView /></Suspense></RequireAuth>} />
+                        <Route path="/learn/business-credit" element={<RequireAuth requiredLevels={['sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><TrackView /></Suspense></RequireAuth>} />
+                        <Route path="/learn/:trackSlug" element={<RequireAuth><Suspense fallback={null}><TrackView /></Suspense></RequireAuth>} />
+                        <Route path="/learn/:trackSlug/:lessonSlug" element={<RequireAuth><Suspense fallback={null}><CoursePlayer /></Suspense></RequireAuth>} />
+                        <Route path="/locker" element={<RequireAuth><Suspense fallback={null}><StudentLocker /></Suspense></RequireAuth>} />
                         <Route path="/apply" element={<Navigate to="/orientation/dorm-week" replace />} />
                         <Route path="/accepted" element={<Navigate to="/orientation/dorm-week" replace />} />
                         <Route path="/gate" element={<Navigate to="/orientation/dorm-week" replace />} />
@@ -133,30 +150,30 @@ function App() {
                             </RequireAuth>
                         }>
                             <Route index element={<StudentDashboard />} />
-                            <Route path="dream-architect" element={<Suspense fallback={null}><DreamArchitect /></Suspense>} />
+                            <Route path="dream-architect" element={<RequireAuth requiredLevels={['senior', 'graduate']}><Suspense fallback={null}><DreamArchitect /></Suspense></RequireAuth>} />
                             <Route path="financial-nervous-system" element={<Navigate to="/dashboard/labs/financial-nervous-system" replace />} />
-                            <Route path="labs/financial-nervous-system" element={<Suspense fallback={null}><FinancialNervousSystem /></Suspense>} />
-                            <Route path="neural-network" element={<Suspense fallback={null}><NeuralNetwork /></Suspense>} />
+                            <Route path="labs/financial-nervous-system" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><FinancialNervousSystem /></Suspense></RequireAuth>} />
+                            <Route path="neural-network" element={<RequireAuth requiredLevels={['junior', 'senior', 'graduate']}><Suspense fallback={null}><NeuralNetwork /></Suspense></RequireAuth>} />
                             <Route path="curriculum" element={<Suspense fallback={null}><Curriculum /></Suspense>} />
                             <Route path="course/:id" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
                             <Route path="knowledge" element={<Suspense fallback={null}><KnowledgeCenter /></Suspense>} />
                             <Route path="quest" element={<Suspense fallback={null}><CreditQuest /></Suspense>} />
                             <Route path="tools" element={<Suspense fallback={null}><ToolsHub /></Suspense>} />
-                            <Route path="tools/score-simulator" element={<Suspense fallback={null}><CreditScoreSimulator /></Suspense>} />
-                            <Route path="tools/utilization" element={<Suspense fallback={null}><CreditUtilizationCalculator /></Suspense>} />
-                            <Route path="tools/dti" element={<Suspense fallback={null}><DebtToIncomeCalculator /></Suspense>} />
-                            <Route path="tools/dispute-generator" element={<Suspense fallback={null}><DisputeLetterGenerator /></Suspense>} />
+                            <Route path="tools/score-simulator" element={<RequireAuth requiredLevels={['sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><CreditScoreSimulator /></Suspense></RequireAuth>} />
+                            <Route path="tools/utilization" element={<RequireAuth><Suspense fallback={null}><CreditUtilizationCalculator /></Suspense></RequireAuth>} />
+                            <Route path="tools/dti" element={<RequireAuth><Suspense fallback={null}><DebtToIncomeCalculator /></Suspense></RequireAuth>} />
+                            <Route path="tools/dispute-generator" element={<RequireAuth requirePremium={true} requiredFlag="NODE_DISPUTE_LAB"><Suspense fallback={null}><DisputeLetterGenerator /></Suspense></RequireAuth>} />
                             <Route path="tools/quiz" element={<Suspense fallback={null}><InteractiveQuiz /></Suspense>} />
                             <Route path="tools/debt-payoff" element={<Suspense fallback={null}><DebtPayoffCalculator /></Suspense>} />
                             <Route path="vault" element={<Suspense fallback={null}><TheVault /></Suspense>} />
                             <Route path="lecture-hall" element={<Suspense fallback={null}><LectureHall /></Suspense>} />
                             <Route path="credit-lab" element={<Suspense fallback={null}><CreditTools /></Suspense>} />
-                            <Route path="credit-lab/dispute" element={<Suspense fallback={null}><DisputePage /></Suspense>} />
-                            <Route path="credit-lab/simulator" element={<Suspense fallback={null}><SimulatorPage /></Suspense>} />
-                            <Route path="credit-lab/audit" element={<Suspense fallback={null}><ReportAuditor /></Suspense>} />
-                            <Route path="credit-lab/audit-checklist" element={<Suspense fallback={null}><Metro2AuditChecklist /></Suspense>} />
-                            <Route path="credit-lab/freeze" element={<Suspense fallback={null}><SecurityFreeze /></Suspense>} />
-                            <Route path="credit-lab/identity-theft" element={<Suspense fallback={null}><IdentityTheftCenter /></Suspense>} />
+                            <Route path="credit-lab/dispute" element={<RequireAuth requirePremium={true} requiredFlag="NODE_DISPUTE_LAB"><Suspense fallback={null}><DisputePage /></Suspense></RequireAuth>} />
+                            <Route path="credit-lab/simulator" element={<RequireAuth requiredLevels={['sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><SimulatorPage /></Suspense></RequireAuth>} />
+                            <Route path="credit-lab/audit" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><ReportAuditor /></Suspense></RequireAuth>} />
+                            <Route path="credit-lab/audit-checklist" element={<RequireAuth><Suspense fallback={null}><Metro2AuditChecklist /></Suspense></RequireAuth>} />
+                            <Route path="credit-lab/freeze" element={<RequireAuth><Suspense fallback={null}><SecurityFreeze /></Suspense></RequireAuth>} />
+                            <Route path="credit-lab/identity-theft" element={<RequireAuth requirePremium={true}><Suspense fallback={null}><IdentityTheftCenter /></Suspense></RequireAuth>} />
                             <Route path="honor-roll" element={<Suspense fallback={null}><HonorRoll /></Suspense>} />
                             <Route path="vision" element={<Suspense fallback={null}><VisionBoard /></Suspense>} />
                             <Route path="store" element={<Suspense fallback={null}><MooStore /></Suspense>} />
@@ -167,11 +184,11 @@ function App() {
                             <Route path="referrals" element={<Suspense fallback={null}><ReferralDashboard /></Suspense>} />
 
                             {/* Legacy Aliases */}
-                            <Route path="lab" element={<Suspense fallback={null}><VisibilityStrategyLab /></Suspense>} />
-                            <Route path="classroom" element={<Suspense fallback={null}><FreshmanClassroom /></Suspense>} />
-                            <Route path="dispute" element={<Suspense fallback={null}><DisputePage /></Suspense>} />
-                            <Route path="voice" element={<Suspense fallback={null}><VoiceTrainingLab /></Suspense>} />
-                            <Route path="consumer-law" element={<Suspense fallback={null}><ConsumerLaw /></Suspense>} />
+                            <Route path="lab" element={<RequireAuth requiredLevels={['junior', 'senior', 'graduate']}><Suspense fallback={null}><VisibilityStrategyLab /></Suspense></RequireAuth>} />
+                            <Route path="classroom" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><FreshmanClassroom /></Suspense></RequireAuth>} />
+                            <Route path="dispute" element={<RequireAuth requirePremium={true} requiredFlag="NODE_DISPUTE_LAB"><Suspense fallback={null}><DisputePage /></Suspense></RequireAuth>} />
+                            <Route path="voice" element={<RequireAuth requirePremium={true}><Suspense fallback={null}><VoiceTrainingLab /></Suspense></RequireAuth>} />
+                            <Route path="consumer-law" element={<RequireAuth requirePremium={true}><Suspense fallback={null}><ConsumerLaw /></Suspense></RequireAuth>} />
 
                             {/* Deep-linking for Node Labs */}
                             <Route path="labs/*" element={<Suspense fallback={null}><Outlet /></Suspense>}>
@@ -194,8 +211,8 @@ function App() {
                             {AdminNodeRoutes()}
                         </Route>
 
-                        {/* Fallback to Admissions (Public) instead of Dashboard (Protected) to avoid login loops */}
-                        <Route path="*" element={<Navigate to="/admissions" replace />} />
+                        {/* Fallback to Admissions for Public, Dashboard for Auth */}
+                        <Route path="*" element={<AuthAwareNavigate />} />
                     </Routes>
                 <div className="fixed bottom-1 left-1 z-50 text-[10px] text-white/20 pointer-events-none font-mono flex flex-col gap-0 uppercase">
                     <div>v2.1.0 - TAKEOVER // <span className="text-amber-500/50 text-[8px]">thecredituniversityai.com</span></div>
