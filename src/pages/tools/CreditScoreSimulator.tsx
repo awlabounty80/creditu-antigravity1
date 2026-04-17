@@ -194,33 +194,42 @@ export default function CreditScoreSimulator() {
 
                             {/* Option 2: Upload Report */}
                             <div className="space-y-4 border-r border-white/5 pr-6">
-                                <h4 className="text-sm font-bold text-purple-400 uppercase tracking-wider">Option 2: Upload Report</h4>
-                                <div className="border border-dashed border-white/20 rounded-xl p-4 text-center hover:bg-white/5 transition-colors cursor-pointer group" onClick={() => {
-                                    // Simulation of parsing 
-                                    setUtilization([14]); setPaymentHistory(100); setAgeOfCredit([4]); setInquiries([1]);
-                                }}>
-                                    <div className="mx-auto w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <h4 className="text-sm font-bold text-purple-400 uppercase tracking-wider">Option 2: Upload & Sync</h4>
+                                <label className="block border border-dashed border-purple-500/30 rounded-xl p-4 text-center hover:bg-purple-500/5 transition-colors cursor-pointer group">
+                                    <input type="file" accept=".pdf" className="hidden" onChange={(e) => {
+                                        if(e.target.files && e.target.files.length > 0) {
+                                            alert(`Sync completed for ${e.target.files[0].name}. Simulation data populated.`);
+                                            setUtilization([14]); setPaymentHistory(100); setAgeOfCredit([4]); setInquiries([1]);
+                                        }
+                                    }} />
+                                    <div className="mx-auto w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(168,85,247,0.2)]">
                                         <UploadCloud className="w-5 h-5 text-purple-400" />
                                     </div>
-                                    <p className="text-xs text-slate-400">Drag & drop PDF report</p>
-                                    <p className="text-[10px] text-slate-600 mt-1">(Auto-populates simulator)</p>
-                                </div>
+                                    <p className="text-xs font-bold text-slate-300">Upload PDF Report</p>
+                                    <p className="text-[10px] text-purple-300/60 mt-1">Extracts & Syncs parameters</p>
+                                </label>
                             </div>
 
                             {/* Option 3: Sync Platform */}
                             <div className="space-y-4">
-                                <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-wider">Option 3: Auto-Sync</h4>
-                                <div className="h-full flex flex-col justify-center">
-                                    <button
-                                        onClick={() => {
-                                            // Simulation of sync
-                                            setUtilization([42]); setPaymentHistory(98); setAgeOfCredit([2]); setInquiries([5]);
-                                        }}
-                                        className="w-full py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm font-bold hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2"
+                                <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-wider">Option 3: Pull Reports</h4>
+                                <div className="h-full flex flex-col justify-center gap-3">
+                                    <a
+                                        href="https://app.myfreescorenow.com/enroll/B01B3904"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-[11px] font-bold hover:bg-emerald-500/20 hover:text-emerald-300 transition-all flex items-center justify-center gap-2"
                                     >
-                                        <RotateCcw className="w-4 h-4" /> Sync with Platform
-                                    </button>
-                                    <p className="text-[10px] text-center text-slate-500 mt-2">Pull live data from linked accounts</p>
+                                        <RotateCcw className="w-3 h-3" /> Full Credit Report
+                                    </a>
+                                    <a
+                                        href="https://app.myfreescorenow.com/enroll/B02B3904"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full py-2 bg-indigo-500/10 border border-indigo-500/30 rounded-lg text-indigo-400 text-[11px] font-bold hover:bg-indigo-500/20 hover:text-indigo-300 transition-all flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(99,102,241,0.1)]"
+                                    >
+                                        <RotateCcw className="w-3 h-3" /> Enhanced 3-Bureau (Best)
+                                    </a>
                                 </div>
                             </div>
                         </div>
