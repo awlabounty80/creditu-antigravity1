@@ -151,8 +151,8 @@ function App() {
                         }>
                             <Route index element={<StudentDashboard />} />
                             <Route path="dream-architect" element={<RequireAuth requiredLevels={['senior', 'graduate']}><Suspense fallback={null}><DreamArchitect /></Suspense></RequireAuth>} />
-                            <Route path="financial-nervous-system" element={<Navigate to="/dashboard/labs/financial-nervous-system" replace />} />
-                            <Route path="labs/financial-nervous-system" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><FinancialNervousSystem /></Suspense></RequireAuth>} />
+                            <Route path="financial-nervous-system" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><FinancialNervousSystem /></Suspense></RequireAuth>} />
+                            <Route path="labs/financial-nervous-system" element={<Navigate to="/dashboard/financial-nervous-system" replace />} />
                             <Route path="neural-network" element={<RequireAuth requiredLevels={['junior', 'senior', 'graduate']}><Suspense fallback={null}><NeuralNetwork /></Suspense></RequireAuth>} />
                             <Route path="curriculum" element={<Suspense fallback={null}><Curriculum /></Suspense>} />
                             <Route path="course/:id" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />

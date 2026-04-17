@@ -57,12 +57,13 @@ export function RequireAuth({
         }
 
         if (!profile) {
-            return <Navigate to="/dashboard/orientation" replace />
+            return <Navigate to="/login" replace />
         }
 
         // Role Check
         if (allowedRoles && !allowedRoles.includes(profile.role)) {
-            return <Navigate to="/dashboard/orientation" replace />
+            // Keep on dashboard if authenticated but wrong role for specific tool
+            return <Navigate to="/dashboard" replace state={{ uiError: 'Restricted Access: Higher clearance required for this node.' }} />
         }
 
         // Academic Level Guard (Centralized)
@@ -71,13 +72,15 @@ export function RequireAuth({
                 hasAcademicAccess(profile.role, profile.academic_level, level, isCurriculum)
             );
             if (!isAllowed) {
-                return <Navigate to="/dashboard" replace state={{ uiError: 'Access Denied: You have not reached the required academic level.' }} />
+                const required = requiredLevels[0]; // Primary requirement
+                const label = required.charAt(0).toUpperCase() + required.slice(1);
+                return <Navigate to="/dashboard" replace state={{ uiError: `Academic Restriction: ${label} Rank Required` }} />
             }
         }
 
         // Premium Content Guard (Centralized)
         if (requirePremium && !hasPremiumAccess(profile.role, profile.subscription_tier)) {
-            return <Navigate to="/dashboard" replace state={{ uiError: 'Access Denied: Active premium subscription required.' }} />
+            return <Navigate to="/dashboard" replace state={{ uiError: 'Membership Restriction: Premium Access Required' }} />
         }
 
         // Feature Flag / Tool Support Guard
