@@ -22,15 +22,7 @@ export const NODES: NodeMetadata[] = [
         permissions: ['student', 'founder'],
         featureFlag: 'NODE_LABS'
     },
-    {
-        id: 'dorm-hub',
-        name: 'Dorm Week Hub',
-        purpose: 'Central orientation and protocol management center.',
-        route: '/dashboard/labs/dorm-hub',
-        component: React.lazy(() => import('@/nodes/DormWeekHub/DormWeekHub')),
-        permissions: ['student', 'founder'],
-        featureFlag: 'NODE_DORM_HUB'
-    },
+
     {
         id: 'visibility-lab',
         name: 'Funding Visibility Lab',
@@ -81,7 +73,7 @@ export const NODES: NodeMetadata[] = [
         name: 'Dorm Pre-Registration',
         purpose: 'Initial intake for the incoming class.',
         route: '/pre-reg',
-        component: React.lazy(() => import('@/nodes/DormWeekPreReg/DormWeekPreReg')),
+        component: React.lazy(() => import('@/campus/registrar/dorm-week/DormWeekPreReg')),
         permissions: ['public', 'student', 'founder'],
         featureFlag: 'NODE_DORM_PRE_REG'
     }

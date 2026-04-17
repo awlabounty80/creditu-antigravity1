@@ -18,11 +18,7 @@ const CampusTour = lazy(() => import('./pages/public/CampusTour'))
 const Login = lazy(() => import('./pages/Login'))
 const OnboardingVault = lazy(() => import('./components/credit-lab/OnboardingVault'))
 const LinkView = lazy(() => import('./pages/public/LinkView'))
-const DormWeek = lazy(() => import('./pages/public/DormWeek'))
 const StudentIdPage = lazy(() => import('./pages/public/StudentIdPage'))
-
-// --- Mandatory Initiation Sequence ---
-const DormWeekFlowA = lazy(() => import('./components/credit-lab/DormWeekFlowA'))
 
 // --- Campus Pages ---
 const Curriculum = lazy(() => import('./pages/Curriculum'))
@@ -45,11 +41,19 @@ const ReferralDashboard = lazy(() => import('./pages/ReferralDashboard'))
 
 // --- Missing Campus Pages ---
 const DreamArchitect = lazy(() => import('./pages/DreamArchitect'))
-const FinancialNervousSystem = lazy(() => import('./pages/FinancialNervousSystem'))
+const FinancialNervousSystem = lazy(() => import('./campus/academic/labs/fns/FinancialNervousSystem'))
 const NeuralNetwork = lazy(() => import('./pages/NeuralNetwork'))
 const TheVault = lazy(() => import('./pages/TheVault'))
 const LectureHall = lazy(() => import('./pages/LectureHall'))
 const ToolsHub = lazy(() => import('./pages/ToolsHub'))
+
+// --- Financial Tools ---
+const CreditScoreSimulator = lazy(() => import('./pages/tools/CreditScoreSimulator'))
+const CreditUtilizationCalculator = lazy(() => import('./pages/tools/CreditUtilizationCalculator'))
+const DebtToIncomeCalculator = lazy(() => import('./pages/tools/DebtToIncomeCalculator'))
+const DisputeLetterGenerator = lazy(() => import('./pages/tools/DisputeLetterGenerator'))
+const InteractiveQuiz = lazy(() => import('./pages/tools/InteractiveQuiz'))
+const DebtPayoffCalculator = lazy(() => import('./pages/tools/DebtPayoffCalculator'))
 
 // --- Admin Pages ---
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
@@ -63,8 +67,8 @@ const VisibilityStrategyLab = lazy(() => import('./pages/campus/VisibilityStrate
 const FreshmanClassroom = lazy(() => import('./pages/classroom/FreshmanClassroom'))
 const VoiceTrainingLab = lazy(() => import('./pages/campus/VoiceTrainingLab'))
 const ConsumerLaw = lazy(() => import('./pages/library/ConsumerLaw'))
-const DormWeekVideoGate = lazy(() => import('./nodes/DormWeekPreReg/DormWeekVideoGate'))
-const DormWeekPreReg = lazy(() => import('./nodes/DormWeekPreReg/DormWeekPreReg'))
+const DormWeekVideoGate = lazy(() => import('./campus/registrar/dorm-week/DormWeekVideoGate'))
+const DormWeekPreReg = lazy(() => import('./campus/registrar/dorm-week/DormWeekPreReg'))
 const StudentLocker = lazy(() => import('./pages/campus/StudentLocker'))
 const LearnHub = lazy(() => import('./pages/learn/LearnHub'))
 const TrackView = lazy(() => import('./pages/learn/TrackView'))
@@ -89,19 +93,20 @@ function App() {
                         <Route path="/" element={<Suspense fallback={null}><CreditUniversityLanding /></Suspense>} />
                         <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                         <Route path="/links" element={<Suspense fallback={null}><LinkView /></Suspense>} />
-                        <Route path="/admissions" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
-                        <Route path="/admissions/register" element={<Navigate to="/admissions" replace />} />
+                        <Route path="/admissions" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/admissions/register" element={<Navigate to="/orientation/dorm-week" replace />} />
                         <Route path="/admissions/summary" element={<Suspense fallback={null}><StudentIdPage /></Suspense>} />
                         <Route path="/learn" element={<Suspense fallback={null}><LearnHub /></Suspense>} />
                         <Route path="/learn/:trackSlug" element={<Suspense fallback={null}><TrackView /></Suspense>} />
                         <Route path="/learn/:trackSlug/:lessonSlug" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
                         <Route path="/locker" element={<Suspense fallback={null}><StudentLocker /></Suspense>} />
-                        <Route path="/apply" element={<Navigate to="/admissions" replace />} />
-                        <Route path="/accepted" element={<Navigate to="/admissions" replace />} />
-                        <Route path="/gate" element={<Navigate to="/admissions" replace />} />
+                        <Route path="/apply" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/accepted" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/gate" element={<Navigate to="/orientation/dorm-week" replace />} />
 
                         {/* Gated Dorm Week routes mapped to Antigravity Edition */}
-                        <Route path="/dorm-week" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
+                        <Route path="/dorm-week" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/orientation/dorm-week" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
                         <Route path="/dorm-week/protocol" element={<DormWeekGuard><Suspense fallback={null}><Orientation /></Suspense></DormWeekGuard>} />
 
                         {/* Pre-Registration Node (Public) */}
@@ -129,13 +134,20 @@ function App() {
                         }>
                             <Route index element={<StudentDashboard />} />
                             <Route path="dream-architect" element={<Suspense fallback={null}><DreamArchitect /></Suspense>} />
-                            <Route path="financial-nervous-system" element={<Suspense fallback={null}><FinancialNervousSystem /></Suspense>} />
+                            <Route path="financial-nervous-system" element={<Navigate to="/dashboard/labs/financial-nervous-system" replace />} />
+                            <Route path="labs/financial-nervous-system" element={<Suspense fallback={null}><FinancialNervousSystem /></Suspense>} />
                             <Route path="neural-network" element={<Suspense fallback={null}><NeuralNetwork /></Suspense>} />
                             <Route path="curriculum" element={<Suspense fallback={null}><Curriculum /></Suspense>} />
                             <Route path="course/:id" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
                             <Route path="knowledge" element={<Suspense fallback={null}><KnowledgeCenter /></Suspense>} />
                             <Route path="quest" element={<Suspense fallback={null}><CreditQuest /></Suspense>} />
                             <Route path="tools" element={<Suspense fallback={null}><ToolsHub /></Suspense>} />
+                            <Route path="tools/score-simulator" element={<Suspense fallback={null}><CreditScoreSimulator /></Suspense>} />
+                            <Route path="tools/utilization" element={<Suspense fallback={null}><CreditUtilizationCalculator /></Suspense>} />
+                            <Route path="tools/dti" element={<Suspense fallback={null}><DebtToIncomeCalculator /></Suspense>} />
+                            <Route path="tools/dispute-generator" element={<Suspense fallback={null}><DisputeLetterGenerator /></Suspense>} />
+                            <Route path="tools/quiz" element={<Suspense fallback={null}><InteractiveQuiz /></Suspense>} />
+                            <Route path="tools/debt-payoff" element={<Suspense fallback={null}><DebtPayoffCalculator /></Suspense>} />
                             <Route path="vault" element={<Suspense fallback={null}><TheVault /></Suspense>} />
                             <Route path="lecture-hall" element={<Suspense fallback={null}><LectureHall /></Suspense>} />
                             <Route path="credit-lab" element={<Suspense fallback={null}><CreditTools /></Suspense>} />
