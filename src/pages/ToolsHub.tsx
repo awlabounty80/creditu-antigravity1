@@ -68,6 +68,60 @@ export default function ToolsHub() {
             path: '/dashboard/knowledge',
             color: 'from-violet-500 to-purple-500',
             features: ['100+ lessons', 'Interactive quizzes', 'Source-verified content']
+        },
+        {
+            id: 'debt-payoff',
+            title: 'Debt Payoff Calculator',
+            description: 'Snowball vs Avalanche comparison for strategic debt reduction',
+            icon: Calculator,
+            path: '/dashboard/tools/debt-payoff',
+            color: 'from-red-500 to-rose-500',
+            features: ['Snowball method', 'Avalanche method', 'Payoff timeline']
+        },
+        {
+            id: 'security-freeze',
+            title: 'Security Freeze Manager',
+            description: 'Bureau freeze management and identity protection guidelines',
+            icon: Shield,
+            path: '/dashboard/credit-lab/freeze',
+            color: 'from-slate-500 to-slate-400',
+            features: ['Bureau direct links', 'Freeze tracking', 'Unfreeze scheduling']
+        },
+        {
+            id: 'dispute-wizard',
+            title: 'Dispute Wizard',
+            description: 'Step-by-step dispute process for correcting errors',
+            icon: FileText,
+            path: '/dashboard/credit-lab/dispute',
+            color: 'from-amber-500 to-yellow-500',
+            features: ['Guided workflow', 'Law citations', 'Follow-up tracking']
+        },
+        {
+            id: 'score-simulator-lab',
+            title: 'Score Simulator (Credit Lab)',
+            description: 'Advanced credit impact analysis and staging',
+            icon: TrendingUp,
+            path: '/dashboard/credit-lab/simulator',
+            color: 'from-sky-500 to-blue-500',
+            features: ['Impact analysis', 'Timeline projections', 'What-if scenarios']
+        },
+        {
+            id: 'credit-quest',
+            title: 'Credit Quest',
+            description: 'Interactive gamified learning scenarios for real-world application',
+            icon: Brain,
+            path: '/dashboard/quest',
+            color: 'from-fuchsia-500 to-pink-500',
+            features: ['Interactive modules', 'XP Rewards', 'Decision outcomes']
+        },
+        {
+            id: 'vision-board',
+            title: 'Vision Board',
+            description: 'Goal visualization and financial blueprints',
+            icon: BookOpen,
+            path: '/dashboard/vision',
+            color: 'from-teal-500 to-emerald-500',
+            features: ['Goal setting', 'Visual tracking', 'Milestone rewards']
         }
     ];
 

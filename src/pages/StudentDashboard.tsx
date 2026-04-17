@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, BookOpen, Trophy, TrendingUp, Sparkles, Zap, Clock, Play, Activity, Eye, Mic } from 'lucide-react'
+import { ArrowRight, BookOpen, Trophy, TrendingUp, Sparkles, Zap, Clock, Play, Activity, Eye, Mic, Wrench, Beaker, ShoppingCart, Users, Image as ImageIcon, Lock, Library } from 'lucide-react'
 import { CreditULogo } from '@/components/common/CreditULogo'
 import { useProfile } from '@/hooks/useProfile'
 import { useGamification } from '@/hooks/useGamification'
@@ -20,12 +20,103 @@ import { AchievementGallery } from '@/components/learn/AchievementGallery'
 // import { ProfessorGenerative } from '@/components/dashboard/ProfessorGenerative'
 
 import { JulesTerminal } from '@/components/dashboard/JulesTerminal'
+import { BureauSyncStatus } from '@/components/dashboard/BureauSyncStatus'
 
 import { DashboardResetMode } from '@/components/dashboard/DashboardResetMode'
 import { EXTERNAL_RESOURCES } from '@/data/external-resources'
 import { MISSIONS } from '@/data/missions'
 import { useSound } from '@/hooks/useSound'
 
+// COMMAND CENTER CONFIGURATION
+type BadgeType = 'Active' | 'Continue' | 'Updated' | 'New' | 'Coming Soon';
+
+interface CommandCenterCardData {
+    title: string;
+    description: string;
+    icon: any; 
+    route: string;
+    badge?: BadgeType;
+    isDisabled?: boolean;
+    colorClassName: string;
+}
+
+const COMMAND_CENTER_APPS: CommandCenterCardData[] = [
+    {
+        title: 'Curriculum',
+        description: 'Course player & verified lessons',
+        icon: Play,
+        route: '/dashboard/curriculum',
+        badge: 'Continue',
+        colorClassName: 'from-indigo-500/20 to-indigo-600/5 border-indigo-500/30 text-indigo-400 group-hover:border-indigo-400/60',
+    },
+    {
+        title: 'Knowledge Center',
+        description: 'Comprehensive research library',
+        icon: Library,
+        route: '/dashboard/knowledge',
+        colorClassName: 'from-blue-500/20 to-blue-600/5 border-blue-500/30 text-blue-400 group-hover:border-blue-400/60',
+    },
+    {
+        title: 'Tools Hub',
+        description: '13 professional financial tools',
+        icon: Wrench,
+        route: '/dashboard/tools',
+        colorClassName: 'from-emerald-500/20 to-emerald-600/5 border-emerald-500/30 text-emerald-400 group-hover:border-emerald-400/60',
+    },
+    {
+        title: 'Credit Lab',
+        description: 'Specialized management tools',
+        icon: Beaker,
+        route: '/dashboard/credit-lab',
+        colorClassName: 'from-cyan-500/20 to-cyan-600/5 border-cyan-500/30 text-cyan-400 group-hover:border-cyan-400/60',
+    },
+    {
+        title: 'Credit Quest',
+        description: 'Gamified learning scenarios',
+        icon: Sparkles,
+        route: '/dashboard/quest',
+        colorClassName: 'from-purple-500/20 to-purple-600/5 border-purple-500/30 text-purple-400 group-hover:border-purple-400/60',
+    },
+    {
+        title: 'Vision Board',
+        description: 'Goal visualization & tracking',
+        icon: ImageIcon,
+        route: '/dashboard/vision-board',
+        colorClassName: 'from-pink-500/20 to-pink-600/5 border-pink-500/30 text-pink-400 group-hover:border-pink-400/60',
+    },
+    {
+        title: 'Moo Store',
+        description: 'Rewards marketplace',
+        icon: ShoppingCart,
+        route: '/dashboard/store',
+        colorClassName: 'from-amber-500/20 to-amber-600/5 border-amber-500/30 text-amber-400 group-hover:border-amber-400/60',
+    },
+    {
+        title: 'Community Campus',
+        description: 'Global campus network',
+        icon: Users,
+        route: '/dashboard/community',
+        colorClassName: 'from-orange-500/20 to-orange-600/5 border-orange-500/30 text-orange-400 group-hover:border-orange-400/60',
+    },
+    {
+        title: 'Student Locker',
+        description: 'Secure document storage',
+        icon: Lock,
+        route: '#',
+        badge: 'Coming Soon',
+        isDisabled: true,
+        colorClassName: 'from-slate-500/10 to-slate-600/5 border-white/5 text-slate-500 group-hover:border-white/10',
+    },
+    {
+        title: 'Dream Architect',
+        description: 'AI blueprint generation',
+        icon: Activity,
+        route: '#',
+        badge: 'Coming Soon',
+        isDisabled: true,
+        colorClassName: 'from-slate-500/10 to-slate-600/5 border-white/5 text-slate-500 group-hover:border-white/10',
+    }
+];
 
 interface EnrolledCourse {
     course_id: string
@@ -271,9 +362,12 @@ export default function StudentDashboard() {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Moo Point Wallet */}
                     <MooPointWallet userId={profile?.id || ""} />
+
+                    {/* Bureau Sync Tracking Module */}
+                    <BureauSyncStatus />
 
                     <Card
                         onClick={() => { playClick(); navigate('/learn'); }}
@@ -333,12 +427,124 @@ export default function StudentDashboard() {
                     </Card>
                 </div>
 
+                {/* COMMAND CENTER HUB */}
+                <div className="space-y-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-2">
+                        <div>
+                            <h2 className="text-2xl font-black text-white font-heading tracking-tight">Command Center Apps</h2>
+                            <p className="text-slate-400 text-sm">Everything you need to learn, build, track, and move forward.</p>
+                        </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl">
+                        {COMMAND_CENTER_APPS.map((app, idx) => {
+                            const Icon = app.icon;
+                            return (
+                                <div 
+                                    key={idx}
+                                    onClick={() => {
+                                        if (!app.isDisabled) {
+                                            playClick();
+                                            navigate(app.route);
+                                        }
+                                    }}
+                                    onMouseEnter={() => { if(!app.isDisabled) playHover(); }}
+                                    className={`relative p-5 rounded-2xl bg-gradient-to-br border backdrop-blur-sm transition-all duration-300 group
+                                        ${app.isDisabled 
+                                            ? 'opacity-60 cursor-not-allowed bg-black/40 border-white/5' 
+                                            : `cursor-pointer hover:-translate-y-1 hover:shadow-xl bg-[#0A0F1E] ${app.colorClassName}`
+                                        }
+                                    `}
+                                >
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className={`p-2 rounded-xl bg-black/40 backdrop-blur-md border border-white/5 ${!app.isDisabled && 'group-hover:scale-110 transition-transform'}`}>
+                                            <Icon className={`w-5 h-5 ${app.isDisabled ? 'text-slate-500' : 'text-current'}`} />
+                                        </div>
+                                        {app.badge && (
+                                            <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border 
+                                                ${app.badge === 'Coming Soon' ? 'bg-slate-900 border-slate-700 text-slate-400' : 
+                                                  app.badge === 'Continue' ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300' : 
+                                                  'bg-emerald-900/30 border-emerald-500/50 text-emerald-300'}`}>
+                                                {app.badge}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <h3 className={`font-bold text-lg mb-1 leading-tight ${app.isDisabled ? 'text-slate-400' : 'text-white'}`}>
+                                        {app.title}
+                                    </h3>
+                                    <p className={`text-xs ${app.isDisabled ? 'text-slate-600' : 'text-slate-400 group-hover:text-slate-300'} transition-colors line-clamp-2`}>
+                                        {app.description}
+                                    </p>
+                                    
+                                    {!app.isDisabled && (
+                                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Content Column */}
                     <div className="lg:col-span-2 space-y-8">
 
                         {/* INGESTED COMPONENT: Progression Logic */}
                         <FoundationCoreClass />
+
+                        {/* FRESHMAN CORE CLASSES */}
+                        <div className="space-y-4">
+                            <h3 className="font-heading text-xl font-bold text-white flex items-center gap-2">
+                                <Brain className="w-5 h-5 text-indigo-400" />
+                                Freshman Core Classes
+                            </h3>
+                            <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-[#0F1629] to-[#0A0F1E] border border-indigo-500/20 group hover:border-indigo-500/40 transition-all cursor-pointer shadow-lg relative overflow-hidden" 
+                                 onClick={() => { playClick(); navigate('/dashboard/labs/financial-nervous-system'); }}
+                                 onMouseEnter={() => playHover()}
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-colors group-hover:bg-indigo-500/20" />
+                                
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/50 text-indigo-300">
+                                                Freshman Core Class
+                                            </span>
+                                        </div>
+                                        <h4 className="text-2xl font-black text-white font-heading tracking-tight mb-1 group-hover:text-indigo-300 transition-colors">
+                                            Financial Nervous System™
+                                        </h4>
+                                        <h5 className="text-indigo-400 font-medium mb-3">
+                                            Calm your money mind. Reset your financial response.
+                                        </h5>
+                                        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
+                                            A guided experience designed to help students understand how stress, fear, survival mode, and emotional patterns impact financial decisions, credit behavior, and long-term growth.
+                                        </p>
+                                        
+                                        {/* Hover Expanded Learning Outcomes */}
+                                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto overflow-hidden transition-all duration-500">
+                                            {[
+                                                "Understand your financial stress responses",
+                                                "Identify fear-based money habits",
+                                                "Reset emotional patterns around credit",
+                                                "Build calmer financial decision-making",
+                                                "Create stronger consistency for growth"
+                                            ].map((outcome, idx) => (
+                                                <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
+                                                    <div className="w-1 h-1 rounded-full bg-indigo-500 shrink-0" />
+                                                    {outcome}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="shrink-0 w-full md:w-auto mt-4 md:mt-0">
+                                        <Button className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-6 rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+                                            Enter Class <ArrowRight className="w-4 h-4 ml-2" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         {/* Track Progress Overview */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -390,7 +596,7 @@ export default function StudentDashboard() {
                                     <div
                                         key={i}
                                         className="group flex flex-col md:flex-row items-center gap-6 p-4 bg-[#0F1629] border border-white/5 rounded-2xl hover:border-indigo-500/30 transition-all cursor-pointer"
-                                        onClick={() => { playClick(); navigate(`/dashboard/course/${enr.course_id}`); }}
+                                        onClick={() => { playClick(); navigate(`/learn/${enr.course_id}`); }}
                                         onMouseEnter={() => playHover()}
                                     >
                                         <div className="w-full md:w-32 h-20 rounded-xl bg-gradient-to-br from-indigo-900 to-slate-900 flex items-center justify-center shrink-0 shadow-inner">
