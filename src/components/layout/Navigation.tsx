@@ -15,7 +15,7 @@ export default function Navigation() {
         { label: 'Vision', path: '/vision', icon: Target },              // Vision Board
         { label: 'Exchange', path: '/exchange', icon: CreditCard },      // Store
         { label: 'Honor Roll', path: '/honor-roll', icon: Trophy },      // Leaderboard
-        { label: 'Network', path: '/community', icon: Globe },           // Community
+        { label: 'Global Campus', path: '/community', icon: Globe },           // Community
         { label: 'Credit Lab', path: '/credit-lab', icon: BookOpen },    // Professor/Guidance (Entry)
     ];
 
