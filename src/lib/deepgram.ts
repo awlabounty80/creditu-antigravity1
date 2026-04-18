@@ -63,8 +63,7 @@ export const synthesizeSpeech = async (text: string) => {
         }
 
         const audioBlob = await response.blob();
-        const url = URL.createObjectURL(audioBlob);
-        return new Audio(url);
+        return URL.createObjectURL(audioBlob);
     } catch (err: any) {
         console.error("Deepgram: Synthesis error:", err);
         throw err;

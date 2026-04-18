@@ -787,7 +787,7 @@ export default function StudentLocker() {
                                                             try {
                                                                 console.log("StudentLocker: [PDF] Module loading...");
                                                                 const html2pdfModule = await import('html2pdf.js');
-                                                                const generatePdf = html2pdfModule.default ? html2pdfModule.default : html2pdfModule;
+                                                                const generatePdf = (html2pdfModule.default ? html2pdfModule.default : html2pdfModule) as any;
                                                                 
                                                                 // Create a visible (but off-screen) container to force layout painting
                                                                 const element = document.createElement("div");

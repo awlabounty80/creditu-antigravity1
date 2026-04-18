@@ -15,7 +15,7 @@ export function useGamification() {
             const { data } = await supabase
                 .from('student_moo_points')
                 .select('total_points')
-                .eq('user_id', profile.id)
+                .eq('user_id', profile?.id)
                 .single();
             if (data) setPoints(data.total_points);
         }
