@@ -66,7 +66,7 @@ export default function PublicLayout() {
                                 <li><Link to="#" className="hover:text-credit-royal-400 transition-colors">Credit Lab</Link></li>
                                 <li><Link to="#" className="hover:text-credit-royal-400 transition-colors">Vision Center</Link></li>
                                 <li><Link to="#" className="hover:text-credit-royal-400 transition-colors">The Dean (AI)</Link></li>
-                                <li><Link to="#" className="hover:text-credit-royal-400 transition-colors">Community Hall</Link></li>
+                                <li><Link to="/dashboard/community" className="hover:text-credit-royal-400 transition-colors">Global Campus</Link></li>
                             </ul>
                         </div>
                         <div>

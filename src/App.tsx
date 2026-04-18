@@ -182,6 +182,7 @@ function App() {
                             <Route path="store" element={<Suspense fallback={null}><MooStore /></Suspense>} />
                             <Route path="emporium" element={<Navigate to="/dashboard/store" replace />} />
                             <Route path="community" element={<Suspense fallback={null}><GlobalCampus /></Suspense>} />
+                            <Route path="global-campus" element={<Navigate to="/dashboard/community" replace />} />
                             <Route path="settings" element={<Suspense fallback={null}><UserSettings /></Suspense>} />
                             <Route path="orientation" element={<Suspense fallback={null}><Orientation /></Suspense>} />
                             <Route path="certificate" element={<Suspense fallback={null}><CertificateDownload /></Suspense>} />

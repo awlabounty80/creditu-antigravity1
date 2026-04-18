@@ -12,7 +12,7 @@ export function QuickActionsFAB() {
         { label: 'Share Profile', icon: ExternalLink, color: 'bg-indigo-600', onClick: () => navigate('/links') },
         { label: 'New Dispute', icon: Zap, color: 'bg-amber-500', onClick: () => navigate('/dashboard/credit-lab') },
         { label: 'Transcript', icon: FileText, color: 'bg-indigo-500', onClick: () => navigate('/dashboard/profile') },
-        { label: 'Support', icon: MessageCircle, color: 'bg-emerald-500', onClick: () => navigate('/dashboard/community') },
+        { label: 'Global Campus', icon: MessageCircle, color: 'bg-emerald-500', onClick: () => navigate('/dashboard/community') },
     ]
 
     return (
