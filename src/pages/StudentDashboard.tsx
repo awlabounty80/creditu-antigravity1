@@ -86,7 +86,7 @@ const STATIC_COMMAND_CENTER_APPS: CommandCenterCardData[] = [
         title: 'Vision Board',
         description: 'Goal visualization & tracking',
         icon: ImageIcon,
-        route: '/dashboard/vision-board',
+        route: '/dashboard/vision',
         colorClassName: 'from-pink-500/20 to-pink-600/5 border-pink-500/30 text-pink-400 group-hover:border-pink-400/60',
     },
     {
@@ -607,7 +607,7 @@ export default function StudentDashboard() {
                                 Freshman Core Classes
                             </h3>
                             <div className="p-6 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-[#020412] via-[#0F1629] to-[#0A0F1E] border border-indigo-500/30 group hover:border-indigo-500/60 transition-all cursor-pointer shadow-2xl relative overflow-hidden" 
-                                 onClick={() => { playClick(); navigate('/dashboard/labs/financial-nervous-system'); }}
+                                 onClick={() => { playClick(); navigate('/dashboard/financial-nervous-system'); }}
                                  onMouseEnter={() => playHover()}
                             >
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] -mr-32 -mt-32 transition-all group-hover:bg-indigo-500/20" />
