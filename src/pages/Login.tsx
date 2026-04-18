@@ -153,15 +153,31 @@ export default function Login() {
                         </button>
                     </form>
 
-                    <div className="mt-8 pt-8 border-t border-white/5 text-center">
-                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-4">New to Credit University AI?</p>
-                        <Link 
-                            to="/admissions/register" 
-                            className="inline-flex items-center gap-2 text-white hover:text-amber-500 transition-colors font-black uppercase text-xs tracking-widest border border-white/10 px-6 py-3 rounded-full hover:border-amber-500/40 bg-white/5 shadow-lg shadow-indigo-500/10"
-                        >
-                            <Sparkles className="w-3 h-3" />
-                            Initialize Admissions Sequence
-                        </Link>
+                    <div className="mt-8 pt-8 border-t border-white/5 text-center space-y-4">
+                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">New to Credit University AI?</p>
+                        <div className="flex flex-col gap-4 items-center">
+                            <Link 
+                                to="/admissions/register" 
+                                className="inline-flex items-center gap-2 text-white hover:text-amber-500 transition-colors font-black uppercase text-xs tracking-widest border border-white/10 px-6 py-3 rounded-full hover:border-amber-500/40 bg-white/5 shadow-lg shadow-indigo-500/10"
+                            >
+                                <Sparkles className="w-3 h-3" />
+                                Initialize Admissions Sequence
+                            </Link>
+
+                            {/* DEVELOPER BYPASS BUTTON */}
+                            {import.meta.env.DEV && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        sessionStorage.setItem('auth_bypass', 'enabled');
+                                        navigate('/dashboard');
+                                    }}
+                                    className="text-[10px] text-white/20 hover:text-amber-500/80 uppercase tracking-[0.4em] font-black transition-all pt-4 border-t border-white/5 w-full"
+                                >
+                                    [ ADMIN BUILD MODE ]
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
 
