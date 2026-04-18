@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Shield, Pause, Brain, Fingerprint, Lock } from 'lucide-react';
+import { Check, Shield, Pause, Brain, Fingerprint, Lock, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,7 @@ import { generateProtocolCalendar } from '@/lib/calendar-generator';
 // --- Types ---
 
 type OnboardingStep =
+    | 'academy_entry'
     | 'arrival'
     | 'reframe'
     | 'consent'
@@ -233,7 +234,7 @@ const HoldButton = ({ onClick, children, className, disabled }: { onClick: () =>
 
 export default function Onboarding() {
     const navigate = useNavigate();
-    const [step, setStep] = useState<OnboardingStep>('arrival');
+    const [step, setStep] = useState<OnboardingStep>('academy_entry');
     const [userState, setUserState] = useState<UserState>({
         hasConsented: false,
         stressResponse: '',
@@ -284,6 +285,46 @@ export default function Onboarding() {
     };
 
     // --- Components ---
+
+    const AcademyEntryStep = () => (
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center max-w-2xl mx-auto px-6 z-10">
+            <FadeIn delay={0.2}>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.3em] mb-12 shadow-[0_0_30px_rgba(99,102,241,0.4)]">
+                    Freshman Core Requirement
+                </div>
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+                <h1 className="text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none">
+                    Academy <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">Entrance</span>
+                </h1>
+                <div className="h-px w-24 bg-indigo-500/50 mx-auto mb-8" />
+            </FadeIn>
+
+            <FadeIn delay={0.8}>
+                <div className="space-y-6 text-xl text-slate-300 font-medium max-w-lg mx-auto leading-relaxed">
+                    <p>
+                        "You occupy a physical vessel. <br /> 
+                        That vessel was trained in a world of lack."
+                    </p>
+                    <p className="text-base text-slate-500 font-normal italic">
+                        The Financial Nervous System protocol is a prerequisite for Sophomore status. 
+                        You are here to calibrate your sensors.
+                    </p>
+                </div>
+            </FadeIn>
+
+            <FadeIn delay={1.4} className="mt-16">
+                <Button
+                    onClick={() => setStep('arrival')}
+                    className="bg-white text-black hover:bg-indigo-500 hover:text-white font-black h-20 px-12 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 text-xl uppercase tracking-tighter"
+                >
+                    Establish Secure Link <ArrowRight className="ml-3 w-6 h-6" />
+                </Button>
+            </FadeIn>
+        </div>
+    );
 
     const ArrivalStep = () => (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center max-w-xl mx-auto px-6 z-10">
