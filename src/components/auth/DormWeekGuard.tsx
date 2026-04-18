@@ -105,8 +105,7 @@ export const DormWeekGuard: React.FC<DormWeekGuardProps> = ({ children }) => {
 
     if (!accessAllowed) {
         // If logged in but denied Dorm Week access, keep them in the ecosystem
-        const { data: { user } } = supabase.auth.getSession() ? { data: { user: true } } : { data: { user: null } }; // Quick check or use a state
-        // Actually we already checked user in the useEffect, let's just check if we have an error msg
+        // Access restricted - user status already verified in checkAccess useEffect
         return <Navigate to={errorMsg?.includes("closed") ? "/dashboard" : "/admissions"} state={{ from: location, message: errorMsg }} replace />;
     }
 

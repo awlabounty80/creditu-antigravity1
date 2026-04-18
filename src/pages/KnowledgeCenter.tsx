@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useGamification } from '@/hooks/useGamification';
 import { toast } from 'sonner';
 import { useSound } from '@/hooks/useSound';
@@ -34,7 +34,8 @@ import {
     MicOff,
     Volume2,
     Square,
-    Pause
+    Pause,
+    Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 // Removed legacy FULL_ARTICLES import
@@ -349,7 +350,8 @@ const ArticleReader = ({ articleId, onClose }: { articleId: string, onClose: () 
             
             // Clean markdown for better speech synthesis
             const textToSpeak = article.content?.replace(/[#*`_\[\]]/g, '') || "";
-            const audio = await synthesizeSpeech(textToSpeak);
+            const url = await synthesizeSpeech(textToSpeak);
+            const audio = new Audio(url);
             
             setCurrentAudio(audio);
             audio.play();

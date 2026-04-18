@@ -310,7 +310,13 @@ export function useDormWeek() {
             }
         })();
 
-        return { reward: reward!, reels, spinCount: nextSpin, isAccepted: updatedSession.is_accepted };
+        return { 
+            reward: reward!, 
+            reels, 
+            spinCount: nextSpin, 
+            isAccepted: updatedSession.is_accepted,
+            resultKey: (reward!.type === 'acceptance' ? 'accepted' : 'almost') as AcceptanceStatus
+        };
     }, [getAdmissionsSession]);
 
     const completeAdmissions = useCallback(async (email: string, userId?: string) => {
