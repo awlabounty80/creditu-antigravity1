@@ -209,12 +209,25 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit, is
             </motion.div>
 
             {/* Force Proceed Debug Link */}
-            <button
-                onClick={() => onSubmit({ name: formData.name || 'ASHLEY', email: formData.email || 'awlabounty80@gmail.com' })}
-                className="text-[8px] text-white/5 uppercase tracking-[0.5em] hover:text-amber-500/50 transition-colors"
-            >
-                Protocol Force Start
-            </button>
+            <div className="flex flex-col items-center gap-4">
+                {import.meta.env.DEV && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+                    <button
+                        onClick={() => {
+                            sessionStorage.setItem('auth_bypass', 'enabled');
+                            window.location.href = '/dashboard';
+                        }}
+                        className="text-[10px] font-black text-amber-500/40 hover:text-amber-500 uppercase tracking-[0.4em] transition-all"
+                    >
+                        [ ADMIN BUILD ACCESS ]
+                    </button>
+                )}
+                <button
+                    onClick={() => onSubmit({ name: formData.name || 'ASHLEY', email: formData.email || 'awlabounty80@gmail.com' })}
+                    className="text-[8px] text-white/5 uppercase tracking-[0.5em] hover:text-amber-500/50 transition-colors"
+                >
+                    Protocol Force Start
+                </button>
+            </div>
         </div>
     );
 };
