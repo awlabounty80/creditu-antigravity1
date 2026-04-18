@@ -18,6 +18,22 @@ export interface Profile {
     current_streak: number
 }
 
+const MOCK_DEAN: Profile = {
+    id: 'dean-build-cache',
+    email: 'build@creditu.ai',
+    first_name: 'Dean',
+    last_name: 'Build Cache',
+    student_id_number: 'ADMIN-001',
+    avatar_url: null,
+    role: 'dean',
+    academic_level: 'graduate',
+    subscription_tier: 'premium',
+    gpa: 4.0,
+    credits_earned: 999,
+    moo_points: 99999,
+    current_streak: 365
+};
+
 interface ProfileContextType {
     profile: Profile | null
     user: User | null
@@ -51,10 +67,18 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
                 .single()
 
             if (profileError) {
-                console.warn("Profile fetch warning:", profileError.message)
-                setProfile(null)
+                // FALLBACK: If we are in bypass mode, use the Mock Dean
+                const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+                const isBypass = import.meta.env.DEV && isLocal && sessionStorage.getItem('auth_bypass') === 'enabled';
+                if (isBypass) {
+                    console.log("ProfileContext: Bypass Active. Injecting MOCK_DEAN.");
+                    setProfile(MOCK_DEAN);
+                } else {
+                    console.warn("Profile fetch warning:", profileError.message);
+                    setProfile(null);
+                }
             } else if (data) {
-                setProfile(data as Profile)
+                setProfile(data as Profile);
             }
         } catch (e) {
             console.error("Profile exception:", e)
@@ -97,9 +121,19 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
                     setLoading(true)
                     await fetchProfile(newId)
                 } else {
-                    setProfile(null)
-                    setLoading(false)
-                    isInitialLoadRef.current = false
+                    // CHECK FOR BYPASS IF NO USER
+                    const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+                    const isBypass = import.meta.env.DEV && isLocal && sessionStorage.getItem('auth_bypass') === 'enabled';
+                    if (isBypass) {
+                        console.log("ProfileContext: No session but Auth Bypass enabled.");
+                        setProfile(MOCK_DEAN);
+                        setLoading(false);
+                        isInitialLoadRef.current = false;
+                    } else {
+                        setProfile(null)
+                        setLoading(false)
+                        isInitialLoadRef.current = false
+                    }
                 }
             } else {
                 if (isInitialLoadRef.current) {

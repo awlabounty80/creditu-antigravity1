@@ -97,7 +97,7 @@ const STATIC_COMMAND_CENTER_APPS: CommandCenterCardData[] = [
         colorClassName: 'from-amber-500/20 to-amber-600/5 border-amber-500/30 text-amber-400 group-hover:border-amber-400/60',
     },
     {
-        title: 'Community Campus',
+        title: 'Global Campus',
         description: 'Global campus network',
         icon: Users,
         route: '/dashboard/community',
@@ -165,7 +165,7 @@ export default function StudentDashboard() {
     }, [location])
 
     // 🔬 DEVELOPMENT BYPASS HOOK
-    if (searchParams.get('bypass') === 'true') {
+    if (import.meta.env.DEV && (searchParams.get('bypass') === 'true' || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && searchParams.get('bypass') === 'true')) {
         sessionStorage.setItem('auth_bypass', 'enabled');
     }
 
