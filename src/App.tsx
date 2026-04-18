@@ -108,8 +108,8 @@ function App() {
                         <Route path="/" element={<Suspense fallback={null}><CreditUniversityLanding /></Suspense>} />
                         <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
                         <Route path="/links" element={<Suspense fallback={null}><LinkView /></Suspense>} />
-                        <Route path="/admissions" element={<Navigate to="/orientation/dorm-week" replace />} />
-                        <Route path="/admissions/register" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/admissions" element={<AuthAwareNavigate />} />
+                        <Route path="/admissions/register" element={<AuthAwareNavigate />} />
                         <Route path="/admissions/summary" element={<Suspense fallback={null}><StudentIdPage /></Suspense>} />
                         <Route path="/learn" element={<RequireAuth><Suspense fallback={null}><LearnHub /></Suspense></RequireAuth>} />
                         <Route path="/learn/personal-credit" element={<RequireAuth requiredLevels={['foundation', 'freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><TrackView /></Suspense></RequireAuth>} />
@@ -117,12 +117,12 @@ function App() {
                         <Route path="/learn/:trackSlug" element={<RequireAuth><Suspense fallback={null}><TrackView /></Suspense></RequireAuth>} />
                         <Route path="/learn/:trackSlug/:lessonSlug" element={<RequireAuth><Suspense fallback={null}><CoursePlayer /></Suspense></RequireAuth>} />
                         <Route path="/locker" element={<RequireAuth><Suspense fallback={null}><StudentLocker /></Suspense></RequireAuth>} />
-                        <Route path="/apply" element={<Navigate to="/orientation/dorm-week" replace />} />
-                        <Route path="/accepted" element={<Navigate to="/orientation/dorm-week" replace />} />
-                        <Route path="/gate" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/apply" element={<AuthAwareNavigate />} />
+                        <Route path="/accepted" element={<AuthAwareNavigate />} />
+                        <Route path="/gate" element={<AuthAwareNavigate />} />
 
                         {/* Gated Dorm Week routes mapped to Antigravity Edition */}
-                        <Route path="/dorm-week" element={<Navigate to="/orientation/dorm-week" replace />} />
+                        <Route path="/dorm-week" element={<AuthAwareNavigate />} />
                         <Route path="/orientation/dorm-week" element={<Suspense fallback={null}><DormWeekPreReg /></Suspense>} />
                         <Route path="/dorm-week/protocol" element={<DormWeekGuard><Suspense fallback={null}><Orientation /></Suspense></DormWeekGuard>} />
 
@@ -152,12 +152,14 @@ function App() {
                             <Route index element={<StudentDashboard />} />
                             <Route path="dream-architect" element={<RequireAuth requiredLevels={['senior', 'graduate']}><Suspense fallback={null}><DreamArchitect /></Suspense></RequireAuth>} />
                             <Route path="financial-nervous-system" element={<RequireAuth requiredLevels={['freshman', 'sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><FinancialNervousSystem /></Suspense></RequireAuth>} />
+                            <Route path="neural-protocol" element={<Navigate to="/dashboard/financial-nervous-system" replace />} />
                             <Route path="labs/financial-nervous-system" element={<Navigate to="/dashboard/financial-nervous-system" replace />} />
                             <Route path="neural-network" element={<RequireAuth requiredLevels={['junior', 'senior', 'graduate']}><Suspense fallback={null}><NeuralNetwork /></Suspense></RequireAuth>} />
                             <Route path="curriculum" element={<Suspense fallback={null}><Curriculum /></Suspense>} />
                             <Route path="course/:id" element={<Suspense fallback={null}><CoursePlayer /></Suspense>} />
                             <Route path="knowledge" element={<Suspense fallback={null}><KnowledgeCenter /></Suspense>} />
                             <Route path="quest" element={<Suspense fallback={null}><CreditQuest /></Suspense>} />
+                            <Route path="credit-quest" element={<Navigate to="/dashboard/quest" replace />} />
                             <Route path="tools" element={<Suspense fallback={null}><ToolsHub /></Suspense>} />
                             <Route path="tools/score-simulator" element={<RequireAuth requiredLevels={['sophomore', 'junior', 'senior', 'graduate']}><Suspense fallback={null}><CreditScoreSimulator /></Suspense></RequireAuth>} />
                             <Route path="tools/utilization" element={<RequireAuth><Suspense fallback={null}><CreditUtilizationCalculator /></Suspense></RequireAuth>} />
@@ -176,7 +178,9 @@ function App() {
                             <Route path="credit-lab/identity-theft" element={<RequireAuth requirePremium={true}><Suspense fallback={null}><IdentityTheftCenter /></Suspense></RequireAuth>} />
                             <Route path="honor-roll" element={<Suspense fallback={null}><HonorRoll /></Suspense>} />
                             <Route path="vision" element={<Suspense fallback={null}><VisionBoard /></Suspense>} />
+                            <Route path="vision-board" element={<Navigate to="/dashboard/vision" replace />} />
                             <Route path="store" element={<Suspense fallback={null}><MooStore /></Suspense>} />
+                            <Route path="emporium" element={<Navigate to="/dashboard/store" replace />} />
                             <Route path="community" element={<Suspense fallback={null}><GlobalCampus /></Suspense>} />
                             <Route path="settings" element={<Suspense fallback={null}><UserSettings /></Suspense>} />
                             <Route path="orientation" element={<Suspense fallback={null}><Orientation /></Suspense>} />

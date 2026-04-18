@@ -57,6 +57,10 @@ export function RequireAuth({
         }
 
         if (!profile) {
+            // Check if we actually have a user. If so, don't bounce to login, keep them on dashboard.
+            if (user) {
+                return <Navigate to="/dashboard" replace state={{ uiError: 'Network Synchronization: Profile data not yet established. Try refreshing.' }} />
+            }
             return <Navigate to="/login" replace />
         }
 

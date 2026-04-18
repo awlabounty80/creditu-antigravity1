@@ -75,18 +75,18 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
     const navItems = [
         { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", match: "/dashboard" },
         { icon: Target, label: "Dream Architect", path: "/dashboard/dream-architect", match: "/dashboard/dream-architect" },
-        { icon: Shield, label: "Neural Protocol", path: "/dashboard/financial-nervous-system", match: "/dashboard/financial-nervous-system" },
+        { icon: Shield, label: "Financial Nervous System", path: "/dashboard/financial-nervous-system", match: "/dashboard/financial-nervous-system" },
         { icon: Network, label: "Neural Network", path: "/dashboard/neural-network", match: "/dashboard/neural-network" },
         { icon: GraduationCap, label: "Curriculum", path: "/dashboard/curriculum", match: "/dashboard/curriculum" },
         { icon: BookOpen, label: "Knowledge Center", path: "/dashboard/knowledge", match: "/dashboard/knowledge" },
         { icon: Wrench, label: "Tools Hub", path: "/dashboard/tools", match: "/dashboard/tools" },
         { icon: Vault, label: "The Vault", path: "/dashboard/vault", match: "/dashboard/vault" },
-        { icon: Brain, label: "Credit Quest", path: "/dashboard/credit-quest", match: "/dashboard/credit-quest" },
+        { icon: Brain, label: "Credit Quest", path: "/dashboard/quest", match: "/dashboard/quest" },
         { icon: MonitorPlay, label: "Lecture Hall", path: "/dashboard/lecture-hall", match: "/dashboard/lecture-hall" },
         { icon: CreditCard, label: "Credit Lab", path: "/dashboard/credit-lab", match: "/dashboard/credit-lab" },
         { icon: Users, label: "Global Campus", path: "/dashboard/community", match: "/dashboard/community" },
         { icon: Sparkles, label: "Vision Board", path: "/dashboard/vision", match: "/dashboard/vision" },
-        { icon: ShoppingBag, label: "Moo Emporium", path: "/dashboard/store", match: "/dashboard/store" },
+        { icon: ShoppingBag, label: "Moo Store", path: "/dashboard/store", match: "/dashboard/store" },
         { icon: Settings, label: "Settings", path: "/dashboard/settings", match: "/dashboard/settings" },
     ];
 
