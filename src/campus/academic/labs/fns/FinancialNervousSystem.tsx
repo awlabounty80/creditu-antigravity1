@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { generateProtocolCalendar } from '@/lib/calendar-generator';
+import { supabase } from '@/lib/supabase';
+import { useProfile } from '@/hooks/useProfile';
+import { toast } from 'sonner';
 
 // --- Types ---
 
@@ -240,22 +243,80 @@ export default function Onboarding() {
         stressResponse: '',
         completedDayOne: false
     });
+    const { profile, user, refreshProfile } = useProfile();
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [isEnrolling, setIsEnrolling] = useState(false);
 
-    // Mock persistence
+    // Initialize from Supabase or LocalStorage (Idempotent Hydration)
     useEffect(() => {
-        const saved = localStorage.getItem('credit_u_reset_state');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            setUserState(parsed);
-            if (parsed.completedDayOne) setStep('close');
-            else if (parsed.hasConsented) setStep('map');
-        }
-    }, []);
+        const hydrateState = async () => {
+            if (!user) {
+                // If not logged in, fallback to local storage
+                const saved = localStorage.getItem('credit_u_reset_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    setUserState(parsed);
+                    if (parsed.completedDayOne) setStep('close');
+                    else if (parsed.hasConsented) setStep('map');
+                }
+                return;
+            }
 
-    const saveState = (newState: Partial<UserState>) => {
+            try {
+                const { data, error } = await supabase
+                    .from('student_progress')
+                    .select('metadata, status')
+                    .eq('user_id', user.id)
+                    .eq('lesson_id', 'fns-core')
+                    .single();
+
+                if (data?.metadata) {
+                    const cloudState = data.metadata as UserState;
+                    setUserState(cloudState);
+                    
+                    // Route based on hydrated state
+                    if (cloudState.completedDayOne) setStep('close');
+                    else if (cloudState.hasConsented) setStep('map');
+                    
+                    // Sync local cache
+                    localStorage.setItem('credit_u_reset_state', JSON.stringify(cloudState));
+                }
+            } catch (err) {
+                console.warn("FNS: Hydration failed, using local cache.", err);
+            }
+        };
+
+        hydrateState();
+    }, [user]);
+
+    const saveState = async (newState: Partial<UserState>) => {
         const updated = { ...userState, ...newState };
         setUserState(updated);
+        
+        // Always update local cache for responsiveness
         localStorage.setItem('credit_u_reset_state', JSON.stringify(updated));
+
+        // Sync to Supabase if authenticated (Idempotent Upsert)
+        if (user) {
+            setIsSyncing(true);
+            try {
+                const { error } = await supabase
+                    .from('student_progress')
+                    .upsert({
+                        user_id: user.id,
+                        lesson_id: 'fns-core',
+                        metadata: updated,
+                        status: updated.completedDayOne ? 'complete' : 'in_progress',
+                        last_seen_at: new Date().toISOString()
+                    }, { onConflict: 'user_id,lesson_id' });
+
+                if (error) throw error;
+            } catch (err) {
+                console.error("FNS: Persistence sync failed:", err);
+            } finally {
+                setIsSyncing(false);
+            }
+        }
     };
 
     // --- Audio System ---
@@ -901,12 +962,51 @@ export default function Onboarding() {
                         </p>
                     </div>
                     {userState.completedDayOne && (
-                        <Button
-                            onClick={() => navigate('/signup')}
-                            className="w-full bg-white text-black hover:bg-slate-200"
-                        >
-                            Enroll in Freshman Class
-                        </Button>
+                        <div className="space-y-4">
+                            {user ? (
+                                <div className="space-y-4">
+                                    <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-4 scale-95 opacity-80">
+                                        <p className="text-emerald-400 text-[10px] uppercase tracking-widest font-black flex items-center justify-center gap-2">
+                                            <Check className="w-3 h-3" /> FNS Requirement Met
+                                        </p>
+                                    </div>
+                                    <Button
+                                        onClick={async () => {
+                                            if (profile?.academic_level === 'foundation') {
+                                                setIsEnrolling(true);
+                                                const { error } = await supabase
+                                                    .from('profiles')
+                                                    .update({ academic_level: 'freshman' })
+                                                    .eq('id', user.id);
+                                                
+                                                if (!error) {
+                                                    toast.success("Enrolled in Freshman Class");
+                                                    await refreshProfile();
+                                                    navigate('/dashboard');
+                                                } else {
+                                                    toast.error("Enrollment failed. Try again.");
+                                                }
+                                                setIsEnrolling(false);
+                                            } else {
+                                                navigate('/dashboard');
+                                            }
+                                        }}
+                                        disabled={isEnrolling}
+                                        className="w-full bg-emerald-600 text-white hover:bg-emerald-500 py-8 text-lg font-black uppercase tracking-tighter rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.3)] transition-all hover:scale-105 active:scale-95"
+                                    >
+                                        {isEnrolling ? "Processing Advancement..." : (profile?.academic_level === 'foundation' ? "Advance to Freshman Rank" : "Return to Dashboard")}
+                                    </Button>
+                                    <p className="text-[10px] text-slate-500 italic">This will update your academic status to Freshman.</p>
+                                </div>
+                            ) : (
+                                <Button
+                                    onClick={() => navigate('/signup')}
+                                    className="w-full bg-white text-black hover:bg-slate-200 py-8 text-lg font-black uppercase tracking-tighter rounded-2xl"
+                                >
+                                    Enroll in Freshman Class
+                                </Button>
+                            )}
+                        </div>
                     )}
                 </FadeIn>
             </div>
@@ -947,6 +1047,7 @@ export default function Onboarding() {
             {/* Main Stage */}
             <div className="flex-1 flex items-center justify-center relative z-[10] w-full">
                 <AnimatePresence mode="wait">
+                    {step === 'academy_entry' && <motion.div className="w-full" key="academy_entry" exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1, transition: { duration: 0.5 } }}><AcademyEntryStep /></motion.div>}
                     {step === 'arrival' && <motion.div className="w-full" key="arrival" exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1, transition: { duration: 0.5 } }}><ArrivalStep /></motion.div>}
                     {step === 'reframe' && <motion.div className="w-full" key="reframe" exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1, transition: { duration: 0.5 } }}><ReframeStep /></motion.div>}
                     {step === 'consent' && <motion.div className="w-full" key="consent" exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1, transition: { duration: 0.5 } }}><ConsentStep /></motion.div>}

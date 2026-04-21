@@ -16,16 +16,20 @@ export const DormWeekGuard: React.FC<DormWeekGuardProps> = ({ children }) => {
     const [forceBypass, setForceBypass] = useState(false);
     const location = useLocation();
 
-    // GLOBAL SAFETY BYPASS: Never allow the spinner to stay more than 2 seconds
+    // --- DEVELOPMENT BYPASS ---
+    // Only active in DEV + Localhost + Explicit Opt-in Signal
     useEffect(() => {
-        const timer = setTimeout(() => {
-            console.warn("DormWeekGuard: GLOBAL Safety timeout reached. Forcing unlock.");
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const searchParams = new URLSearchParams(location.search);
+        const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled' || searchParams.get('bypass') === 'true';
+        
+        if (import.meta.env.DEV && isLocalhost && hasBypassSignal) {
+            console.log("DormWeekGuard: DEV Bypass Active.");
             setForceBypass(true);
+            setAccessAllowed(true);
             setCheckingStatus(false);
-            if (accessAllowed === null) setAccessAllowed(true);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, [accessAllowed]);
+        }
+    }, [location.search]);
 
     useEffect(() => {
         const checkAccess = async () => {
