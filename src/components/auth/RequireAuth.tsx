@@ -22,10 +22,11 @@ export function RequireAuth({
     const location = useLocation()
 
     // --- DEVELOPMENT BYPASS ---
-    // Allow local testing without a session if email delivery is failing
+    // Only active in DEV + Localhost + Explicit Opt-in Signal
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const searchParams = new URLSearchParams(location.search);
-    const bypassAuth = import.meta.env.DEV && isLocalhost && (sessionStorage.getItem('auth_bypass') === 'enabled' || searchParams.get('bypass') === 'true');
+    const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled' || searchParams.get('bypass') === 'true';
+    const bypassAuth = import.meta.env.DEV && isLocalhost && hasBypassSignal;
 
     // 1. Initial Identity Check
     if (!loading && !user && !bypassAuth) {
