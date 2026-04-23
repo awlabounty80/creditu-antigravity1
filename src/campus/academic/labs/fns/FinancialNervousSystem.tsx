@@ -267,7 +267,7 @@ export default function Onboarding() {
                     .from('student_progress')
                     .select('metadata, status')
                     .eq('user_id', user.id)
-                    .eq('lesson_id', 'fns-core')
+                    .eq('content_id', 'fns-core')
                     .single();
 
                 if (data?.metadata) {
@@ -304,11 +304,11 @@ export default function Onboarding() {
                     .from('student_progress')
                     .upsert({
                         user_id: user.id,
-                        lesson_id: 'fns-core',
+                        content_id: 'fns-core',
                         metadata: updated,
                         status: updated.completedDayOne ? 'complete' : 'in_progress',
                         last_seen_at: new Date().toISOString()
-                    }, { onConflict: 'user_id,lesson_id' });
+                    }, { onConflict: 'user_id,content_id' });
 
                 if (error) throw error;
             } catch (err) {

@@ -1,0 +1,8 @@
+dist
+archive
+temp
+scripts
+supabase/migrations
+*.cjs
+*.config.js
+node_modules

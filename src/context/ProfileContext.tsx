@@ -57,7 +57,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     const fetchProfile = async (targetId: string) => {
         try {
             // Admin Impersonation Logic
-            const impersonateId = typeof window !== 'undefined' ? sessionStorage.getItem('impersonate_id') : null
+            const impersonateId = (import.meta.env.DEV && typeof window !== 'undefined') ? sessionStorage.getItem('impersonate_id') : null
             const finalId = impersonateId || targetId
 
             const { data, error: profileError } = await supabase
