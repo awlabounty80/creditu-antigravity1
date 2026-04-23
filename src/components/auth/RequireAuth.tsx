@@ -22,10 +22,10 @@ export function RequireAuth({
     const location = useLocation()
 
     // --- DEVELOPMENT BYPASS ---
-    // Only active in DEV + Localhost + Explicit Opt-in Signal
+    // Strictly disabled in production builds.
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const searchParams = new URLSearchParams(location.search);
-    const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled' || searchParams.get('bypass') === 'true';
+    const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled';
     const bypassAuth = import.meta.env.DEV && isLocalhost && hasBypassSignal;
 
     // 1. Initial Identity Check

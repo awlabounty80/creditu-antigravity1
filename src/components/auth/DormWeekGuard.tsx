@@ -17,11 +17,11 @@ export const DormWeekGuard: React.FC<DormWeekGuardProps> = ({ children }) => {
     const location = useLocation();
 
     // --- DEVELOPMENT BYPASS ---
-    // Only active in DEV + Localhost + Explicit Opt-in Signal
+    // Strictly disabled in production builds.
     useEffect(() => {
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const searchParams = new URLSearchParams(location.search);
-        const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled' || searchParams.get('bypass') === 'true';
+        const hasBypassSignal = sessionStorage.getItem('auth_bypass') === 'enabled';
         
         if (import.meta.env.DEV && isLocalhost && hasBypassSignal) {
             console.log("DormWeekGuard: DEV Bypass Active.");
